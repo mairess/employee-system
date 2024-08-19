@@ -4,12 +4,12 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 /**
  * The type Employee.
  */
-@Entity
+@Entity(name = "employees")
 public class Employee {
 
   @Id
@@ -22,7 +22,7 @@ public class Employee {
 
   private String position;
 
-  private Date admission;
+  private LocalDateTime admission;
 
   private String phone;
 
@@ -41,7 +41,8 @@ public class Employee {
    * @param admission the admission
    * @param phone     the phone
    */
-  public Employee(String photo, String name, String position, Date admission, String phone) {
+  public Employee(String photo, String name, String position, LocalDateTime admission,
+      String phone) {
     this.photo = photo;
     this.name = name;
     this.position = position;
@@ -126,7 +127,7 @@ public class Employee {
    *
    * @return the admission
    */
-  public Date getAdmission() {
+  public LocalDateTime getAdmission() {
     return admission;
   }
 
@@ -135,7 +136,7 @@ public class Employee {
    *
    * @param admission the admission
    */
-  public void setAdmission(Date admission) {
+  public void setAdmission(LocalDateTime admission) {
     this.admission = admission;
   }
 
