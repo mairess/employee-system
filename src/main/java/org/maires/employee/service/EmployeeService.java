@@ -46,4 +46,14 @@ public class EmployeeService {
         () -> new EmployeeNotFoundException(employeeId.toString())
     );
   }
+
+  /**
+   * Create employee employee.
+   *
+   * @param employee the employee
+   * @return the employee
+   */
+  public Employee createEmployee(Employee employee) {
+    return employeeRepository.save(employee);
+  }
 }
