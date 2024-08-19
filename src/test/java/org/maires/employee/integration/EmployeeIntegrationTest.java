@@ -1,5 +1,6 @@
 package org.maires.employee.integration;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -119,31 +120,47 @@ public class EmployeeIntegrationTest {
   @DisplayName("Create employee")
   public void testCreate() throws Exception {
 
-    LocalDateTime now = LocalDateTime.now();
-
     Employee Gahan = new Employee(
         "https://robohash.org/employee170",
         "David Gahan",
         "Backend",
-        now,
+        LocalDateTime.now(),
         "5577912345678"
     );
 
     ObjectMapper objectMapper = new ObjectMapper();
     objectMapper.registerModule(new JavaTimeModule());
-    String newEmployeeJson = objectMapper.writeValueAsString(Gahan);
-
-    System.out.println("newEmployeeJson: " + newEmployeeJson);
+    String newEmployeeAsString = objectMapper.writeValueAsString(Gahan);
 
     String employeeUrl = "/employees";
 
     mockMvc.perform(post(employeeUrl)
             .contentType(MediaType.APPLICATION_JSON)
             .accept(MediaType.APPLICATION_JSON)
-            .content(newEmployeeJson))
+            .content(newEmployeeAsString))
         .andExpect(status().isCreated())
         .andExpect(jsonPath("$.id").exists())
         .andExpect(jsonPath("$.name").value("David Gahan"));
+  }
+
+  @Test
+  @DisplayName("Delete employee")
+  public void testDelete() throws Exception {
+
+    Employee Gahan = new Employee(
+        "https://robohash.org/employee170",
+        "David Gahan",
+        "Backend",
+        LocalDateTime.now(),
+        "5577912345678"
+    );
+
+    employeeRepository.save(Gahan);
+
+    String employeeUrl = "/employees/%s".formatted(Gahan.getId());
+
+    mockMvc.perform(delete(employeeUrl))
+        .andExpect(status().isNoContent());
   }
 
 }
