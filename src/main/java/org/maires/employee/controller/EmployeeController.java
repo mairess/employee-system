@@ -1,7 +1,7 @@
 package org.maires.employee.controller;
 
 import java.util.List;
-import org.maires.employee.entity.Employee;
+import org.maires.employee.controller.dto.EmployeeDto;
 import org.maires.employee.service.EmployeeService;
 import org.maires.employee.service.exception.EmployeeNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,14 +35,14 @@ public class EmployeeController {
    * @return the list
    */
   @GetMapping
-  public List<Employee> findAllEmployees() {
-    return employeeService.findAllEmployees();
+  public List<EmployeeDto> findAllEmployees() {
+    return employeeService.findAllEmployees().stream().map(EmployeeDto::fromEntity).toList();
   }
 
   @GetMapping("/{employeeId}")
-  public Employee findEmployeeById(@PathVariable Long employeeId)
+  public EmployeeDto findEmployeeById(@PathVariable Long employeeId)
       throws EmployeeNotFoundException {
-    return employeeService.findEmployeeById(employeeId);
+    return EmployeeDto.fromEntity(employeeService.findEmployeeById(employeeId));
   }
 
 }
