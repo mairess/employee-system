@@ -3,6 +3,7 @@ package org.maires.employee.integration;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -141,6 +142,38 @@ public class EmployeeIntegrationTest {
         .andExpect(status().isCreated())
         .andExpect(jsonPath("$.id").exists())
         .andExpect(jsonPath("$.name").value("David Gahan"));
+  }
+
+  @Test
+  @DisplayName("Update employee")
+  public void testUpdate() throws Exception {
+
+    Employee Gahan = new Employee(
+        "https://robohash.org/employee170",
+        "David Gahan",
+        "Backend",
+        LocalDateTime.now(),
+        "5577912345678"
+    );
+
+    employeeRepository.save(Gahan);
+
+    Gahan.setName("David Gahan Mirosmar Juliano de Almeida");
+    Gahan.setPosition("Fullstack");
+
+    ObjectMapper objectMapper = new ObjectMapper();
+    objectMapper.registerModule(new JavaTimeModule());
+    String updatedEmployeeAsString = objectMapper.writeValueAsString(Gahan);
+
+    String employeeUrl = "/employees/%s".formatted(Gahan.getId());
+
+    mockMvc.perform(put(employeeUrl)
+            .contentType(MediaType.APPLICATION_JSON)
+            .accept(MediaType.APPLICATION_JSON)
+            .content(updatedEmployeeAsString))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.name").value("David Gahan Mirosmar Juliano de Almeida"))
+        .andExpect(jsonPath("$.position").value("Fullstack"));
   }
 
   @Test
