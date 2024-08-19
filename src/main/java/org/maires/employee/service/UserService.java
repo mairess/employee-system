@@ -9,6 +9,9 @@ import org.maires.employee.entity.User;
 import org.maires.employee.repository.UserRepository;
 import org.maires.employee.service.exception.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +19,7 @@ import org.springframework.stereotype.Service;
  * The type User service.
  */
 @Service
-public class UserService {
+public class UserService implements UserDetailsService {
 
   private final UserRepository userRepository;
   private final ObjectMapper objectMapper;
@@ -109,4 +112,10 @@ public class UserService {
     userRepository.delete(user);
   }
 
+
+  @Override
+  public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    return userRepository.findByUsername(username)
+        .orElseThrow(() -> new UsernameNotFoundException(username));
+  }
 }

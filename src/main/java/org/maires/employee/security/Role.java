@@ -5,7 +5,7 @@ package org.maires.employee.security;
  */
 public enum Role {
   ADMIN("ADMIN"),
-  TECHNICIAN("USER");
+  USER("USER");
 
   private final String name;
 
