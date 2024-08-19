@@ -118,6 +118,17 @@ public class EmployeeIntegrationTest {
   }
 
   @Test
+  @DisplayName("Not found exception")
+  public void testNotFoundExceptionById() throws Exception {
+
+    String employeeUrl = "/employees/666";
+
+    mockMvc.perform(get(employeeUrl))
+        .andExpect(status().isNotFound())
+        .andExpect(jsonPath("$.message").value("Employee not found with id 666!"));
+  }
+
+  @Test
   @DisplayName("Create employee")
   public void testCreate() throws Exception {
 

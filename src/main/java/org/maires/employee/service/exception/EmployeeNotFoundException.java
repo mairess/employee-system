@@ -11,7 +11,7 @@ public class EmployeeNotFoundException extends NotFoundException {
    * @param identifier the identifier
    */
   public EmployeeNotFoundException(String identifier) {
-    super("Employee not found with identifier " + identifier + '!');
+    super("Employee not found with id " + identifier + '!');
   }
 
 }
