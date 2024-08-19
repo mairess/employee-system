@@ -1,9 +1,12 @@
 package org.maires.employee.integration;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -13,6 +16,7 @@ import org.maires.employee.repository.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
@@ -107,6 +111,37 @@ public class EmployeeIntegrationTest {
 
     mockMvc.perform(get(employeeUrl))
         .andExpect(status().isOk())
+        .andExpect(jsonPath("$.id").exists())
+        .andExpect(jsonPath("$.name").value("David Gahan"));
+  }
+
+  @Test
+  @DisplayName("Create employee")
+  public void testCreate() throws Exception {
+
+    LocalDateTime now = LocalDateTime.now();
+
+    Employee Gahan = new Employee(
+        "https://robohash.org/employee170",
+        "David Gahan",
+        "Backend",
+        now,
+        "5577912345678"
+    );
+
+    ObjectMapper objectMapper = new ObjectMapper();
+    objectMapper.registerModule(new JavaTimeModule());
+    String newEmployeeJson = objectMapper.writeValueAsString(Gahan);
+
+    System.out.println("newEmployeeJson: " + newEmployeeJson);
+
+    String employeeUrl = "/employees";
+
+    mockMvc.perform(post(employeeUrl)
+            .contentType(MediaType.APPLICATION_JSON)
+            .accept(MediaType.APPLICATION_JSON)
+            .content(newEmployeeJson))
+        .andExpect(status().isCreated())
         .andExpect(jsonPath("$.id").exists())
         .andExpect(jsonPath("$.name").value("David Gahan"));
   }
