@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
  * The type Employee controller.
  */
 @RestController
-@RequestMapping("employees")
+@RequestMapping("/employees")
 public class EmployeeController {
 
   private final EmployeeService employeeService;
@@ -47,7 +47,7 @@ public class EmployeeController {
    * @return the list
    */
   @GetMapping
-  public ResponseEntity<List<EmployeeDto>> findAllEmployees() {
+  public ResponseEntity<List<EmployeeDto>> findAll() {
 
     List<EmployeeDto> employees = employeeService
         .findAll()
