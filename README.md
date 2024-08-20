@@ -52,6 +52,12 @@ mvn spring-boot:run
 mvn test
 ```
 
+6. Documentation and available routes:
+
+```BASH
+http://localhost:8080/swagger-ui/index.html
+```
+
 ## Run with Docker
 
 ### Prerequisites
@@ -80,4 +86,10 @@ docker compose up -d --build
 
 ```BASH
 mvn test
+```
+
+4. Documentation and available routes:
+
+```BASH
+http://localhost:8080/swagger-ui/index.html
 ```

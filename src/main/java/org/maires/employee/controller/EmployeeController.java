@@ -10,6 +10,7 @@ import org.maires.employee.service.exception.EmployeeNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,7 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
  * The type Employee controller.
  */
 @RestController
-@RequestMapping("employees")
+@RequestMapping("/employees")
 public class EmployeeController {
 
   private final EmployeeService employeeService;
@@ -47,7 +48,8 @@ public class EmployeeController {
    * @return the list
    */
   @GetMapping
-  public ResponseEntity<List<EmployeeDto>> findAllEmployees() {
+  @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
+  public ResponseEntity<List<EmployeeDto>> findAll() {
 
     List<EmployeeDto> employees = employeeService
         .findAll()
@@ -67,6 +69,7 @@ public class EmployeeController {
    * @throws EmployeeNotFoundException the employee not found exception
    */
   @GetMapping("/{employeeId}")
+  @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
   public ResponseEntity<EmployeeDto> findById(
       @PathVariable Long employeeId
   ) throws EmployeeNotFoundException {
@@ -85,6 +88,7 @@ public class EmployeeController {
    * @return the employee dto
    */
   @PostMapping
+  @PreAuthorize("hasAnyAuthority('ADMIN')")
   public ResponseEntity<EmployeeDto> create(@RequestBody EmployeeCreationDto employeeCreationDto) {
 
     Employee newEmployee = employeeService.create(employeeCreationDto.toEntity());
@@ -104,6 +108,7 @@ public class EmployeeController {
    * @throws EmployeeNotFoundException the employee not found exception
    */
   @PutMapping("/{employeeId}")
+  @PreAuthorize("hasAnyAuthority('ADMIN')")
   public ResponseEntity<EmployeeDto> update(
       @PathVariable Long employeeId,
       @RequestBody EmployeeCreationDto employeeCreationDto
@@ -122,6 +127,7 @@ public class EmployeeController {
    * @throws EmployeeNotFoundException the employee not found exception
    */
   @DeleteMapping("/{employeeId}")
+  @PreAuthorize("hasAnyAuthority('ADMIN')")
   public ResponseEntity<Void> deleteById(
       @PathVariable Long employeeId
   ) throws EmployeeNotFoundException {
