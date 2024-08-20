@@ -21,7 +21,11 @@ public class User implements UserDetails {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
+  private String name;
+
   private String username;
+
+  private String email;
 
   private String password;
 
@@ -33,17 +37,20 @@ public class User implements UserDetails {
   public User() {
   }
 
+
   /**
    * Instantiates a new User.
    *
-   * @param id       the id
+   * @param name     the name
    * @param username the username
+   * @param email    the email
    * @param password the password
    * @param role     the role
    */
-  public User(Long id, String username, String password, Role role) {
-    this.id = id;
+  public User(String name, String username, String email, String password, Role role) {
+    this.name = name;
     this.username = username;
+    this.email = email;
     this.password = password;
     this.role = role;
   }
@@ -66,12 +73,25 @@ public class User implements UserDetails {
     this.id = id;
   }
 
+  /**
+   * Gets name.
+   *
+   * @return the name
+   */
+  public String getName() {
+    return name;
+  }
 
   /**
-   * Gets username.
+   * Sets name.
    *
-   * @return the username
+   * @param name the name
    */
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  @Override
   public String getUsername() {
     return username;
   }
@@ -105,16 +125,30 @@ public class User implements UserDetails {
     return UserDetails.super.isEnabled();
   }
 
+  /**
+   * Gets email.
+   *
+   * @return the email
+   */
+  public String getEmail() {
+    return email;
+  }
+
+  /**
+   * Sets email.
+   *
+   * @param email the email
+   */
+  public void setEmail(String email) {
+    this.email = email;
+  }
+
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
     return List.of(new SimpleGrantedAuthority(role.getName()));
   }
 
-  /**
-   * Gets password.
-   *
-   * @return the password
-   */
+  @Override
   public String getPassword() {
     return password;
   }

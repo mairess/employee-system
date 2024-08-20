@@ -8,10 +8,10 @@ public class EmployeeNotFoundException extends NotFoundException {
   /**
    * Instantiates a new Employee not found exception.
    *
-   * @param identifier the identifier
+   * @param id the identifier
    */
-  public EmployeeNotFoundException(String identifier) {
-    super("Employee not found with id " + identifier + '!');
+  public EmployeeNotFoundException(String id) {
+    super("Employee not found with id " + id + '!');
   }
 
 }

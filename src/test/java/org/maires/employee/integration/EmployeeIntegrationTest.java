@@ -65,7 +65,7 @@ public class EmployeeIntegrationTest {
     userRepository.deleteAll();
     employeeRepository.deleteAll();
 
-    User admin = new User(null, "Clodoaldo Marques", "123456", Role.ADMIN);
+    User admin = new User("Gilmar de Castro", "gilmar", "gilmar@example.com", "123456", Role.ADMIN);
     userRepository.save(admin);
     tokenAdmin = tokenService.generateToken(admin.getUsername());
   }

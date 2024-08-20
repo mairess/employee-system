@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -77,6 +78,19 @@ public class UserController {
 
     return ResponseEntity.status(HttpStatus.OK).body(user);
 
+  }
+
+  /**
+   * Find user by username user dto.
+   *
+   * @param username the username
+   * @return the user dto
+   * @throws UserNotFoundException the user not found exception
+   */
+  @GetMapping("/find")
+  @PreAuthorize("hasAuthority('ADMIN')")
+  public UserDto findUserByUsername(@RequestParam String username) throws UserNotFoundException {
+    return UserDto.fromEntity(userService.findByUsername(username));
   }
 
   /**

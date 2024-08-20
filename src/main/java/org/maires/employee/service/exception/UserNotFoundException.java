@@ -8,8 +8,8 @@ public class UserNotFoundException extends NotFoundException {
   /**
    * Instantiates a new Person not found exception.
    */
-  public UserNotFoundException(String identifier) {
-    super("User not found with identifier " + identifier + "!");
+  public UserNotFoundException(String id) {
+    super("User not found with id " + id + "!");
   }
 
 }
