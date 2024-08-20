@@ -5,6 +5,7 @@ import org.maires.employee.service.exception.NotFoundException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
@@ -33,7 +34,7 @@ public class GeneralControllerAdvice {
    * @return the response entity
    */
   @ExceptionHandler(DataIntegrityViolationException.class)
-  public ResponseEntity<Map<String, String>> handleLogin(
+  public ResponseEntity<Map<String, String>> handleUniqueFiled(
       DataIntegrityViolationException exception) {
 
     String message = exception.getMessage();
@@ -51,6 +52,26 @@ public class GeneralControllerAdvice {
 
     return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
         .body(Map.of("message", "Database error occurred!"));
+  }
+
+  /*
+  @ExceptionHandler(UsernameNotFoundException.class)
+  public ResponseEntity<Map<String, String>> handleUsernameNotFound(
+      UsernameNotFoundException exception) {
+    Map<String, String> response = Map.of("message", exception.getMessage());
+    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+  }
+
+  /**
+   * Handle login response entity.
+   *
+   * @param exception the exception
+   * @return the response entity
+   */
+  @ExceptionHandler(BadCredentialsException.class)
+  public ResponseEntity<Map<String, String>> handleLogin(BadCredentialsException exception) {
+    Map<String, String> response = Map.of("message", exception.getMessage());
+    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
   }
 
 }
