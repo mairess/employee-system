@@ -9,6 +9,9 @@ import org.maires.employee.entity.User;
 import org.maires.employee.repository.UserRepository;
 import org.maires.employee.service.exception.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -41,8 +44,13 @@ public class UserService implements UserDetailsService {
    *
    * @return the list
    */
-  public List<User> findAll() {
-    return userRepository.findAll();
+  public List<User> findAll(int pageNumber, int pageSize) {
+
+    Pageable pageable = PageRequest.of(pageNumber, pageSize);
+
+    Page<User> page = userRepository.findAll(pageable);
+
+    return page.toList();
   }
 
   /**

@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 
@@ -51,10 +52,13 @@ public class EmployeeController {
    */
   @GetMapping
   @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
-  public ResponseEntity<List<EmployeeDto>> findAll() {
+  public ResponseEntity<List<EmployeeDto>> findAll(
+      @RequestParam(required = false, defaultValue = "0") int pageNumber,
+      @RequestParam(required = false, defaultValue = "20") int pageSize
+  ) {
 
     List<EmployeeDto> employees = employeeService
-        .findAll()
+        .findAll(pageNumber, pageSize)
         .stream().map(EmployeeDto::fromEntity)
         .toList();
 

@@ -51,10 +51,13 @@ public class UserController {
    */
   @GetMapping
   @PreAuthorize("hasAnyAuthority('ADMIN')")
-  public ResponseEntity<List<UserDto>> findAll() {
+  public ResponseEntity<List<UserDto>> findAll(
+      @RequestParam(required = false, defaultValue = "0") int pageNumber,
+      @RequestParam(required = false, defaultValue = "20") int pageSize
+  ) {
 
     List<UserDto> users = userService
-        .findAll()
+        .findAll(pageNumber, pageSize)
         .stream().map(UserDto::fromEntity)
         .toList();
 
