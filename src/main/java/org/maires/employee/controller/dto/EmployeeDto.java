@@ -9,7 +9,7 @@ import org.maires.employee.entity.Employee;
 public record EmployeeDto(
     Long id,
     String photo,
-    String name,
+    String fullName,
     String position,
     LocalDateTime admission,
     String phone
@@ -25,7 +25,7 @@ public record EmployeeDto(
     return new EmployeeDto(
         employee.getId(),
         employee.getPhoto(),
-        employee.getName(),
+        employee.getFullName(),
         employee.getPosition(),
         employee.getAdmission(),
         employee.getPhone()

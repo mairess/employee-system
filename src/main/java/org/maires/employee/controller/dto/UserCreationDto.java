@@ -7,7 +7,7 @@ import org.maires.employee.security.Role;
  * The type User creation dto.
  */
 public record UserCreationDto(
-    String name,
+    String fullName,
     String username,
     String email,
     String password,
@@ -20,7 +20,7 @@ public record UserCreationDto(
    * @return the user
    */
   public User toEntity() {
-    return new User(name, username, email, password, role);
+    return new User(fullName, username, email, password, role);
   }
 
 }

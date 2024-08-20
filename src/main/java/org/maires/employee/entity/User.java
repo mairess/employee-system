@@ -22,7 +22,7 @@ public class User implements UserDetails {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  private String name;
+  private String fullName;
 
   @Column(unique = true)
   private String username;
@@ -44,14 +44,14 @@ public class User implements UserDetails {
   /**
    * Instantiates a new User.
    *
-   * @param name     the name
+   * @param fullName the name
    * @param username the username
    * @param email    the email
    * @param password the password
    * @param role     the role
    */
-  public User(String name, String username, String email, String password, Role role) {
-    this.name = name;
+  public User(String fullName, String username, String email, String password, Role role) {
+    this.fullName = fullName;
     this.username = username;
     this.email = email;
     this.password = password;
@@ -81,17 +81,17 @@ public class User implements UserDetails {
    *
    * @return the name
    */
-  public String getName() {
-    return name;
+  public String getFullName() {
+    return fullName;
   }
 
   /**
    * Sets name.
    *
-   * @param name the name
+   * @param fullName the name
    */
-  public void setName(String name) {
-    this.name = name;
+  public void setFullName(String fullName) {
+    this.fullName = fullName;
   }
 
   @Override

@@ -8,7 +8,7 @@ import org.maires.employee.entity.Employee;
  */
 public record EmployeeCreationDto(
     String photo,
-    String name,
+    String fullName,
     String position,
     LocalDateTime admission,
     String phone
@@ -20,7 +20,7 @@ public record EmployeeCreationDto(
    * @return the employee
    */
   public Employee toEntity() {
-    return new Employee(photo, name, position, admission, phone);
+    return new Employee(photo, fullName, position, admission, phone);
   }
 
 }

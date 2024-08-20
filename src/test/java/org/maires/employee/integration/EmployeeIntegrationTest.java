@@ -109,7 +109,7 @@ public class EmployeeIntegrationTest {
         .andExpect(jsonPath("$").isArray())
         .andExpect(jsonPath("$.length()").value(3))
         .andExpect(jsonPath("$[0].id").exists())
-        .andExpect(jsonPath("$[0].name").value("David Gahan"));
+        .andExpect(jsonPath("$[0].fullName").value("David Gahan"));
   }
 
   @Test
@@ -132,7 +132,7 @@ public class EmployeeIntegrationTest {
             .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenAdmin))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.id").exists())
-        .andExpect(jsonPath("$.name").value("David Gahan"));
+        .andExpect(jsonPath("$.fullName").value("David Gahan"));
   }
 
   @Test
@@ -171,7 +171,7 @@ public class EmployeeIntegrationTest {
             .content(newEmployeeAsString))
         .andExpect(status().isCreated())
         .andExpect(jsonPath("$.id").exists())
-        .andExpect(jsonPath("$.name").value("David Gahan"));
+        .andExpect(jsonPath("$.fullName").value("David Gahan"));
   }
 
   @Test
@@ -188,7 +188,7 @@ public class EmployeeIntegrationTest {
 
     employeeRepository.save(Gahan);
 
-    Gahan.setName("David Gahan Mirosmar Juliano de Almeida");
+    Gahan.setFullName("David Gahan Mirosmar Juliano de Almeida");
     Gahan.setPosition("Fullstack");
 
     ObjectMapper objectMapper = new ObjectMapper();
@@ -202,7 +202,7 @@ public class EmployeeIntegrationTest {
             .contentType(MediaType.APPLICATION_JSON)
             .content(updatedEmployeeAsString))
         .andExpect(status().isOk())
-        .andExpect(jsonPath("$.name").value("David Gahan Mirosmar Juliano de Almeida"))
+        .andExpect(jsonPath("$.fullName").value("David Gahan Mirosmar Juliano de Almeida"))
         .andExpect(jsonPath("$.position").value("Fullstack"));
   }
 

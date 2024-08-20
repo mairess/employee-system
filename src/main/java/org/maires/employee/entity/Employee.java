@@ -19,7 +19,7 @@ public class Employee {
 
   private String photo;
 
-  private String name;
+  private String fullName;
 
   private String position;
 
@@ -38,15 +38,15 @@ public class Employee {
    * Instantiates a new Employee.
    *
    * @param photo     the photo
-   * @param name      the name
+   * @param fullName  the full name
    * @param position  the position
    * @param admission the admission
    * @param phone     the phone
    */
-  public Employee(String photo, String name, String position, LocalDateTime admission,
+  public Employee(String photo, String fullName, String position, LocalDateTime admission,
       String phone) {
     this.photo = photo;
-    this.name = name;
+    this.fullName = fullName;
     this.position = position;
     this.admission = admission;
     this.phone = phone;
@@ -93,17 +93,17 @@ public class Employee {
    *
    * @return the name
    */
-  public String getName() {
-    return name;
+  public String getFullName() {
+    return fullName;
   }
 
   /**
    * Sets name.
    *
-   * @param name the name
+   * @param fullName the full name
    */
-  public void setName(String name) {
-    this.name = name;
+  public void setFullName(String fullName) {
+    this.fullName = fullName;
   }
 
   /**
