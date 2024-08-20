@@ -11,6 +11,9 @@ import org.maires.employee.repository.EmployeeRepository;
 import org.maires.employee.service.exception.EmployeeNotFoundException;
 import org.maires.employee.service.exception.FutureDateException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 
@@ -42,9 +45,13 @@ public class EmployeeService {
    *
    * @return the list
    */
-  public List<Employee> findAll() {
+  public List<Employee> findAll(int pageNumber, int pageSize) {
 
-    return employeeRepository.findAll();
+    Pageable pageable = PageRequest.of(pageNumber, pageSize);
+
+    Page<Employee> page = employeeRepository.findAll(pageable);
+
+    return page.toList();
 
   }
 
