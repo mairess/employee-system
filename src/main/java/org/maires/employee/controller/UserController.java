@@ -103,11 +103,7 @@ public class UserController {
   @PostMapping
   public ResponseEntity<UserDto> create(@Valid @RequestBody UserCreationDto userCreationDto) {
 
-    System.out.println("userCreationDto: " + userCreationDto);
-
     User newUser = userService.create(userCreationDto.toEntity());
-
-    System.out.println("newUser: " + UserDto.fromEntity(newUser));
 
     return ResponseEntity.status(HttpStatus.CREATED).body(UserDto.fromEntity(newUser));
 

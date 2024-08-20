@@ -4,7 +4,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import org.maires.employee.entity.Employee;
 
 /**
@@ -27,9 +27,9 @@ public record EmployeeCreationDto(
     String position,
 
     @NotNull(message = "Admission cannot be null!")
-    LocalDateTime admission,
+    LocalDate admission,
 
-    @Size(min = 11, max = 11)
+    @Size(min = 11, max = 11, message = "Phone must be 11 characters!")
     @NotNull(message = "Phone cannot be null!")
     @NotBlank(message = "Phone cannot be blank!")
     @Pattern(

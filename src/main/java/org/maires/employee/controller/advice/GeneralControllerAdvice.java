@@ -2,10 +2,12 @@ package org.maires.employee.controller.advice;
 
 import java.util.List;
 import java.util.Map;
+import org.maires.employee.service.exception.FutureDateException;
 import org.maires.employee.service.exception.NotFoundException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -25,7 +27,9 @@ public class GeneralControllerAdvice {
    */
   @ExceptionHandler(NotFoundException.class)
   public ResponseEntity<Map<String, String>> handleNotFound(NotFoundException exception) {
+
     Map<String, String> response = Map.of("message", exception.getMessage());
+
     return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
   }
 
@@ -36,34 +40,30 @@ public class GeneralControllerAdvice {
    * @return the response entity
    */
   @ExceptionHandler(DataIntegrityViolationException.class)
-  public ResponseEntity<Map<String, String>> handleUniqueFiled(
+  public ResponseEntity<Map<String, String>> handleDuplicatedKey(
       DataIntegrityViolationException exception) {
 
     String message = exception.getMessage();
 
     if (message.contains("users_email_key")) {
+
       return ResponseEntity.status(HttpStatus.BAD_REQUEST)
           .body(Map.of("message", "Email already in use!"));
+
     } else if (message.contains("users_username_key")) {
+
       return ResponseEntity.status(HttpStatus.BAD_REQUEST)
           .body(Map.of("message", "Username already in use!"));
+
     } else if (message.contains("employees_phone_key")) {
+
       return ResponseEntity.status(HttpStatus.BAD_REQUEST)
           .body(Map.of("message", "Phone already in use!"));
     }
 
     return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-        .body(Map.of("message", "Database error occurred!"));
+        .body(Map.of("message", exception.getMessage()));
   }
-
-  /*
-  @ExceptionHandler(UsernameNotFoundException.class)
-  public ResponseEntity<Map<String, String>> handleUsernameNotFound(
-      UsernameNotFoundException exception) {
-    Map<String, String> response = Map.of("message", exception.getMessage());
-    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
-  }
- */
 
   /**
    * Handle login response entity.
@@ -73,21 +73,10 @@ public class GeneralControllerAdvice {
    */
   @ExceptionHandler(BadCredentialsException.class)
   public ResponseEntity<Map<String, String>> handleLogin(BadCredentialsException exception) {
-    Map<String, String> response = Map.of("message", exception.getMessage());
-    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
-  }
 
-  /**
-   * Handle invalid arg response entity.
-   *
-   * @param exception the exception
-   * @return the response entity
-   */
-  @ExceptionHandler(IllegalArgumentException.class)
-  public ResponseEntity<Map<String, String>> handleInvalidArg(
-      IllegalArgumentException exception) {
     Map<String, String> response = Map.of("message", exception.getMessage());
-    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+
+    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
   }
 
   /**
@@ -110,6 +99,34 @@ public class GeneralControllerAdvice {
     );
 
     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+  }
+
+  /**
+   * Handle json parse error response entity.
+   *
+   * @param exception the exception
+   * @return the response entity
+   */
+  @ExceptionHandler({HttpMessageNotReadableException.class, FutureDateException.class})
+  public ResponseEntity<Map<String, String>> handleDateJsonParseError(
+      Exception exception) {
+
+    if (exception instanceof HttpMessageNotReadableException) {
+
+      Map<String, String> response = Map.of("message", "Admission valid format yyyy-MM-dd");
+
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+
+    } else if (exception instanceof FutureDateException) {
+
+      Map<String, String> response = Map.of("message", exception.getMessage());
+
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+
+    }
+
+    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+        .body(Map.of("message", exception.getMessage()));
   }
 
 }

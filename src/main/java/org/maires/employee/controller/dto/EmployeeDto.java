@@ -1,6 +1,6 @@
 package org.maires.employee.controller.dto;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import org.maires.employee.entity.Employee;
 
 /**
@@ -11,7 +11,7 @@ public record EmployeeDto(
     String photo,
     String fullName,
     String position,
-    LocalDateTime admission,
+    LocalDate admission,
     String phone
 ) {
 

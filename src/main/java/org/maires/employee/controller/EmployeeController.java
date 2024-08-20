@@ -8,6 +8,7 @@ import org.maires.employee.controller.dto.EmployeeDto;
 import org.maires.employee.entity.Employee;
 import org.maires.employee.service.EmployeeService;
 import org.maires.employee.service.exception.EmployeeNotFoundException;
+import org.maires.employee.service.exception.FutureDateException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -91,7 +92,7 @@ public class EmployeeController {
   @PostMapping
   @PreAuthorize("hasAnyAuthority('ADMIN')")
   public ResponseEntity<EmployeeDto> create(
-      @Valid @RequestBody EmployeeCreationDto employeeCreationDto) {
+      @Valid @RequestBody EmployeeCreationDto employeeCreationDto) throws FutureDateException {
 
     Employee newEmployee = employeeService.create(employeeCreationDto.toEntity());
 
