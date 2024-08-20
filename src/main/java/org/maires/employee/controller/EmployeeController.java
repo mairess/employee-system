@@ -1,6 +1,7 @@
 package org.maires.employee.controller;
 
 import com.fasterxml.jackson.databind.JsonMappingException;
+import jakarta.validation.Valid;
 import java.util.List;
 import org.maires.employee.controller.dto.EmployeeCreationDto;
 import org.maires.employee.controller.dto.EmployeeDto;
@@ -89,7 +90,8 @@ public class EmployeeController {
    */
   @PostMapping
   @PreAuthorize("hasAnyAuthority('ADMIN')")
-  public ResponseEntity<EmployeeDto> create(@RequestBody EmployeeCreationDto employeeCreationDto) {
+  public ResponseEntity<EmployeeDto> create(
+      @Valid @RequestBody EmployeeCreationDto employeeCreationDto) {
 
     Employee newEmployee = employeeService.create(employeeCreationDto.toEntity());
 
@@ -111,7 +113,7 @@ public class EmployeeController {
   @PreAuthorize("hasAnyAuthority('ADMIN')")
   public ResponseEntity<EmployeeDto> update(
       @PathVariable Long employeeId,
-      @RequestBody EmployeeCreationDto employeeCreationDto
+      @Valid @RequestBody EmployeeCreationDto employeeCreationDto
   ) throws JsonMappingException, EmployeeNotFoundException {
 
     Employee employeeUpdated = employeeService.update(employeeId, employeeCreationDto);

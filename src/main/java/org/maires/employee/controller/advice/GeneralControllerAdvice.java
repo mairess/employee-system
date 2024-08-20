@@ -1,11 +1,13 @@
 package org.maires.employee.controller.advice;
 
+import java.util.List;
 import java.util.Map;
 import org.maires.employee.service.exception.NotFoundException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
@@ -61,6 +63,7 @@ public class GeneralControllerAdvice {
     Map<String, String> response = Map.of("message", exception.getMessage());
     return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
   }
+ */
 
   /**
    * Handle login response entity.
@@ -72,6 +75,41 @@ public class GeneralControllerAdvice {
   public ResponseEntity<Map<String, String>> handleLogin(BadCredentialsException exception) {
     Map<String, String> response = Map.of("message", exception.getMessage());
     return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
+  }
+
+  /**
+   * Handle invalid arg response entity.
+   *
+   * @param exception the exception
+   * @return the response entity
+   */
+  @ExceptionHandler(IllegalArgumentException.class)
+  public ResponseEntity<Map<String, String>> handleInvalidArg(
+      IllegalArgumentException exception) {
+    Map<String, String> response = Map.of("message", exception.getMessage());
+    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+  }
+
+  /**
+   * Handle validation response entity.
+   *
+   * @param exception the exception
+   * @return the response entity
+   */
+  @ExceptionHandler(MethodArgumentNotValidException.class)
+  public ResponseEntity<Map<String, List<String>>> handleValidation(
+      MethodArgumentNotValidException exception) {
+
+    Map<String, List<String>> response = Map.of(
+        "message",
+        exception.getBindingResult()
+            .getAllErrors()
+            .stream()
+            .map(error -> error.getDefaultMessage())
+            .toList()
+    );
+
+    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
   }
 
 }
