@@ -14,7 +14,7 @@ public class OpenApiConfig implements OpenApiCustomizer {
   @Override
   public void customise(OpenAPI openApi) {
     Info info = new Info()
-        .title("Employee system")
+        .title("Employee System")
         .description("A RESTful API for managing employee data.")
         .version("1.0.0");
 

@@ -14,10 +14,15 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.maires.employee.entity.Employee;
+import org.maires.employee.entity.User;
 import org.maires.employee.repository.EmployeeRepository;
+import org.maires.employee.repository.UserRepository;
+import org.maires.employee.security.Role;
+import org.maires.employee.service.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
@@ -40,7 +45,13 @@ public class EmployeeIntegrationTest {
   EmployeeRepository employeeRepository;
 
   @Autowired
+  UserRepository userRepository;
+
+  @Autowired
   MockMvc mockMvc;
+  String tokenAdmin;
+  @Autowired
+  private TokenService tokenService;
 
   @DynamicPropertySource
   public static void overrideProperties(DynamicPropertyRegistry registry) {
@@ -51,7 +62,12 @@ public class EmployeeIntegrationTest {
 
   @BeforeEach
   public void cleanUp() {
+    userRepository.deleteAll();
     employeeRepository.deleteAll();
+
+    User admin = new User(null, "Clodoaldo Marques", "123456", Role.ADMIN);
+    userRepository.save(admin);
+    tokenAdmin = tokenService.generateToken(admin.getUsername());
   }
 
   @Test
@@ -87,7 +103,8 @@ public class EmployeeIntegrationTest {
 
     String employeeUrl = "/employees";
 
-    mockMvc.perform(get(employeeUrl))
+    mockMvc.perform(get(employeeUrl)
+            .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenAdmin))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$").isArray())
         .andExpect(jsonPath("$.length()").value(3))
@@ -111,7 +128,8 @@ public class EmployeeIntegrationTest {
 
     String employeeUrl = "/employees/%s".formatted(Gahan.getId());
 
-    mockMvc.perform(get(employeeUrl))
+    mockMvc.perform(get(employeeUrl)
+            .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenAdmin))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.id").exists())
         .andExpect(jsonPath("$.name").value("David Gahan"));
@@ -123,7 +141,8 @@ public class EmployeeIntegrationTest {
 
     String employeeUrl = "/employees/666";
 
-    mockMvc.perform(get(employeeUrl))
+    mockMvc.perform(get(employeeUrl)
+            .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenAdmin))
         .andExpect(status().isNotFound())
         .andExpect(jsonPath("$.message").value("Employee not found with id 666!"));
   }
@@ -147,8 +166,8 @@ public class EmployeeIntegrationTest {
     String employeeUrl = "/employees";
 
     mockMvc.perform(post(employeeUrl)
+            .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenAdmin)
             .contentType(MediaType.APPLICATION_JSON)
-            .accept(MediaType.APPLICATION_JSON)
             .content(newEmployeeAsString))
         .andExpect(status().isCreated())
         .andExpect(jsonPath("$.id").exists())
@@ -179,8 +198,8 @@ public class EmployeeIntegrationTest {
     String employeeUrl = "/employees/%s".formatted(Gahan.getId());
 
     mockMvc.perform(put(employeeUrl)
+            .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenAdmin)
             .contentType(MediaType.APPLICATION_JSON)
-            .accept(MediaType.APPLICATION_JSON)
             .content(updatedEmployeeAsString))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.name").value("David Gahan Mirosmar Juliano de Almeida"))
@@ -203,7 +222,8 @@ public class EmployeeIntegrationTest {
 
     String employeeUrl = "/employees/%s".formatted(Gahan.getId());
 
-    mockMvc.perform(delete(employeeUrl))
+    mockMvc.perform(delete(employeeUrl)
+            .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenAdmin))
         .andExpect(status().isNoContent());
   }
 
