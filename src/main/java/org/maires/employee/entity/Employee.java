@@ -1,10 +1,11 @@
 package org.maires.employee.entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 /**
  * The type Employee.
@@ -18,12 +19,13 @@ public class Employee {
 
   private String photo;
 
-  private String name;
+  private String fullName;
 
   private String position;
 
-  private LocalDateTime admission;
+  private LocalDate admission;
 
+  @Column(unique = true)
   private String phone;
 
   /**
@@ -36,15 +38,15 @@ public class Employee {
    * Instantiates a new Employee.
    *
    * @param photo     the photo
-   * @param name      the name
+   * @param fullName  the full name
    * @param position  the position
    * @param admission the admission
    * @param phone     the phone
    */
-  public Employee(String photo, String name, String position, LocalDateTime admission,
+  public Employee(String photo, String fullName, String position, LocalDate admission,
       String phone) {
     this.photo = photo;
-    this.name = name;
+    this.fullName = fullName;
     this.position = position;
     this.admission = admission;
     this.phone = phone;
@@ -91,17 +93,17 @@ public class Employee {
    *
    * @return the name
    */
-  public String getName() {
-    return name;
+  public String getFullName() {
+    return fullName;
   }
 
   /**
    * Sets name.
    *
-   * @param name the name
+   * @param fullName the full name
    */
-  public void setName(String name) {
-    this.name = name;
+  public void setFullName(String fullName) {
+    this.fullName = fullName;
   }
 
   /**
@@ -127,7 +129,7 @@ public class Employee {
    *
    * @return the admission
    */
-  public LocalDateTime getAdmission() {
+  public LocalDate getAdmission() {
     return admission;
   }
 
@@ -136,7 +138,7 @@ public class Employee {
    *
    * @param admission the admission
    */
-  public void setAdmission(LocalDateTime admission) {
+  public void setAdmission(LocalDate admission) {
     this.admission = admission;
   }
 

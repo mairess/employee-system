@@ -100,7 +100,7 @@ public class AuthIntegrationTest {
     mockMvc.perform(post(employeeUrl)
             .contentType(MediaType.APPLICATION_JSON)
             .content(loginPayload))
-        .andExpect(status().isForbidden());
+        .andExpect(status().isUnauthorized());
   }
 
 }

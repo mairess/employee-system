@@ -1,6 +1,7 @@
 package org.maires.employee.controller;
 
 import com.fasterxml.jackson.databind.JsonMappingException;
+import jakarta.validation.Valid;
 import java.util.List;
 import org.maires.employee.controller.dto.UserCreationDto;
 import org.maires.employee.controller.dto.UserDto;
@@ -100,13 +101,9 @@ public class UserController {
    * @return the response entity
    */
   @PostMapping
-  public ResponseEntity<UserDto> create(@RequestBody UserCreationDto userCreationDto) {
-
-    System.out.println("userCreationDto: " + userCreationDto);
+  public ResponseEntity<UserDto> create(@Valid @RequestBody UserCreationDto userCreationDto) {
 
     User newUser = userService.create(userCreationDto.toEntity());
-
-    System.out.println("newUser: " + UserDto.fromEntity(newUser));
 
     return ResponseEntity.status(HttpStatus.CREATED).body(UserDto.fromEntity(newUser));
 
@@ -125,7 +122,7 @@ public class UserController {
   @PreAuthorize("hasAnyAuthority('ADMIN')")
   public ResponseEntity<UserDto> update(
       @PathVariable Long userId,
-      @RequestBody UserCreationDto userCreationDto
+      @Valid @RequestBody UserCreationDto userCreationDto
   ) throws JsonMappingException, UserNotFoundException {
 
     User userUpdated = userService.update(userId, userCreationDto);

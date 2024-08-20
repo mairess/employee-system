@@ -3,11 +3,13 @@ package org.maires.employee.service;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.transaction.Transactional;
+import java.time.LocalDate;
 import java.util.List;
 import org.maires.employee.controller.dto.EmployeeCreationDto;
 import org.maires.employee.entity.Employee;
 import org.maires.employee.repository.EmployeeRepository;
 import org.maires.employee.service.exception.EmployeeNotFoundException;
+import org.maires.employee.service.exception.FutureDateException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -71,7 +73,13 @@ public class EmployeeService {
    * @param employee the employee
    * @return the employee
    */
-  public Employee create(Employee employee) {
+  public Employee create(Employee employee) throws FutureDateException {
+
+    LocalDate admission = employee.getAdmission();
+
+    if (admission.isAfter(LocalDate.now())) {
+      throw new FutureDateException("Admission cannot be future date!");
+    }
 
     return employeeRepository.save(employee);
 

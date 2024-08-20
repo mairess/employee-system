@@ -9,7 +9,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -78,23 +78,23 @@ public class EmployeeIntegrationTest {
         "https://robohash.org/employee170",
         "David Gahan",
         "Backend",
-        LocalDateTime.now(),
-        "5577912345678"
+        LocalDate.now(),
+        "77912345678"
     );
 
     Employee Gore = new Employee(
         "https://robohash.org/employee170",
         "Martin Gore",
         "Frontend",
-        LocalDateTime.now(),
-        "5577987654321"
+        LocalDate.now(),
+        "77987654321"
     );
     Employee Fletcher = new Employee(
         "https://robohash.org/employee170",
         "Andrew Fletcher",
         "UX Designer",
-        LocalDateTime.now(),
-        "5577987653210"
+        LocalDate.now(),
+        "77987653210"
     );
 
     employeeRepository.save(Gahan);
@@ -109,7 +109,7 @@ public class EmployeeIntegrationTest {
         .andExpect(jsonPath("$").isArray())
         .andExpect(jsonPath("$.length()").value(3))
         .andExpect(jsonPath("$[0].id").exists())
-        .andExpect(jsonPath("$[0].name").value("David Gahan"));
+        .andExpect(jsonPath("$[0].fullName").value("David Gahan"));
   }
 
   @Test
@@ -120,8 +120,8 @@ public class EmployeeIntegrationTest {
         "https://robohash.org/employee170",
         "David Gahan",
         "Backend",
-        LocalDateTime.now(),
-        "5577912345678"
+        LocalDate.now(),
+        "77912345678"
     );
 
     employeeRepository.save(Gahan);
@@ -132,7 +132,7 @@ public class EmployeeIntegrationTest {
             .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenAdmin))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.id").exists())
-        .andExpect(jsonPath("$.name").value("David Gahan"));
+        .andExpect(jsonPath("$.fullName").value("David Gahan"));
   }
 
   @Test
@@ -155,8 +155,8 @@ public class EmployeeIntegrationTest {
         "https://robohash.org/employee170",
         "David Gahan",
         "Backend",
-        LocalDateTime.now(),
-        "5577912345678"
+        LocalDate.now(),
+        "77912345678"
     );
 
     ObjectMapper objectMapper = new ObjectMapper();
@@ -171,7 +171,7 @@ public class EmployeeIntegrationTest {
             .content(newEmployeeAsString))
         .andExpect(status().isCreated())
         .andExpect(jsonPath("$.id").exists())
-        .andExpect(jsonPath("$.name").value("David Gahan"));
+        .andExpect(jsonPath("$.fullName").value("David Gahan"));
   }
 
   @Test
@@ -182,13 +182,13 @@ public class EmployeeIntegrationTest {
         "https://robohash.org/employee170",
         "David Gahan",
         "Backend",
-        LocalDateTime.now(),
-        "5577912345678"
+        LocalDate.now(),
+        "77912345678"
     );
 
     employeeRepository.save(Gahan);
 
-    Gahan.setName("David Gahan Mirosmar Juliano de Almeida");
+    Gahan.setFullName("David Gahan Mirosmar Juliano de Almeida");
     Gahan.setPosition("Fullstack");
 
     ObjectMapper objectMapper = new ObjectMapper();
@@ -202,7 +202,7 @@ public class EmployeeIntegrationTest {
             .contentType(MediaType.APPLICATION_JSON)
             .content(updatedEmployeeAsString))
         .andExpect(status().isOk())
-        .andExpect(jsonPath("$.name").value("David Gahan Mirosmar Juliano de Almeida"))
+        .andExpect(jsonPath("$.fullName").value("David Gahan Mirosmar Juliano de Almeida"))
         .andExpect(jsonPath("$.position").value("Fullstack"));
   }
 
@@ -214,8 +214,8 @@ public class EmployeeIntegrationTest {
         "https://robohash.org/employee170",
         "David Gahan",
         "Backend",
-        LocalDateTime.now(),
-        "5577912345678"
+        LocalDate.now(),
+        "77912345678"
     );
 
     employeeRepository.save(Gahan);
