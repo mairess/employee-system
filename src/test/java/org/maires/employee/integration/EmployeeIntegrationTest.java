@@ -201,6 +201,29 @@ public class EmployeeIntegrationTest {
   }
 
   @Test
+  @DisplayName("Invalid date format exception")
+  public void testInvalidDateFormat() throws Exception {
+
+    String invalidEmployeeJson = """
+        {
+            "fullName": "David Gahan",
+            "position": "Singer",
+            "admission": "wrong date format here :)",
+            "phone": "1234567890"
+        }
+        """;
+
+    String employeeUrl = "/employees";
+
+    mockMvc.perform(post(employeeUrl)
+            .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenAdmin)
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(invalidEmployeeJson))
+        .andExpect(status().isBadRequest())
+        .andExpect(jsonPath("$.message").value("Admission valid format yyyy-MM-dd"));
+  }
+
+  @Test
   @DisplayName("Update employee")
   public void testUpdate() throws Exception {
 
