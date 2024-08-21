@@ -175,6 +175,32 @@ public class EmployeeIntegrationTest {
   }
 
   @Test
+  @DisplayName("Future date exception")
+  public void testFutureDateException() throws Exception {
+
+    Employee Gahan = new Employee(
+        "https://robohash.org/employee170",
+        "David Gahan",
+        "Backend",
+        LocalDate.now().plusDays(1),
+        "77912345678"
+    );
+
+    ObjectMapper objectMapper = new ObjectMapper();
+    objectMapper.registerModule(new JavaTimeModule());
+    String newEmployeeAsString = objectMapper.writeValueAsString(Gahan);
+
+    String employeeUrl = "/employees";
+
+    mockMvc.perform(post(employeeUrl)
+            .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenAdmin)
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(newEmployeeAsString))
+        .andExpect(status().isBadRequest())
+        .andExpect(jsonPath("$.message").value("Admission cannot be future date!"));
+  }
+
+  @Test
   @DisplayName("Update employee")
   public void testUpdate() throws Exception {
 
