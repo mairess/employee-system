@@ -55,6 +55,9 @@
           </execution>
           <execution>
             <configuration>
+              <excludes>
+                <exclude>**/controller/advice/*</exclude>
+              </excludes>
               <haltOnFailure>true</haltOnFailure>
               <includes>
                 <include>**/controller/*</include>

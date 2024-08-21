@@ -1,4 +1,4 @@
-package org.maires.employee.security;
+package org.maires.employee.docs;
 
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.security.SecurityRequirement;
@@ -17,7 +17,6 @@ public class DocAuthCustomizer implements OpenApiCustomizer {
   /**
    * The Scheme name.
    */
-  @SuppressWarnings({"checkstyle:AbbreviationAsWordInName", "checkstyle:MemberName"})
   public final String schemeName = "Bearer Auth";
 
   @Override
