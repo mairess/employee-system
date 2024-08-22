@@ -16,6 +16,17 @@ services:
       database:
         condition: service_healthy
 
+  frontend:
+    build:
+      context: ./frontend
+    container_name: employee_system_frontend
+    restart: unless-stopped
+    ports:
+      - 3000:3000
+    working_dir: /app
+    volumes:
+      - ./frontend:/app
+
   ms-reset-password:
     build:
       context: ./ms-reset-password
