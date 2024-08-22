@@ -29,7 +29,7 @@ Also, set up the following env variables for the mail service:
 ```
 MAIL_HOST=smtp.gmail.com 
 
-MAIL_PORT=your-port-number-like 123
+MAIL_PORT=123
 
 MAIL_USERNAME=mymail@example.com
 
