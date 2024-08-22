@@ -19,9 +19,11 @@ jobs:
 
       - name: Validate checkstyle
         run: mvn checkstyle:check
+        working-directory: backend
 
       - name: Validate test coverage
         run: mvn clean verify
+        working-directory: backend
 
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v4.0.1
