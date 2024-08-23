@@ -163,6 +163,42 @@ public class UserIntegrationTest {
   }
 
   @Test
+  @DisplayName("Email in use exception")
+  public void testEmailAlreadyInUse() throws Exception {
+
+    User newUser = new User("Vange Carlos Aguiar", "vange", "vange@example.com", "123456",
+        Role.ADMIN);
+
+    ObjectMapper objectMapper = new ObjectMapper();
+    String newUserJson = objectMapper.writeValueAsString(newUser);
+    String userUrl = "/users";
+
+    mockMvc.perform(post(userUrl)
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(newUserJson))
+        .andExpect(status().isBadRequest())
+        .andExpect(jsonPath("$.message").value("Email already in use!"));
+  }
+
+  @Test
+  @DisplayName("Username in use exception")
+  public void testUsernameAlreadyInUse() throws Exception {
+
+    User newUser = new User("Vange Carlos Aguiar", "vange", "vangecarlos@example.com", "123456",
+        Role.ADMIN);
+
+    ObjectMapper objectMapper = new ObjectMapper();
+    String newUserJson = objectMapper.writeValueAsString(newUser);
+    String userUrl = "/users";
+
+    mockMvc.perform(post(userUrl)
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(newUserJson))
+        .andExpect(status().isBadRequest())
+        .andExpect(jsonPath("$.message").value("Username"));
+  }
+
+  @Test
   @DisplayName("Update user")
   public void testUpdate() throws Exception {
 

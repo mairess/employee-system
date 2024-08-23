@@ -45,17 +45,17 @@ public class GeneralControllerAdvice {
 
     String message = exception.getMessage();
 
-    if (message.contains("users_email_key")) {
+    if (message.contains("(email)=")) {
 
       return ResponseEntity.status(HttpStatus.BAD_REQUEST)
           .body(Map.of("message", "Email already in use!"));
 
-    } else if (message.contains("users_username_key")) {
+    } else if (message.contains("(username)=")) {
 
       return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-          .body(Map.of("message", "Username already in use!"));
+          .body(Map.of("message", "Username"));
 
-    } else if (message.contains("employees_phone_key")) {
+    } else if (message.contains("(phone)=")) {
 
       return ResponseEntity.status(HttpStatus.BAD_REQUEST)
           .body(Map.of("message", "Phone already in use!"));
