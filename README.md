@@ -70,7 +70,7 @@ bin/kafka-server-start.sh config/server.properties
 4. Start database:
 
 ```BASH
-docker compose up database -d database 
+docker compose up -d database 
 ```
 
 5. Start backend:
