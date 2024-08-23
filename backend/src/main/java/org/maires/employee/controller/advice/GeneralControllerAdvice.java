@@ -129,4 +129,18 @@ public class GeneralControllerAdvice {
         .body(Map.of("message", exception.getMessage()));
   }
 
+  /**
+   * Handle generic erros response entity.
+   *
+   * @param exception the exception
+   * @return the response entity
+   */
+  @ExceptionHandler(Exception.class)
+  public ResponseEntity<Map<String, String>> handleGenericErros(Exception exception) {
+
+    Map<String, String> response = Map.of("message", exception.getMessage());
+
+    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+  }
+
 }
