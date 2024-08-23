@@ -10,24 +10,17 @@ This is a system for managing employees.
 
 Frontend is in MVP mode and only supports password change.
 
-## Run locally
-
-To run this project locally, follow these steps:
+## Run with Docker
 
 ### Prerequisites
 
-Make sure you have the following installed on your machine:
+⚠️ Make sure you have [Docker](https://www.docker.com/get-started/) installed on your machine:
 
-⚠️ [Java](https://www.oracle.com/java/)
 
-⚠️ [Docker](https://www.docker.com/get-started/)
-
-⚠️ [Apache kafka](https://kafka.apache.org/documentation/#quickstart)
-
-Also, set up the following env variables for the mail service:
+Also set up the following env variables for the mail service ([guide here](./docs/set-env-variables-mail-service.md)):
 
 ```
-MAIL_HOST=smtp.gmail.com 
+MAIL_HOST=smtp.example.com 
 
 MAIL_PORT=123
 
@@ -46,62 +39,66 @@ MAIL_PASSWORD=asdfASDF123
 ```BASH
 git clone git@github.com:mairess/employee-system.git
 
-cd employee-system/backend
+cd employee-system
 ```
 
-2. Install dependencies:
+2. Run application:
 
 ```BASH
-mvn clean install
+docker compose up -d --build 
 ```
 
-3. Start ZooKeeper:
-
-```BASH
-bin/zookeeper-server-start.sh config/zookeeper.properties
-```
-
-4. Start Kafka:
-
-```BASH
-bin/kafka-server-start.sh config/server.properties
-```
-
-4. Start database:
-
-```BASH
-docker compose up -d database 
-```
-
-5. Start backend:
-
-```BASH
-mvn spring-boot:run
-```
-
-6. Run tests:
-
-```BASH
-mvn test
-```
-
-7. Available routes:
+3. Available routes:
 
 ```BASH
 http://localhost:8080/swagger-ui/index.html
 ```
 
-## Run with Docker
+## Run locally
+
+To run this project locally, follow these steps:
 
 ### Prerequisites
 
 Make sure you have the following installed on your machine:
 
+⚠️ [Java](https://www.oracle.com/java/)
+
 ⚠️ [Docker](https://www.docker.com/get-started/)
+
+⚠️ [Apache kafka](https://kafka.apache.org/quickstart)
+
+Also set up the following env variables for the mail service ([guide here](./docs/set-env-variables-mail-service.md)):
+
+```
+MAIL_HOST=smtp.example.com 
+
+MAIL_PORT=123
+
+MAIL_USERNAME=mymail@example.com
+
+MAIL_PASSWORD=asdfASDF123
+
+```
+
+⚠️ The variable `MAIL_PASSWORD` is not your email password, you need to create an app password, set this up [here](https://myaccount.google.com/apppasswords) if using google.
 
 ### Steps:
 
-1. Clone repository:
+1. Start Kafka with KRaft (Kafka must be running before start the application):
+
+```BASH
+# Generate a Cluster UUID
+KAFKA_CLUSTER_ID="$(bin/kafka-storage.sh random-uuid)"
+
+# Format Log Directories
+bin/kafka-storage.sh format -t $KAFKA_CLUSTER_ID -c config/kraft/server.properties
+
+#Start the Kafka Server
+bin/kafka-server-start.sh config/kraft/server.properties
+```
+
+2. Clone repository:
 
 ```BASH
 git clone git@github.com:mairess/employee-system.git
@@ -109,19 +106,47 @@ git clone git@github.com:mairess/employee-system.git
 cd employee-system
 ```
 
-2. Run API:
+3. Start database:
 
 ```BASH
-docker compose up -d --build 
+docker compose up -d database
 ```
 
-3. Run tests:
+4. Start backend:
 
 ```BASH
-mvn test
+cd backend
+
+mvn clean install
+
+mvn spring-boot:run
 ```
 
-4. Available routes:
+5. Start ms-reset-password:
+
+```BASH
+# open another terminal and enter ms-reset-password
+
+cd ms-reset-password
+
+mvn clean install
+
+mvn spring-boot:run
+```
+
+6. Start frontend (just to change password nothing more):
+
+```BASH
+# open another terminal and enter frontend
+
+cd frontend
+
+npm install
+
+npm run dev
+```
+
+7. Available routes:
 
 ```BASH
 http://localhost:8080/swagger-ui/index.html
