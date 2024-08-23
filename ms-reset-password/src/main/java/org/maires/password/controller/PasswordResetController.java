@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/password")
-public class PasswordController {
+public class PasswordResetController {
 
   private final TokenService tokenService;
   private final PasswordResetService passwordResetService;
@@ -36,7 +36,7 @@ public class PasswordController {
    * @param passwordResetService  the password reset service
    */
   @Autowired
-  public PasswordController(
+  public PasswordResetController(
       AuthenticationManager authenticationManager,
       TokenService tokenService,
       PasswordResetService passwordResetService
