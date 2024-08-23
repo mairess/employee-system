@@ -1,5 +1,6 @@
 package org.maires.employee.integration;
 
+import static org.hamcrest.Matchers.hasItem;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -23,6 +24,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultActions;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
@@ -36,7 +38,7 @@ public class UserIntegrationTest {
 
   @Container
   public static PostgreSQLContainer POSTGRES_CONTAINER = new PostgreSQLContainer("postgres")
-      .withDatabaseName("wnetdb");
+      .withDatabaseName("employee-db");
 
   @Autowired
   EmployeeRepository employeeRepository;
@@ -163,6 +165,82 @@ public class UserIntegrationTest {
   }
 
   @Test
+  @DisplayName("Email in use exception")
+  public void testEmailAlreadyInUse() throws Exception {
+
+    User newUser = new User("Vange Carlos Aguiar", "vange", "vange@example.com", "123456",
+        Role.ADMIN);
+
+    ObjectMapper objectMapper = new ObjectMapper();
+    String newUserJson = objectMapper.writeValueAsString(newUser);
+    String userUrl = "/users";
+
+    mockMvc.perform(post(userUrl)
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(newUserJson))
+        .andExpect(status().isBadRequest())
+        .andExpect(jsonPath("$.message").value("Email already in use!"));
+  }
+
+  @Test
+  @DisplayName("Username in use exception")
+  public void testUsernameAlreadyInUse() throws Exception {
+
+    User newUser = new User("Vange Carlos Aguiar", "vange", "vangecarlos@example.com", "123456",
+        Role.ADMIN);
+
+    ObjectMapper objectMapper = new ObjectMapper();
+    String newUserJson = objectMapper.writeValueAsString(newUser);
+    String userUrl = "/users";
+
+    mockMvc.perform(post(userUrl)
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(newUserJson))
+        .andExpect(status().isBadRequest())
+        .andExpect(jsonPath("$.message").value("Username"));
+  }
+
+  @Test
+  @DisplayName("User validation errors")
+  public void testUserValidationErrors() throws Exception {
+
+    String invalidUserJson = """
+        {
+            "WrongKey": "David Gahan",
+            "WrongKey": "david",
+            "WrongKey": "david@example.com",
+            "WrongKey": "1234567890",
+            "WrongKey": "ADMIN"
+        }
+        """;
+
+    String userUrl = "/users";
+
+    ResultActions resultActions = mockMvc.perform(post(userUrl)
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(invalidUserJson))
+        .andExpect(status().isBadRequest())
+        .andExpect(jsonPath("$.message").isArray());
+
+    String[] expectedMessages = {
+        "Username cannot be blank!",
+        "Username cannot be null!",
+        "Role cannot be null! Try ADMIN or TECHNICIAN",
+        "Role must be ADMIN or TECHNICIAN",
+        "Password cannot be null!",
+        "Password cannot be blank!",
+        "FullName cannot be blank!",
+        "FullName cannot be null!",
+        "Email cannot be null!",
+        "Email cannot be blank!"
+    };
+
+    for (String expectedMessage : expectedMessages) {
+      resultActions.andExpect(jsonPath("$.message").value(hasItem(expectedMessage)));
+    }
+  }
+
+  @Test
   @DisplayName("Update user")
   public void testUpdate() throws Exception {
 
@@ -181,7 +259,7 @@ public class UserIntegrationTest {
         .andExpect(jsonPath("$.username").value("gilmar"))
         .andExpect(jsonPath("$.role").value("USER"));
   }
-
+  
   @Test
   @DisplayName("Delete user")
   public void testDelete() throws Exception {

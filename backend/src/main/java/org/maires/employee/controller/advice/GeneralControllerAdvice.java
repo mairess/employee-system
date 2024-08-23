@@ -45,17 +45,17 @@ public class GeneralControllerAdvice {
 
     String message = exception.getMessage();
 
-    if (message.contains("users_email_key")) {
+    if (message.contains("(email)=")) {
 
       return ResponseEntity.status(HttpStatus.BAD_REQUEST)
           .body(Map.of("message", "Email already in use!"));
 
-    } else if (message.contains("users_username_key")) {
+    } else if (message.contains("(username)=")) {
 
       return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-          .body(Map.of("message", "Username already in use!"));
+          .body(Map.of("message", "Username"));
 
-    } else if (message.contains("employees_phone_key")) {
+    } else if (message.contains("(phone)=")) {
 
       return ResponseEntity.status(HttpStatus.BAD_REQUEST)
           .body(Map.of("message", "Phone already in use!"));
@@ -127,6 +127,20 @@ public class GeneralControllerAdvice {
 
     return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
         .body(Map.of("message", exception.getMessage()));
+  }
+
+  /**
+   * Handle generic erros response entity.
+   *
+   * @param exception the exception
+   * @return the response entity
+   */
+  @ExceptionHandler(Exception.class)
+  public ResponseEntity<Map<String, String>> handleGenericErros(Exception exception) {
+
+    Map<String, String> response = Map.of("message", exception.getMessage());
+
+    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
   }
 
 }
