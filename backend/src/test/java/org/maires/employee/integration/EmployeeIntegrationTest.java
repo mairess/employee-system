@@ -89,6 +89,7 @@ public class EmployeeIntegrationTest {
         LocalDate.now(),
         "77987654321"
     );
+
     Employee Fletcher = new Employee(
         "https://robohash.org/employee170",
         "Andrew Fletcher",
@@ -172,6 +173,42 @@ public class EmployeeIntegrationTest {
         .andExpect(status().isCreated())
         .andExpect(jsonPath("$.id").exists())
         .andExpect(jsonPath("$.fullName").value("David Gahan"));
+  }
+
+  @Test
+  @DisplayName("Phone in use exception")
+  public void testPhoneAlreadyInUse() throws Exception {
+
+    Employee Gore = new Employee(
+        "https://robohash.org/employee170",
+        "Martin Gore",
+        "Frontend",
+        LocalDate.now(),
+        "77912345678"
+    );
+
+    employeeRepository.save(Gore);
+
+    Employee Gahan = new Employee(
+        "https://robohash.org/employee170",
+        "David Gahan",
+        "Backend",
+        LocalDate.now(),
+        "77912345678"
+    );
+
+    ObjectMapper objectMapper = new ObjectMapper();
+    objectMapper.registerModule(new JavaTimeModule());
+    String newEmployeeAsString = objectMapper.writeValueAsString(Gahan);
+
+    String employeeUrl = "/employees";
+
+    mockMvc.perform(post(employeeUrl)
+            .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenAdmin)
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(newEmployeeAsString))
+        .andExpect(status().isBadRequest())
+        .andExpect(jsonPath("$.message").value("Phone already in use!"));
   }
 
   @Test
