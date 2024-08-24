@@ -15,7 +15,7 @@ function PasswordResetPage() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const response = await fetch(`http://localhost:8080/auth/reset-password?token=${token}`, {
+    const response = await fetch(`http://localhost:8080/password/reset?token=${token}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
