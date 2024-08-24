@@ -3,6 +3,7 @@ package org.maires.employee.service;
 import org.maires.employee.entity.User;
 import org.maires.employee.repository.UserRepository;
 import org.maires.employee.service.exception.UserNotFoundException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.messaging.MessagingException;
@@ -17,6 +18,7 @@ public class PasswordResetService {
 
   private final UserRepository userRepository;
   private final KafkaTemplate<String, String> kafkaTemplate;
+  private final BCryptPasswordEncoder bcryptPasswordEncoder;
 
   @Value("${kafka.topic.password-reset}")
   private String passwordResetTopic;
@@ -24,19 +26,24 @@ public class PasswordResetService {
   @Value("${kafka.topic.password-reset-confirmation}")
   private String passwordResetConfirmationTopic;
 
+
   /**
    * Instantiates a new Password reset service.
    *
    * @param userRepository the user repository
    * @param kafkaTemplate  the kafka template
    */
+  @Autowired
   public PasswordResetService(
       UserRepository userRepository,
-      KafkaTemplate<String, String> kafkaTemplate
+      KafkaTemplate<String, String> kafkaTemplate,
+      BCryptPasswordEncoder bcryptPasswordEncoder
   ) {
     this.userRepository = userRepository;
     this.kafkaTemplate = kafkaTemplate;
+    this.bcryptPasswordEncoder = bcryptPasswordEncoder;
   }
+
 
   /**
    * Update password.
@@ -52,7 +59,7 @@ public class PasswordResetService {
         () -> new UserNotFoundException(email)
     );
 
-    user.setPassword(new BCryptPasswordEncoder().encode(newPassword));
+    user.setPassword(bcryptPasswordEncoder.encode(newPassword));
 
     userRepository.save(user);
 
@@ -66,6 +73,7 @@ public class PasswordResetService {
    *
    * @param email      the email
    * @param resetToken the reset token
+   * @throws UserNotFoundException the user not found exception
    */
   public void resetPasswordRequest(String email, String resetToken)
       throws UserNotFoundException {
