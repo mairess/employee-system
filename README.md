@@ -122,12 +122,12 @@ mvn clean install
 mvn spring-boot:run
 ```
 
-5. Start ms-reset-password:
+5. Start ms-email:
 
 ```BASH
-# open another terminal and enter ms-reset-password
+# open another terminal and enter ms-email
 
-cd ms-reset-password
+cd ms-email
 
 mvn clean install
 
