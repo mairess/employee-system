@@ -64,6 +64,9 @@ public class SecurityConfig {
             .requestMatchers(HttpMethod.GET, "/v3/**").permitAll()
             .requestMatchers(HttpMethod.POST, "/users").permitAll()
             .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
+            .requestMatchers(
+                HttpMethod.POST, "password/reset-request", "password/reset"
+            ).permitAll()
             .anyRequest().authenticated()
         )
         .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
