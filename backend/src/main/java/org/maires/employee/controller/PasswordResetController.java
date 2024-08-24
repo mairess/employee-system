@@ -70,24 +70,16 @@ public class PasswordResetController {
    */
   @PostMapping("/reset")
   public ResponseEntity<Map<String, String>> resetPassword(@RequestParam String token,
-      @RequestBody PasswordResetDto request) {
+      @RequestBody PasswordResetDto request) throws UserNotFoundException {
 
-    try {
+    String email = tokenService.validateToken(token);
 
-      String email = tokenService.validateToken(token);
+    passwordResetService.updatePassword(email, request.newPassword());
 
-      passwordResetService.updatePassword(email, request.newPassword());
+    Map<String, String> message = Map.of("message", "Password successfully changed!");
 
-      Map<String, String> message = Map.of("message", "Password successfully changed!");
+    return ResponseEntity.status(HttpStatus.OK).body(message);
 
-      return ResponseEntity.status(HttpStatus.OK).body(message);
-
-    } catch (Exception e) {
-      Map<String, String> message = Map.of("message", "Invalid or expired token!");
-
-      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(message);
-    }
   }
-
 
 }

@@ -1,9 +1,11 @@
 package org.maires.employee.controller.advice;
 
+import com.auth0.jwt.exceptions.SignatureVerificationException;
 import java.util.List;
 import java.util.Map;
 import org.maires.employee.service.exception.FutureDateException;
 import org.maires.employee.service.exception.NotFoundException;
+import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,11 +15,13 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+
 /**
  * The type General controller advice.
  */
 @ControllerAdvice
 public class GeneralControllerAdvice {
+
 
   /**
    * Handle not found response entity.
@@ -33,14 +37,15 @@ public class GeneralControllerAdvice {
     return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
   }
 
+
   /**
-   * Handle login response entity.
+   * Handle data integrity violation exception response entity.
    *
    * @param exception the exception
    * @return the response entity
    */
   @ExceptionHandler(DataIntegrityViolationException.class)
-  public ResponseEntity<Map<String, String>> handleDuplicatedKey(
+  public ResponseEntity<Map<String, String>> handleDataIntegrityViolationException(
       DataIntegrityViolationException exception) {
 
     String message = exception.getMessage();
@@ -65,28 +70,31 @@ public class GeneralControllerAdvice {
         .body(Map.of("message", exception.getMessage()));
   }
 
+
   /**
-   * Handle login response entity.
+   * Handle bad credentials exception response entity.
    *
    * @param exception the exception
    * @return the response entity
    */
   @ExceptionHandler(BadCredentialsException.class)
-  public ResponseEntity<Map<String, String>> handleLogin(BadCredentialsException exception) {
+  public ResponseEntity<Map<String, String>> handleBadCredentialsException(
+      BadCredentialsException exception) {
 
     Map<String, String> response = Map.of("message", exception.getMessage());
 
     return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
   }
 
+
   /**
-   * Handle validation response entity.
+   * Handle method argument not valid exception response entity.
    *
    * @param exception the exception
    * @return the response entity
    */
   @ExceptionHandler(MethodArgumentNotValidException.class)
-  public ResponseEntity<Map<String, List<String>>> handleValidation(
+  public ResponseEntity<Map<String, List<String>>> handleMethodArgumentNotValidException(
       MethodArgumentNotValidException exception) {
 
     Map<String, List<String>> response = Map.of(
@@ -94,32 +102,46 @@ public class GeneralControllerAdvice {
         exception.getBindingResult()
             .getAllErrors()
             .stream()
-            .map(error -> error.getDefaultMessage())
+            .map(DefaultMessageSourceResolvable::getDefaultMessage)
             .toList()
     );
 
     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
   }
 
+
   /**
-   * Handle json parse error response entity.
+   * Handle future date exception response entity.
    *
    * @param exception the exception
    * @return the response entity
    */
-  @ExceptionHandler({HttpMessageNotReadableException.class, FutureDateException.class})
-  public ResponseEntity<Map<String, String>> handleDateJsonParseError(
+  @ExceptionHandler(FutureDateException.class)
+  public ResponseEntity<Map<String, String>> handleFutureDateException(
+      FutureDateException exception) {
+
+    Map<String, String> response = Map.of("message", exception.getMessage());
+
+    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+
+  }
+
+
+  /**
+   * Handle http message not readable exception response entity.
+   *
+   * @param exception the exception
+   * @return the response entity
+   */
+  @ExceptionHandler(HttpMessageNotReadableException.class)
+  public ResponseEntity<Map<String, String>> handleHttpMessageNotReadableException(
       Exception exception) {
 
-    if (exception instanceof HttpMessageNotReadableException) {
+    String message = exception.getMessage();
+
+    if (message.contains("java.time.LocalDate")) {
 
       Map<String, String> response = Map.of("message", "Admission valid format yyyy-MM-dd");
-
-      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
-
-    } else if (exception instanceof FutureDateException) {
-
-      Map<String, String> response = Map.of("message", exception.getMessage());
 
       return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
 
@@ -129,14 +151,31 @@ public class GeneralControllerAdvice {
         .body(Map.of("message", exception.getMessage()));
   }
 
+
   /**
-   * Handle generic erros response entity.
+   * Handle signature verification exception response entity.
+   *
+   * @param exception the exception
+   * @return the response entity
+   */
+  @ExceptionHandler(SignatureVerificationException.class)
+  public ResponseEntity<Map<String, String>> handleSignatureVerificationException(
+      SignatureVerificationException exception) {
+
+    Map<String, String> response = Map.of("message", exception.getMessage());
+
+    return ResponseEntity.status(HttpStatus.FORBIDDEN).body(response);
+  }
+
+
+  /**
+   * Handle generic exceptions response entity.
    *
    * @param exception the exception
    * @return the response entity
    */
   @ExceptionHandler(Exception.class)
-  public ResponseEntity<Map<String, String>> handleGenericErros(Exception exception) {
+  public ResponseEntity<Map<String, String>> handleGenericExceptions(Exception exception) {
 
     Map<String, String> response = Map.of("message", exception.getMessage());
 

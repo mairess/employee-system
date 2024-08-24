@@ -43,19 +43,15 @@ public class AuthController {
    * @throws BadCredentialsException the bad credentials exception
    */
   @PostMapping("/login")
-  public TokenDto login(@RequestBody AuthDto authDto) throws BadCredentialsException {
-    try {
-      UsernamePasswordAuthenticationToken usernamePassword =
-          new UsernamePasswordAuthenticationToken(authDto.username(), authDto.password());
+  public TokenDto login(@RequestBody AuthDto authDto) {
+    UsernamePasswordAuthenticationToken usernamePassword =
+        new UsernamePasswordAuthenticationToken(authDto.username(), authDto.password());
 
-      Authentication auth = authenticationManager.authenticate(usernamePassword);
+    Authentication auth = authenticationManager.authenticate(usernamePassword);
 
-      String token = tokenService.generateToken(auth.getName());
+    String token = tokenService.generateToken(auth.getName());
 
-      return new TokenDto(token);
-    } catch (BadCredentialsException exception) {
-      throw new BadCredentialsException("Invalid credentials!");
-    }
+    return new TokenDto(token);
   }
 
 }
