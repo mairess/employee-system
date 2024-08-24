@@ -1,10 +1,10 @@
-package org.maires.password;
+package org.maires.email;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class MsResetPasswordApplicationTests {
+class MsEmailApplicationTests {
 
   @Test
   void contextLoads() {

@@ -118,7 +118,6 @@
       <version>2.6.0</version>
     </dependency>
 
-
     <!-- validations -->
     <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-validation -->
     <dependency>
@@ -126,7 +125,6 @@
       <groupId>org.springframework.boot</groupId>
       <version>3.3.2</version>
     </dependency>
-
 
     <!-- security -->
     <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-security -->
@@ -140,6 +138,12 @@
       <artifactId>java-jwt</artifactId>
       <groupId>com.auth0</groupId>
       <version>4.4.0</version>
+    </dependency>
+
+    <!-- kafka -->
+    <dependency>
+      <artifactId>spring-kafka</artifactId>
+      <groupId>org.springframework.kafka</groupId>
     </dependency>
 
     <!-- test -->
@@ -170,6 +174,20 @@
     <dependency>
       <artifactId>spring-security-test</artifactId>
       <groupId>org.springframework.security</groupId>
+      <scope>test</scope>
+    </dependency>
+
+    <!-- https://mvnrepository.com/artifact/org.testcontainers/kafka -->
+    <dependency>
+      <artifactId>kafka</artifactId>
+      <groupId>org.testcontainers</groupId>
+      <scope>test</scope>
+    </dependency>
+
+    <!-- https://mvnrepository.com/artifact/org.springframework.kafka/spring-kafka-test -->
+    <dependency>
+      <artifactId>spring-kafka-test</artifactId>
+      <groupId>org.springframework.kafka</groupId>
       <scope>test</scope>
     </dependency>
 

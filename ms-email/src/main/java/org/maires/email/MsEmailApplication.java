@@ -1,4 +1,4 @@
-package org.maires.password;
+package org.maires.email;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -7,7 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * The type Ms reset password application.
  */
 @SpringBootApplication
-public class MsResetPasswordApplication {
+public class MsEmailApplication {
 
   /**
    * The entry point of application.
@@ -15,7 +15,7 @@ public class MsResetPasswordApplication {
    * @param args the input arguments
    */
   public static void main(String[] args) {
-    SpringApplication.run(MsResetPasswordApplication.class, args);
+    SpringApplication.run(MsEmailApplication.class, args);
   }
 
 }

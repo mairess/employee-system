@@ -1,4 +1,4 @@
-package org.maires.password.service;
+package org.maires.email.service;
 
 import jakarta.mail.internet.MimeMessage;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +43,13 @@ public class EmailService {
     sendPasswordResetEmail(email, resetLink);
   }
 
+  @KafkaListener(topics = "${kafka.topic.password-reset-confirmation}", groupId = "email-service")
+  public void sendResetPasswordConfirmationEmail(String message)
+      throws MessagingException, jakarta.mail.MessagingException {
+    String email = message.replace("email:", "");
+    sendPasswordResetConfirmationEmail(email);
+  }
+
   private void sendPasswordResetEmail(String email, String resetLink)
       throws MessagingException, jakarta.mail.MessagingException {
     String subject = "Password Reset Request";
@@ -76,12 +83,17 @@ public class EmailService {
         + "  color: #666;"
         + "  line-height: 1.6;"
         + "}"
-        + "a {"
-        + "  color: #007bff;"
+        + "a.button {"
+        + "  display: inline-block;"
+        + "  padding: 10px 20px;"
+        + "  font-size: 16px;"
+        + "  color: #fff;"
+        + "  background-color: #007bff;"
         + "  text-decoration: none;"
+        + "  border-radius: 5px;"
         + "}"
-        + "a:hover {"
-        + "  text-decoration: underline;"
+        + "a.button:hover {"
+        + "  background-color: #0056b3;"
         + "}"
         + ".footer {"
         + "  font-size: 14px;"
@@ -95,8 +107,8 @@ public class EmailService {
         + "<h2>Important: Password Reset Request</h2>"
         + "<p>The link to reset your password will expire in 15 minutes. "
         + "Please use it as soon as possible.</p>"
-        + "<p>To reset your password, click the link below:</p>"
-        + "<p><a href=\"" + resetLink + "\">" + resetLink + "</a></p>"
+        + "<p>To reset your password, click the button below:</p>"
+        + "<p><a href=\"" + resetLink + "\" class=\"button\">Change your password here</a></p>"
         + "<p class=\"footer\">If you did not request this password reset, "
         + "please ignore this email.</p>"
         + "</div>"

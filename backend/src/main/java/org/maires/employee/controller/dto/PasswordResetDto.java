@@ -1,4 +1,4 @@
-package org.maires.password.controller.dto;
+package org.maires.employee.controller.dto;
 
 /**
  * The type Password reset dto.

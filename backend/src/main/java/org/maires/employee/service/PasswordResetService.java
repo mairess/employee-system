@@ -1,11 +1,11 @@
-package org.maires.password.service;
+package org.maires.employee.service;
 
-import jakarta.mail.MessagingException;
-import org.maires.password.entity.User;
-import org.maires.password.repository.UserRepository;
-import org.maires.password.service.exception.UserNotFoundException;
+import org.maires.employee.entity.User;
+import org.maires.employee.repository.UserRepository;
+import org.maires.employee.service.exception.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.messaging.MessagingException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -17,10 +17,12 @@ public class PasswordResetService {
 
   private final UserRepository userRepository;
   private final KafkaTemplate<String, String> kafkaTemplate;
-  private final EmailService emailService;
 
   @Value("${kafka.topic.password-reset}")
   private String passwordResetTopic;
+
+  @Value("${kafka.topic.password-reset-confirmation}")
+  private String passwordResetConfirmationTopic;
 
   /**
    * Instantiates a new Password reset service.
@@ -30,12 +32,10 @@ public class PasswordResetService {
    */
   public PasswordResetService(
       UserRepository userRepository,
-      KafkaTemplate<String, String> kafkaTemplate,
-      EmailService emailService
+      KafkaTemplate<String, String> kafkaTemplate
   ) {
     this.userRepository = userRepository;
     this.kafkaTemplate = kafkaTemplate;
-    this.emailService = emailService;
   }
 
   /**
@@ -56,7 +56,8 @@ public class PasswordResetService {
 
     userRepository.save(user);
 
-    emailService.sendPasswordResetConfirmationEmail(email);
+    String message = "email:%s".formatted(user.getEmail());
+    kafkaTemplate.send(passwordResetConfirmationTopic, message);
 
   }
 
@@ -66,7 +67,7 @@ public class PasswordResetService {
    * @param email      the email
    * @param resetToken the reset token
    */
-  public void sendPasswordResetRequest(String email, String resetToken)
+  public void resetPasswordRequest(String email, String resetToken)
       throws UserNotFoundException {
 
     User user = userRepository.findByEmail(email).orElseThrow(
@@ -75,6 +76,7 @@ public class PasswordResetService {
 
     String message = "email:%s, token:%s".formatted(user.getEmail(), resetToken);
     kafkaTemplate.send(passwordResetTopic, message);
+
   }
 
 }

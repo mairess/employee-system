@@ -37,9 +37,28 @@ public class TokenService {
         .sign(algorithm);
   }
 
+  /**
+   * Generate token string.
+   *
+   * @param username the username
+   * @param minutes  the minutes
+   * @return the string
+   */
+  public String generateToken(String username, int minutes) {
+    return JWT.create()
+        .withSubject(username)
+        .withExpiresAt(generateExpiration(minutes))
+        .sign(algorithm);
+  }
+
   private Instant generateExpiration() {
     return Instant.now()
-        .plus(2, ChronoUnit.HOURS);
+        .plus(8, ChronoUnit.HOURS);
+  }
+
+  private Instant generateExpiration(int minutes) {
+    return Instant.now()
+        .plus(minutes, ChronoUnit.MINUTES);
   }
 
   /**
