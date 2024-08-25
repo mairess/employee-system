@@ -1,5 +1,6 @@
 package org.maires.employee.integration;
 
+import static org.hamcrest.Matchers.containsString;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -109,6 +110,69 @@ public class PasswordResetIntegrationTest {
         .andExpect(status().isNotFound())
         .andExpect(
             jsonPath("$.message").value("User not found with id issoNonEcziste@example.com!"));
+
+  }
+
+  @Test
+  @DisplayName("Token signature exception")
+  public void testTokenSignatureVerificationException() throws Exception {
+
+    PasswordResetDto passwordResetDto = new PasswordResetDto("segredo123");
+
+    String token = tokenService.generateToken(userAdmin.getEmail());
+
+    String invalidToken = token + "a";
+
+    ObjectMapper objectMapper = new ObjectMapper();
+    String newPassword = objectMapper.writeValueAsString(passwordResetDto);
+
+    String passwordUrl = "/password/reset?token=%s".formatted(invalidToken);
+
+    mockMvc.perform(post(passwordUrl)
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(newPassword))
+        .andExpect(status().isForbidden())
+        .andExpect(jsonPath("$.message").value(
+            "The Token's Signature resulted invalid when verified using the Algorithm: HmacSHA256"));
+
+  }
+
+  @Test
+  @DisplayName("Empty body exception")
+  public void testEmptyBodyException() throws Exception {
+
+    String token = tokenService.generateToken(userAdmin.getEmail());
+
+    String passwordUrl = "/password/reset?token=%s".formatted(token);
+
+    mockMvc.perform(post(passwordUrl)
+            .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isInternalServerError())
+        .andExpect(
+            jsonPath("$.message").value(containsString("Required request body is missing:")));
+
+  }
+
+  @Test
+  @DisplayName("Expired token exception")
+  public void testExpiredTokenException() throws Exception {
+
+    String token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJtYWlyZXN0QGdtYWlsLmNvbSIsImV4cCI6MTcyNDU4MjY2NX0.sP_5v6CSYR9bnaIXGjA4qYyZSPfit5rIiIeLEfssERA";
+
+    PasswordResetDto passwordResetDto = new PasswordResetDto("segredo123");
+
+    ObjectMapper objectMapper = new ObjectMapper();
+    String newPassword = objectMapper.writeValueAsString(passwordResetDto);
+
+    String passwordUrl = "/password/reset?token=%s".formatted(token);
+
+    mockMvc.perform(post(passwordUrl)
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(newPassword))
+        .andExpect(status().isInternalServerError())
+        .andExpect(
+            jsonPath("$.message").value(
+                containsString("The Token has expired on 2024-08-25T10:44:25Z.")));
 
   }
 

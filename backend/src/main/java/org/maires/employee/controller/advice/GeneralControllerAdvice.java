@@ -162,6 +162,9 @@ public class GeneralControllerAdvice {
   public ResponseEntity<Map<String, String>> handleSignatureVerificationException(
       SignatureVerificationException exception) {
 
+    // This response shows the algorithm used to sign token.
+    // Might be a security issue.
+
     Map<String, String> response = Map.of("message", exception.getMessage());
 
     return ResponseEntity.status(HttpStatus.FORBIDDEN).body(response);
