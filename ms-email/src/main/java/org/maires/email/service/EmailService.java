@@ -1,12 +1,20 @@
 package org.maires.email.service;
 
+import freemarker.template.Configuration;
+import freemarker.template.Template;
+import freemarker.template.TemplateException;
 import jakarta.mail.internet.MimeMessage;
+import java.io.IOException;
+import java.io.StringWriter;
+import java.io.Writer;
+import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.messaging.MessagingException;
 import org.springframework.stereotype.Service;
+
 
 /**
  * The type Email service.
@@ -15,16 +23,21 @@ import org.springframework.stereotype.Service;
 public class EmailService {
 
   private final JavaMailSender mailSender;
+  private final Configuration freemarkerConfig;
+
 
   /**
    * Instantiates a new Email service.
    *
-   * @param mailSender the mail sender
+   * @param mailSender       the mail sender
+   * @param freemarkerConfig the freemarker config
    */
   @Autowired
-  public EmailService(JavaMailSender mailSender) {
+  public EmailService(JavaMailSender mailSender, Configuration freemarkerConfig) {
     this.mailSender = mailSender;
+    this.freemarkerConfig = freemarkerConfig;
   }
+
 
   /**
    * Send reset password email.
@@ -43,6 +56,14 @@ public class EmailService {
     sendPasswordResetEmail(email, resetLink);
   }
 
+
+  /**
+   * Send reset password confirmation email.
+   *
+   * @param message the message
+   * @throws MessagingException the messaging exception
+   * @throws MessagingException the messaging exception
+   */
   @KafkaListener(topics = "${kafka.topic.password-reset-confirmation}", groupId = "email-service")
   public void sendResetPasswordConfirmationEmail(String message)
       throws MessagingException, jakarta.mail.MessagingException {
@@ -51,72 +72,15 @@ public class EmailService {
   }
 
   private void sendPasswordResetEmail(String email, String resetLink)
-      throws MessagingException, jakarta.mail.MessagingException {
+      throws jakarta.mail.MessagingException {
     String subject = "Password Reset Request";
-    String htmlContent = "<!DOCTYPE html>"
-        + "<html lang=\"en\">"
-        + "<head>"
-        + "<meta charset=\"UTF-8\">"
-        + "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">"
-        + "<title>Password Reset Instructions</title>"
-        + "<style>"
-        + "body {"
-        + "  font-family: Arial, sans-serif;"
-        + "  background-color: #f0f0f0;"
-        + "  padding: 20px;"
-        + "  margin: 0;"
-        + "}"
-        + ".container {"
-        + "  background-color: #ffffff;"
-        + "  padding: 30px;"
-        + "  border-radius: 10px;"
-        + "  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);"
-        + "  max-width: 600px;"
-        + "  margin: 0 auto;"
-        + "}"
-        + "h2 {"
-        + "  color: #333;"
-        + "  margin-bottom: 20px;"
-        + "}"
-        + "p {"
-        + "  font-size: 16px;"
-        + "  color: #666;"
-        + "  line-height: 1.6;"
-        + "}"
-        + "a.button {"
-        + "  display: inline-block;"
-        + "  padding: 10px 20px;"
-        + "  font-size: 16px;"
-        + "  color: #fff;"
-        + "  background-color: #007bff;"
-        + "  text-decoration: none;"
-        + "  border-radius: 5px;"
-        + "}"
-        + "a.button:hover {"
-        + "  background-color: #0056b3;"
-        + "}"
-        + ".footer {"
-        + "  font-size: 14px;"
-        + "  color: #888;"
-        + "  margin-top: 20px;"
-        + "}"
-        + "</style>"
-        + "</head>"
-        + "<body>"
-        + "<div class=\"container\">"
-        + "<h2>Important: Password Reset Request</h2>"
-        + "<p>The link to reset your password will expire in 15 minutes. "
-        + "Please use it as soon as possible.</p>"
-        + "<p>To reset your password, click the button below:</p>"
-        + "<p><a href=\"" + resetLink + "\" class=\"button\">Change your password here</a></p>"
-        + "<p class=\"footer\">If you did not request this password reset, "
-        + "please ignore this email.</p>"
-        + "</div>"
-        + "</body>"
-        + "</html>";
+    Map<String, Object> model = Map.of("resetLink", resetLink);
+
+    String htmlContent = generateContent("password-reset-email.ftl", model);
 
     sendEmail(email, htmlContent, subject);
   }
+
 
   /**
    * Send password reset confirmation email.
@@ -129,54 +93,23 @@ public class EmailService {
       throws MessagingException, jakarta.mail.MessagingException {
     String subject = "Password Reset Confirmation";
     String supportUrl = "https://github.com/mairess";
-    String htmlContent = "<!DOCTYPE html>"
-        + "<html lang=\"en\">"
-        + "<head>"
-        + "<meta charset=\"UTF-8\">"
-        + "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">"
-        + "<title>Password Reset Confirmation</title>"
-        + "<style>"
-        + "body {"
-        + "  font-family: Arial, sans-serif;"
-        + "  background-color: #f0f0f0;"
-        + "  padding: 20px;"
-        + "  margin: 0;"
-        + "}"
-        + ".container {"
-        + "  background-color: #ffffff;"
-        + "  padding: 30px;"
-        + "  border-radius: 10px;"
-        + "  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);"
-        + "  max-width: 600px;"
-        + "  margin: 0 auto;"
-        + "}"
-        + "h2 {"
-        + "  color: #333;"
-        + "  margin-bottom: 20px;"
-        + "}"
-        + "p {"
-        + "  font-size: 16px;"
-        + "  color: #666;"
-        + "  line-height: 1.6;"
-        + "}"
-        + ".footer {"
-        + "  font-size: 14px;"
-        + "  color: #888;"
-        + "  margin-top: 20px;"
-        + "}"
-        + "</style>"
-        + "</head>"
-        + "<body>"
-        + "<div class=\"container\">"
-        + "<p>Your password has been successfully changed. "
-        + "If you did not initiate this change, please contact our "
-        + "<a href=\"" + supportUrl + "\">support</a> immediately.</p>"
-        + "<p class=\"footer\">If you have any questions, feel free to reach out to us.</p>"
-        + "</div>"
-        + "</body>"
-        + "</html>";
+
+    Map<String, Object> model = Map.of("supportUrl", supportUrl);
+
+    String htmlContent = generateContent("password-reset-confirmation.ftl", model);
 
     sendEmail(email, htmlContent, subject);
+  }
+
+  private String generateContent(String templateName, Map<String, Object> model) {
+    try {
+      Template template = freemarkerConfig.getTemplate(templateName);
+      Writer out = new StringWriter();
+      template.process(model, out);
+      return out.toString();
+    } catch (IOException | TemplateException e) {
+      throw new RuntimeException("Error generating email content", e);
+    }
   }
 
   private void sendEmail(String email, String htmlContent, String subject)

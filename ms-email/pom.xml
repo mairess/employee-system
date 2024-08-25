@@ -54,6 +54,12 @@
       <groupId>org.springframework.boot</groupId>
     </dependency>
 
+    <!-- freemarker  -->
+    <dependency>
+      <artifactId>spring-boot-starter-freemarker</artifactId>
+      <groupId>org.springframework.boot</groupId>
+    </dependency>
+
     <!-- test -->
     <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-test -->
     <dependency>
