@@ -126,13 +126,14 @@
       <version>3.3.2</version>
     </dependency>
 
-    <!-- security -->
+    <!-- spring-security -->
     <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-security -->
     <dependency>
       <artifactId>spring-boot-starter-security</artifactId>
       <groupId>org.springframework.boot</groupId>
     </dependency>
 
+    <!-- JWT -->
     <!-- https://mvnrepository.com/artifact/com.auth0/java-jwt -->
     <dependency>
       <artifactId>java-jwt</artifactId>

@@ -18,7 +18,6 @@ public class PasswordResetService {
 
   private final UserRepository userRepository;
   private final KafkaTemplate<String, String> kafkaTemplate;
-  private final BCryptPasswordEncoder bcryptPasswordEncoder;
 
   @Value("${kafka.topic.password-reset}")
   private String passwordResetTopic;
@@ -36,12 +35,10 @@ public class PasswordResetService {
   @Autowired
   public PasswordResetService(
       UserRepository userRepository,
-      KafkaTemplate<String, String> kafkaTemplate,
-      BCryptPasswordEncoder bcryptPasswordEncoder
+      KafkaTemplate<String, String> kafkaTemplate
   ) {
     this.userRepository = userRepository;
     this.kafkaTemplate = kafkaTemplate;
-    this.bcryptPasswordEncoder = bcryptPasswordEncoder;
   }
 
 
@@ -56,10 +53,12 @@ public class PasswordResetService {
       throws UserNotFoundException, MessagingException {
 
     User user = userRepository.findByEmail(email).orElseThrow(
-        () -> new UserNotFoundException(email)
+        () -> new UserNotFoundException(email, "email")
     );
 
-    user.setPassword(bcryptPasswordEncoder.encode(newPassword));
+    String hashedPassword = new BCryptPasswordEncoder().encode(newPassword);
+
+    user.setPassword(hashedPassword);
 
     userRepository.save(user);
 
@@ -79,7 +78,7 @@ public class PasswordResetService {
       throws UserNotFoundException {
 
     User user = userRepository.findByEmail(email).orElseThrow(
-        () -> new UserNotFoundException(email)
+        () -> new UserNotFoundException(email, "email")
     );
 
     String message = "email:%s, token:%s".formatted(user.getEmail(), resetToken);

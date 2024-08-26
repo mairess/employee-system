@@ -109,7 +109,7 @@ public class PasswordResetIntegrationTest {
             .content(newPassword))
         .andExpect(status().isNotFound())
         .andExpect(
-            jsonPath("$.message").value("User not found with id issoNonEcziste@example.com!"));
+            jsonPath("$.message").value("User not found with email issoNonEcziste@example.com!"));
 
   }
 
@@ -131,7 +131,7 @@ public class PasswordResetIntegrationTest {
     mockMvc.perform(post(passwordUrl)
             .contentType(MediaType.APPLICATION_JSON)
             .content(newPassword))
-        .andExpect(status().isForbidden())
+        .andExpect(status().isUnauthorized())
         .andExpect(jsonPath("$.message").value(
             "The Token's Signature resulted invalid when verified using the Algorithm: HmacSHA256"));
 
@@ -213,7 +213,7 @@ public class PasswordResetIntegrationTest {
             .content(newPasswordRequest))
         .andExpect(status().isNotFound())
         .andExpect(
-            jsonPath("$.message").value("User not found with id issoNonEcziste@example.com!"));
+            jsonPath("$.message").value("User not found with email issoNonEcziste@example.com!"));
 
   }
 

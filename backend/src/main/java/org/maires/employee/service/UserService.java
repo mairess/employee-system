@@ -64,7 +64,8 @@ public class UserService implements UserDetailsService {
    * @throws UserNotFoundException the user not found exception
    */
   public User findById(Long id) throws UserNotFoundException {
-    return userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id.toString()));
+    return userRepository.findById(id)
+        .orElseThrow(() -> new UserNotFoundException(id.toString(), "id"));
   }
 
   /**
@@ -76,7 +77,7 @@ public class UserService implements UserDetailsService {
    */
   public User findByUsername(String username) throws UserNotFoundException {
     return userRepository.findByUsername(username)
-        .orElseThrow(() -> new UserNotFoundException(username));
+        .orElseThrow(() -> new UserNotFoundException(username, "id"));
   }
 
   /**
