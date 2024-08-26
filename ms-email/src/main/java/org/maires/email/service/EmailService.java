@@ -3,16 +3,17 @@ package org.maires.email.service;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
+import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.util.Map;
+import org.maires.email.service.dto.EmailTokenDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
-import org.springframework.messaging.MessagingException;
 import org.springframework.stereotype.Service;
 
 
@@ -24,7 +25,6 @@ public class EmailService {
 
   private final JavaMailSender mailSender;
   private final Configuration freemarkerConfig;
-
 
   /**
    * Instantiates a new Email service.
@@ -44,16 +44,12 @@ public class EmailService {
    *
    * @param message the message
    * @throws MessagingException the messaging exception
-   * @throws MessagingException the messaging exception
    */
   @KafkaListener(topics = "${kafka.topic.password-reset}", groupId = "email-service")
-  public void sendResetPasswordEmail(String message)
-      throws MessagingException, jakarta.mail.MessagingException {
-    String[] parts = message.split(",");
-    String email = parts[0].split(":")[1];
-    String token = parts[1].split(":")[1];
-    String resetLink = "http://localhost:3000/?token=%s".formatted(token);
-    sendPasswordResetEmail(email, resetLink);
+  public void sendResetPasswordEmail(String message) throws MessagingException {
+    EmailTokenDto emailTokenDto = extractEmailAndToken(message);
+    String resetLink = "http://localhost:3000/?token=%s".formatted(emailTokenDto.token());
+    sendPasswordResetEmail(emailTokenDto.email(), resetLink);
   }
 
 
@@ -62,17 +58,14 @@ public class EmailService {
    *
    * @param message the message
    * @throws MessagingException the messaging exception
-   * @throws MessagingException the messaging exception
    */
   @KafkaListener(topics = "${kafka.topic.password-reset-confirmation}", groupId = "email-service")
-  public void sendResetPasswordConfirmationEmail(String message)
-      throws MessagingException, jakarta.mail.MessagingException {
-    String email = message.replace("email:", "");
-    sendPasswordResetConfirmationEmail(email);
+  public void sendResetPasswordConfirmationEmail(String message) throws MessagingException {
+    EmailTokenDto emailTokenDto = extractEmailAndToken(message);
+    sendPasswordResetConfirmationEmail(emailTokenDto.email());
   }
 
-  private void sendPasswordResetEmail(String email, String resetLink)
-      throws jakarta.mail.MessagingException {
+  private void sendPasswordResetEmail(String email, String resetLink) throws MessagingException {
     String subject = "Password Reset Request";
     Map<String, Object> model = Map.of("resetLink", resetLink);
 
@@ -87,10 +80,8 @@ public class EmailService {
    *
    * @param email the email
    * @throws MessagingException the messaging exception
-   * @throws MessagingException the messaging exception
    */
-  public void sendPasswordResetConfirmationEmail(String email)
-      throws MessagingException, jakarta.mail.MessagingException {
+  public void sendPasswordResetConfirmationEmail(String email) throws MessagingException {
     String subject = "Password Reset Confirmation";
     String supportUrl = "https://github.com/mairess";
 
@@ -113,7 +104,7 @@ public class EmailService {
   }
 
   private void sendEmail(String email, String htmlContent, String subject)
-      throws MessagingException, jakarta.mail.MessagingException {
+      throws MessagingException {
     MimeMessage message = mailSender.createMimeMessage();
     MimeMessageHelper helper = new MimeMessageHelper(message, true);
 
@@ -122,6 +113,14 @@ public class EmailService {
     helper.setText(htmlContent, true);
 
     mailSender.send(message);
+  }
+
+  private EmailTokenDto extractEmailAndToken(String message) {
+    String[] parts = message.split(",");
+    String email = parts[0].split(":")[1];
+    String token = parts[1].split(":")[1];
+
+    return new EmailTokenDto(email, token);
   }
 
 }
