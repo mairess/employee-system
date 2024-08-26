@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.util.Map;
+import org.maires.email.service.dto.EmailDto;
 import org.maires.email.service.dto.EmailTokenDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -61,8 +62,8 @@ public class EmailService {
    */
   @KafkaListener(topics = "${kafka.topic.password-reset-confirmation}", groupId = "email-service")
   public void sendResetPasswordConfirmationEmail(String message) throws MessagingException {
-    EmailTokenDto emailTokenDto = extractEmailAndToken(message);
-    sendPasswordResetConfirmationEmail(emailTokenDto.email());
+    EmailDto emailDto = extractEmail(message);
+    sendPasswordResetConfirmationEmail(emailDto.email());
   }
 
   private void sendPasswordResetEmail(String email, String resetLink) throws MessagingException {
@@ -117,10 +118,19 @@ public class EmailService {
 
   private EmailTokenDto extractEmailAndToken(String message) {
     String[] parts = message.split(",");
+
     String email = parts[0].split(":")[1];
     String token = parts[1].split(":")[1];
 
     return new EmailTokenDto(email, token);
+  }
+
+  private EmailDto extractEmail(String message) {
+    String[] parts = message.split(",");
+
+    String email = parts[0].split(":")[1];
+
+    return new EmailDto(email);
   }
 
 }
