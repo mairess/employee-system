@@ -56,7 +56,7 @@ public class PasswordResetService {
       throws UserNotFoundException, MessagingException {
 
     User user = userRepository.findByEmail(email).orElseThrow(
-        () -> new UserNotFoundException(email)
+        () -> new UserNotFoundException(email, "email")
     );
 
     user.setPassword(bcryptPasswordEncoder.encode(newPassword));
@@ -79,7 +79,7 @@ public class PasswordResetService {
       throws UserNotFoundException {
 
     User user = userRepository.findByEmail(email).orElseThrow(
-        () -> new UserNotFoundException(email)
+        () -> new UserNotFoundException(email, "email")
     );
 
     String message = "email:%s, token:%s".formatted(user.getEmail(), resetToken);
