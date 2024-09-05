@@ -2,7 +2,7 @@
 
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import AuthFooter from './AuthFooter';
 import Button from './Button';
 import Divider from './Divider';
@@ -12,7 +12,8 @@ import useLogin from '../hooks/useLogin';
 
 function FormLogin() {
   const [formData, setFormaData] = useState({ username: '', password: '' });
-  const [keepLogged, setKeeLogged] = useState(false);
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [keepLogged, setKeepLogged] = useState(false);
   const { setError, error, loading, fetchData } = useLogin({ ...formData, keepLogged });
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -20,15 +21,29 @@ function FormLogin() {
     setFormaData((prevData) => ({ ...prevData, [name]: value }));
   };
 
-  const handleKeepLogged = () => {
-    setKeeLogged(!keepLogged);
-  };
-
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     setError(null);
     event.preventDefault();
     await fetchData();
   };
+
+  useEffect(() => {
+    const storedLogged = localStorage.getItem('keepLogged');
+    setKeepLogged(storedLogged === 'true');
+    setIsLoaded(true);
+  }, []);
+
+  const handleKeepLogged = () => {
+    setKeepLogged((prev) => {
+      const newValue = !prev;
+      localStorage.setItem('keepLogged', JSON.stringify(newValue));
+      return newValue;
+    });
+  };
+
+  if (!isLoaded) {
+    return null;
+  }
 
   return (
     <form

@@ -19,7 +19,6 @@ function useLogin({ username, password, keepLogged }: FetchLoginProps) {
       if (!data.ok) {
         const response = await data.json();
         setError(response);
-        return;
       }
 
       const response = await data.json();
