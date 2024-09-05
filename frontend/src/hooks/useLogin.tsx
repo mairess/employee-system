@@ -16,12 +16,11 @@ function useLogin({ username, password, keepLogged }: FetchLoginProps) {
       setLoading(true);
       const data = await fetchLogin({ username, password });
 
+      const response = await data.json();
+
       if (!data.ok) {
-        const response = await data.json();
         setError(response);
       }
-
-      const response = await data.json();
 
       if (response?.token) {
         if (keepLogged) {
@@ -32,7 +31,7 @@ function useLogin({ username, password, keepLogged }: FetchLoginProps) {
       }
     } catch (err) {
       console.error(err);
-      setError({ message: 'Failed to fetch.' });
+      setError({ message: 'Something went wrong.' });
     } finally {
       setLoading(false);
     }
