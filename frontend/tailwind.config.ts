@@ -36,7 +36,8 @@ const config: Config = {
         'light-neutral-900': '#2C3E5D',
         'light-neutral-1000': '#172B4D',
         'light-neutral-1100': '#091E42',
-        error:'#B00020'
+        error:'#B00020',
+        success: '#388E3C'
       },
     },
   },

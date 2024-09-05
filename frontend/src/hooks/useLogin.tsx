@@ -1,13 +1,13 @@
 import { useState } from 'react';
 import fetchLogin from '../services/fetchLogin';
 
-type FetchLoginProps = {
+type UseLoginProps = {
   username: string,
   password: string,
   keepLogged: boolean
 };
 
-function useLogin({ username, password, keepLogged }: FetchLoginProps) {
+function useLogin({ username, password, keepLogged }: UseLoginProps) {
   const [error, setError] = useState<{ message: string } | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
 

@@ -25,7 +25,7 @@ function Input({ type, name, id, placeholder, value, error = null, onChange }: I
         onChange={ onChange }
       />
       {error
-      && <p className="text-error text-sm mt-2">{error?.message}</p>}
+      && <p className={ error.message.includes('your email!') ? 'text-success text-sm mt-2' : 'text-error text-sm mt-2' }>{error?.message}</p>}
     </div>
   );
 }
