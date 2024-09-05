@@ -2,16 +2,38 @@
 
 'use client';
 
+import { useState } from 'react';
 import AuthFooter from './AuthFooter';
 import Button from './Button';
 import Divider from './Divider';
 import Input from './Input';
 import KeepLogged from './KeepLogged';
+import useLogin from '../hooks/useLogin';
 
 function FormLogin() {
+  const [formData, setFormaData] = useState({ username: '', password: '' });
+  const [keepLogged, setKeeLogged] = useState(false);
+  const { setError, error, loading, fetchData } = useLogin({ ...formData, keepLogged });
+
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = event.target;
+    setFormaData((prevData) => ({ ...prevData, [name]: value }));
+  };
+
+  const handleKeepLogged = () => {
+    setKeeLogged(!keepLogged);
+  };
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    setError(null);
+    event.preventDefault();
+    await fetchData();
+  };
+
   return (
     <form
-      className="flex flex-col gap-4 bg-light-neutral-100 border border-light-neutral-400 rounded-lg p-8 shadow-xl"
+      onSubmit={ handleSubmit }
+      className="flex flex-col gap-6 bg-light-neutral-100 border border-light-neutral-400 rounded-lg p-8 shadow-xl"
     >
 
       <h1
@@ -21,10 +43,12 @@ function FormLogin() {
       </h1>
 
       <Input
-        type="email"
-        name="password"
-        id="password"
-        placeholder="Email"
+        type="username"
+        name="username"
+        id="username"
+        placeholder="Username"
+        value={ formData.username }
+        onChange={ handleInputChange }
       />
 
       <Input
@@ -32,11 +56,20 @@ function FormLogin() {
         name="password"
         id="password"
         placeholder="Password"
+        value={ formData.password }
+        error={ error }
+        onChange={ handleInputChange }
       />
 
-      <KeepLogged />
+      <KeepLogged
+        checked={ keepLogged }
+        onChange={ handleKeepLogged }
+      />
 
-      <Button text="Sign in" />
+      <Button
+        loading={ loading }
+        text="Sign in"
+      />
 
       <Divider />
 
