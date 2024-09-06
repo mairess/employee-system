@@ -70,7 +70,7 @@ function FormLogin() {
         </h1>
 
         <Input
-          type="username"
+          type="text"
           name="username"
           id="username"
           placeholder="Username"
@@ -105,6 +105,7 @@ function FormLogin() {
           doNotHaveAccountText="Don't have an account?"
           doNotHaveAccountLinkTo="Register"
           onClick={ showModal }
+          href="/register"
         />
 
       </form>

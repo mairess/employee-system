@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
@@ -7,7 +8,6 @@ import Input from './Input';
 import Button from './Button';
 import usePasswordChange from '../hooks/usePasswordChange';
 
-/* eslint-disable max-len */
 type ModalProps = {
   onClose: (event: React.MouseEvent<HTMLDivElement | HTMLButtonElement>) => void
   isModalOpen: boolean,

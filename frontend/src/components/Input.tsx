@@ -24,8 +24,8 @@ function Input({ type, name, id, placeholder, value, error = null, onChange }: I
         value={ value }
         onChange={ onChange }
       />
-      {error
-      && <p className={ error.message.includes('your email!') ? 'text-success text-sm mt-2' : 'text-error text-sm mt-2' }>{error?.message}</p>}
+      {error && error.message.includes('your email!') && <p className="text-success text-sm mt-2">{error?.message}</p>}
+      {error && error.message === 'Password do not match!' && <p className="text-error text-sm mt-2">{error?.message}</p>}
     </div>
   );
 }
