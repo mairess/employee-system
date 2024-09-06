@@ -49,7 +49,8 @@ public class EmailService {
   @KafkaListener(topics = "${kafka.topic.password-reset}", groupId = "email-service")
   public void sendResetPasswordEmail(String message) throws MessagingException {
     EmailTokenDto emailTokenDto = extractEmailAndToken(message);
-    String resetLink = "http://localhost:3000/?token=%s".formatted(emailTokenDto.token());
+    String resetLink = "http://localhost:3000/reset-password?token=%s".formatted(
+        emailTokenDto.token());
     sendPasswordResetEmail(emailTokenDto.email(), resetLink);
   }
 
