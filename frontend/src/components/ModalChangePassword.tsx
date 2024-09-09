@@ -40,6 +40,8 @@ function ModalChangePassword({ onClose, isModalOpen }: ModalProps) {
     setFormData({ ...formData, email: e.target.value });
   };
 
+  const isFormValid = !formData.email;
+
   if (!isModalOpen) return null;
 
   const handleClickOutside = (event: React.MouseEvent<HTMLDivElement>) => {
@@ -107,6 +109,7 @@ function ModalChangePassword({ onClose, isModalOpen }: ModalProps) {
         <Button
           loading={ loading }
           text="Change password"
+          disabled={ isFormValid }
         />
 
       </form>
