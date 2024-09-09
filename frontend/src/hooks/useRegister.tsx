@@ -23,6 +23,7 @@ function useRegister({ fullName, username, email, password, role }: UseRegisterP
       if (!data.ok) {
         setError(response.message);
       }
+      return response;
     } catch (err) {
       console.error(err);
       setError('Something went wrong.');

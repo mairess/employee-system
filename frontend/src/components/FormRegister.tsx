@@ -25,13 +25,16 @@ function FormRegister() {
     setConfirmPassword(event.target.value);
   };
 
-  const isFormValid = confirmPassword !== formData.password;
+  const isFormValid = confirmPassword === formData.password;
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     setError(null);
     event.preventDefault();
-    await fetchData();
-    router.push('/');
+    const data = await fetchData();
+
+    if ('id' in data) {
+      router.push('/');
+    }
   };
 
   return (
@@ -98,7 +101,7 @@ function FormRegister() {
       <Button
         loading={ loading }
         text="Sign up"
-        disabled={ isFormValid }
+        disabled={ !isFormValid }
       />
 
       <Divider />
