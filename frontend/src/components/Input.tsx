@@ -1,6 +1,9 @@
+/* eslint-disable complexity */
 /* eslint-disable max-len */
 
 'use client';
+
+import ErrorInputField from './ErrorInputField';
 
 type InputProps = {
   type: string,
@@ -8,11 +11,33 @@ type InputProps = {
   id: string,
   placeholder: string,
   value: string,
-  error?: { message: string } | null,
+  error?: string | string[] | null
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void,
 };
 
-function Input({ type, name, id, placeholder, value, error = null, onChange }: InputProps) {
+function Input({ type, name, id, placeholder, value, error = '', onChange }: InputProps) {
+  const handleErrors = (errorData: string | string[] | null, identifier: string) => {
+    if (Array.isArray(errorData)) {
+      const filteredErrors = errorData.filter((err) => (
+        err.toLocaleLowerCase().includes(identifier.toLocaleLowerCase())
+        || err.toLowerCase().includes(placeholder.toLowerCase())
+      ));
+
+      return (
+        <div className="flex flex-col">
+          {filteredErrors.map((err, index) => (
+            <ErrorInputField key={ index } errors={ err } />
+          ))}
+        </div>
+      );
+    }
+    return (
+      <div>
+        <ErrorInputField errors={ errorData } />
+      </div>
+    );
+  };
+
   return (
     <div>
       <input
@@ -24,8 +49,9 @@ function Input({ type, name, id, placeholder, value, error = null, onChange }: I
         value={ value }
         onChange={ onChange }
       />
-      {error && error.message.includes('your email!') && <p className="text-success text-sm mt-2">{error?.message}</p>}
-      {error && error.message === 'Password do not match!' && <p className="text-error text-sm mt-2">{error?.message}</p>}
+      {(error && typeof error === 'string' && (error.includes(placeholder))) && handleErrors(error, id)}
+      {(error && typeof error !== 'string' && handleErrors(error, id))}
+      {(error && typeof error === 'string' && (error.includes('credentials') || error.includes('Password do not match!')) && handleErrors(error, id))}
     </div>
   );
 }

@@ -8,7 +8,7 @@ type UseLoginProps = {
 };
 
 function useLogin({ username, password, keepLogged }: UseLoginProps) {
-  const [error, setError] = useState<{ message: string } | null>(null);
+  const [error, setError] = useState<string | string[] | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
 
   const fetchData = async () => {
@@ -19,7 +19,7 @@ function useLogin({ username, password, keepLogged }: UseLoginProps) {
       const response = await data.json();
 
       if (!data.ok) {
-        setError(response);
+        setError(response.message);
       }
 
       if (response?.token) {
@@ -31,7 +31,7 @@ function useLogin({ username, password, keepLogged }: UseLoginProps) {
       }
     } catch (err) {
       console.error(err);
-      setError({ message: 'Something went wrong.' });
+      setError('Something went wrong.');
     } finally {
       setLoading(false);
     }

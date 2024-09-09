@@ -7,10 +7,12 @@ import Input from './Input';
 import Button from './Button';
 import Divider from './Divider';
 import AuthFooter from './AuthFooter';
+import useRegister from '../hooks/useRegister';
 
 function FormRegister() {
   const [formData, setFormaData] = useState({ fullName: '', username: '', email: '', password: '', role: 'user' });
   const [confirmPassword, setConfirmPassword] = useState('');
+  const { setError, error, loading, fetchData } = useRegister({ ...formData });
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
@@ -23,10 +25,16 @@ function FormRegister() {
 
   const isFormValid = confirmPassword !== formData.password;
 
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    setError(null);
+    event.preventDefault();
+    await fetchData();
+  };
+
   return (
     <form
       className="flex flex-col gap-6 bg-light-neutral-100 border border-light-neutral-400 rounded-lg p-8 shadow-xl"
-
+      onSubmit={ handleSubmit }
     >
       <h1
         className="font-bold text-center text-2xl text-light-neutral-900 my-4"
@@ -36,10 +44,11 @@ function FormRegister() {
 
       <Input
         type="text"
-        name="fullName"
-        id="fullName"
+        name="full-name"
+        id="full-name"
         placeholder="Full name"
         value={ formData.fullName }
+        error={ error }
         onChange={ handleInputChange }
       />
 
@@ -49,6 +58,7 @@ function FormRegister() {
         id="username"
         placeholder="Username"
         value={ formData.username }
+        error={ error }
         onChange={ handleInputChange }
       />
 
@@ -58,6 +68,7 @@ function FormRegister() {
         id="email"
         placeholder="Email"
         value={ formData.email }
+        error={ error }
         onChange={ handleInputChange }
       />
 
@@ -67,6 +78,7 @@ function FormRegister() {
         id="password"
         placeholder="Password"
         value={ formData.password }
+        error={ error }
         onChange={ handleInputChange }
       />
 
@@ -76,12 +88,12 @@ function FormRegister() {
         id="confirmPassword"
         placeholder="Confirm password"
         value={ confirmPassword }
-        error={ formData.password !== confirmPassword ? { message: 'Password do not match!' } : null }
+        error={ formData.password !== confirmPassword ? 'Password do not match!' : null }
         onChange={ handleConfirmPassword }
       />
 
       <Button
-        loading={ false }
+        loading={ loading }
         text="Sign up"
         disabled={ isFormValid }
       />
@@ -91,7 +103,6 @@ function FormRegister() {
       <AuthFooter
         doNotHaveAccountText="Already have an account?"
         doNotHaveAccountLinkTo="Login"
-        onClick={ () => 'hello' }
         href="/"
       />
 
