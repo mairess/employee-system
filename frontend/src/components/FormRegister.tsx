@@ -3,6 +3,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import Input from './Input';
 import Button from './Button';
 import Divider from './Divider';
@@ -13,6 +14,7 @@ function FormRegister() {
   const [formData, setFormaData] = useState({ fullName: '', username: '', email: '', password: '', role: 'user' });
   const [confirmPassword, setConfirmPassword] = useState('');
   const { setError, error, loading, fetchData } = useRegister({ ...formData });
+  const router = useRouter();
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
@@ -29,6 +31,7 @@ function FormRegister() {
     setError(null);
     event.preventDefault();
     await fetchData();
+    router.push('/');
   };
 
   return (
