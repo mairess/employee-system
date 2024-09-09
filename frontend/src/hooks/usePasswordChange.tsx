@@ -6,9 +6,9 @@ type UsePasswordChangeProps = {
 };
 
 function usePasswordChange({ email }:UsePasswordChangeProps) {
-  const [error, setError] = useState<{ message: string } | null>(null);
+  const [error, setError] = useState<string | string[] | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
-  const [confirmation, setConfirmation] = useState<{ message: string } | null>(null);
+  const [confirmation, setConfirmation] = useState<string | null>(null);
 
   const fetchData = async () => {
     try {
@@ -18,12 +18,12 @@ function usePasswordChange({ email }:UsePasswordChangeProps) {
       const response = await data.json();
 
       if (!data.ok) {
-        setError(response);
+        setError(response.message);
       }
-      setConfirmation(response);
+      setConfirmation(response.message);
     } catch (err) {
       console.error(err);
-      setError({ message: 'Something went wrong.' });
+      setError('Something went wrong.');
     } finally {
       setLoading(false);
     }

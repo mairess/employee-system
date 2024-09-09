@@ -49,7 +49,7 @@ function Input({ type, name, id, placeholder, value, error = '', onChange }: Inp
         value={ value }
         onChange={ onChange }
       />
-      {(error && typeof error === 'string' && (error.includes(placeholder))) && handleErrors(error, id)}
+      {(error && typeof error === 'string' && (error.includes(placeholder.toLocaleLowerCase()))) && handleErrors(error, id)}
       {(error && typeof error !== 'string' && handleErrors(error, id))}
       {(error && typeof error === 'string' && (error.includes('credentials') || error.includes('Password do not match!')) && handleErrors(error, id))}
     </div>

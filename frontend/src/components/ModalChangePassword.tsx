@@ -101,7 +101,7 @@ function ModalChangePassword({ onClose, isModalOpen }: ModalProps) {
           placeholder="Email"
           value={ formData.email }
           onChange={ handleInputChange }
-          error={ confirmation?.message.includes('your email!') ? confirmation : error }
+          error={ confirmation?.includes('your email!') ? confirmation : error }
         />
 
         <Button

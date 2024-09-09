@@ -4,9 +4,10 @@ type ErrorInputFieldProps = {
 
 function ErrorInputField({ errors }:ErrorInputFieldProps) {
   return (
-    <p className="text-error text-xs mt-2">
-      {errors}
-    </p>
+    errors === 'Password reset link sent to your email!'
+      ? <p className="text-success text-xs mt-2">{errors}</p>
+      : <p className="text-error text-xs mt-2">{errors}</p>
+
   );
 }
 
