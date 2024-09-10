@@ -29,6 +29,7 @@ function useLogin({ username, password, keepLogged }: UseLoginProps) {
           sessionStorage.setItem('token', JSON.stringify(response.token));
         }
       }
+      return response;
     } catch (err) {
       console.error(err);
       setError('Something went wrong.');

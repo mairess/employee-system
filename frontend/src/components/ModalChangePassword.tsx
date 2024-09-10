@@ -34,7 +34,7 @@ function ModalChangePassword({ onClose, isModalOpen }: ModalProps) {
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
     };
-  }, [isModalOpen, onClose]);
+  }, [isModalOpen, onClose, setConfirmation, setError]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, email: e.target.value });
