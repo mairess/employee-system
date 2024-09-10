@@ -3,6 +3,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import AuthFooter from './AuthFooter';
 import Button from './Button';
 import Divider from './Divider';
@@ -17,6 +18,7 @@ function FormLogin() {
   const [keepLogged, setKeepLogged] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { setError, error, loading, fetchData } = useLogin({ ...formData, keepLogged });
+  const router = useRouter();
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
@@ -26,7 +28,11 @@ function FormLogin() {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     setError(null);
     event.preventDefault();
-    await fetchData();
+    const data = await fetchData();
+
+    if ('token' in data) {
+      router.push('/dashboard');
+    }
   };
 
   useEffect(() => {
@@ -43,7 +49,7 @@ function FormLogin() {
     });
   };
 
-  if (!isLoaded) return null;
+  if (!isLoaded) return null; // review this and find a better approach to Keep me logged selection
 
   const showModal = (event: React.MouseEvent<HTMLDivElement | HTMLButtonElement>) => {
     event.preventDefault();
@@ -70,7 +76,7 @@ function FormLogin() {
         </h1>
 
         <Input
-          type="username"
+          type="text"
           name="username"
           id="username"
           placeholder="Username"
@@ -85,6 +91,7 @@ function FormLogin() {
           placeholder="Password"
           value={ formData.password }
           error={ error }
+          autocomplete="password"
           onChange={ handleInputChange }
         />
 
@@ -105,6 +112,7 @@ function FormLogin() {
           doNotHaveAccountText="Don't have an account?"
           doNotHaveAccountLinkTo="Register"
           onClick={ showModal }
+          href="/register"
         />
 
       </form>

@@ -5,13 +5,14 @@
 import Link from 'next/link';
 
 type AuthFooterProps = {
-  forgotPassword: string,
+  forgotPassword?: string | null,
   doNotHaveAccountText: string,
   doNotHaveAccountLinkTo: string,
-  onClick: (event: React.MouseEvent<HTMLButtonElement>) => void
+  onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void,
+  href: string
 };
 
-function AuthFooter({ forgotPassword, doNotHaveAccountText, doNotHaveAccountLinkTo, onClick }:AuthFooterProps) {
+function AuthFooter({ forgotPassword = null, doNotHaveAccountText, doNotHaveAccountLinkTo, onClick = () => {}, href }:AuthFooterProps) {
   return (
     <div className="flex flex-col items-center justify-center gap-4">
 
@@ -27,7 +28,7 @@ function AuthFooter({ forgotPassword, doNotHaveAccountText, doNotHaveAccountLink
 
         <Link
           className="ml-1 font-bold text-light-neutral-900 hover:underline"
-          href="register"
+          href={ href }
         >
           {doNotHaveAccountLinkTo}
         </Link>

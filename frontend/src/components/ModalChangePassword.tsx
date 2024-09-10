@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
@@ -7,7 +8,6 @@ import Input from './Input';
 import Button from './Button';
 import usePasswordChange from '../hooks/usePasswordChange';
 
-/* eslint-disable max-len */
 type ModalProps = {
   onClose: (event: React.MouseEvent<HTMLDivElement | HTMLButtonElement>) => void
   isModalOpen: boolean,
@@ -34,11 +34,13 @@ function ModalChangePassword({ onClose, isModalOpen }: ModalProps) {
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
     };
-  }, [isModalOpen, onClose]);
+  }, [isModalOpen, onClose, setConfirmation, setError]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, email: e.target.value });
   };
+
+  const isFormValid = !formData.email;
 
   if (!isModalOpen) return null;
 
@@ -101,12 +103,13 @@ function ModalChangePassword({ onClose, isModalOpen }: ModalProps) {
           placeholder="Email"
           value={ formData.email }
           onChange={ handleInputChange }
-          error={ confirmation?.message.includes('your email!') ? confirmation : error }
+          error={ confirmation?.includes('your email!') ? confirmation : error }
         />
 
         <Button
           loading={ loading }
           text="Change password"
+          disabled={ isFormValid }
         />
 
       </form>

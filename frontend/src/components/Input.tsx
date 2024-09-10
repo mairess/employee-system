@@ -1,6 +1,9 @@
+/* eslint-disable complexity */
 /* eslint-disable max-len */
 
 'use client';
+
+import ErrorInputField from './ErrorInputField';
 
 type InputProps = {
   type: string,
@@ -8,11 +11,23 @@ type InputProps = {
   id: string,
   placeholder: string,
   value: string,
-  error?: { message: string } | null,
+  error?: string | string[] | null
+  autocomplete?: string
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void,
 };
 
-function Input({ type, name, id, placeholder, value, error = null, onChange }: InputProps) {
+function Input({ type, name, id, placeholder, value, error = '', autocomplete = '', onChange }: InputProps) {
+  const handleErrors = (errorData: string | string[] | null, identifier: string) => {
+    if (Array.isArray(errorData)) {
+      const filteredErrors = errorData
+        .filter((err) => (err.toLocaleLowerCase().includes(identifier.toLocaleLowerCase()) || err.toLowerCase().includes(placeholder.toLowerCase())));
+
+      return (<div className="flex flex-col">{filteredErrors.map((err, index) => (<ErrorInputField key={ index } errors={ err } />))}</div>);
+    }
+
+    return (<div><ErrorInputField errors={ errorData } /></div>);
+  };
+
   return (
     <div>
       <input
@@ -22,10 +37,12 @@ function Input({ type, name, id, placeholder, value, error = null, onChange }: I
         id={ id }
         placeholder={ placeholder }
         value={ value }
+        autoComplete={ autocomplete }
         onChange={ onChange }
       />
-      {error
-      && <p className={ error.message.includes('your email!') ? 'text-success text-sm mt-2' : 'text-error text-sm mt-2' }>{error?.message}</p>}
+      {(error && typeof error === 'string' && (error.includes(placeholder.toLocaleLowerCase()))) && handleErrors(error, id)}
+      {(error && typeof error !== 'string' && handleErrors(error, id))}
+      {(error && typeof error === 'string' && (error.includes('credentials') || error.includes('Password do not match!')) && handleErrors(error, id))}
     </div>
   );
 }

@@ -229,8 +229,8 @@ public class UserIntegrationTest {
         "Role must be ADMIN or TECHNICIAN",
         "Password cannot be null!",
         "Password cannot be blank!",
-        "FullName cannot be blank!",
-        "FullName cannot be null!",
+        "Full name cannot be blank!",
+        "Full name cannot be null!",
         "Email cannot be null!",
         "Email cannot be blank!"
     };
@@ -259,7 +259,7 @@ public class UserIntegrationTest {
         .andExpect(jsonPath("$.username").value("gilmar"))
         .andExpect(jsonPath("$.role").value("USER"));
   }
-  
+
   @Test
   @DisplayName("Delete user")
   public void testDelete() throws Exception {
