@@ -85,6 +85,7 @@ function FormLogin() {
           placeholder="Password"
           value={ formData.password }
           error={ error }
+          autocomplete="password"
           onChange={ handleInputChange }
         />
 

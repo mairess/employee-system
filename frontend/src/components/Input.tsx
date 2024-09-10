@@ -12,30 +12,20 @@ type InputProps = {
   placeholder: string,
   value: string,
   error?: string | string[] | null
+  autocomplete?: string
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void,
 };
 
-function Input({ type, name, id, placeholder, value, error = '', onChange }: InputProps) {
+function Input({ type, name, id, placeholder, value, error = '', autocomplete = '', onChange }: InputProps) {
   const handleErrors = (errorData: string | string[] | null, identifier: string) => {
     if (Array.isArray(errorData)) {
-      const filteredErrors = errorData.filter((err) => (
-        err.toLocaleLowerCase().includes(identifier.toLocaleLowerCase())
-        || err.toLowerCase().includes(placeholder.toLowerCase())
-      ));
+      const filteredErrors = errorData
+        .filter((err) => (err.toLocaleLowerCase().includes(identifier.toLocaleLowerCase()) || err.toLowerCase().includes(placeholder.toLowerCase())));
 
-      return (
-        <div className="flex flex-col">
-          {filteredErrors.map((err, index) => (
-            <ErrorInputField key={ index } errors={ err } />
-          ))}
-        </div>
-      );
+      return (<div className="flex flex-col">{filteredErrors.map((err, index) => (<ErrorInputField key={ index } errors={ err } />))}</div>);
     }
-    return (
-      <div>
-        <ErrorInputField errors={ errorData } />
-      </div>
-    );
+
+    return (<div><ErrorInputField errors={ errorData } /></div>);
   };
 
   return (
@@ -47,6 +37,7 @@ function Input({ type, name, id, placeholder, value, error = '', onChange }: Inp
         id={ id }
         placeholder={ placeholder }
         value={ value }
+        autoComplete={ autocomplete }
         onChange={ onChange }
       />
       {(error && typeof error === 'string' && (error.includes(placeholder.toLocaleLowerCase()))) && handleErrors(error, id)}

@@ -50,7 +50,7 @@ function FormRegister() {
 
       <Input
         type="text"
-        name="full-name"
+        name="fullName"
         id="full-name"
         placeholder="Full name"
         value={ formData.fullName }
@@ -85,6 +85,7 @@ function FormRegister() {
         placeholder="Password"
         value={ formData.password }
         error={ error }
+        autocomplete="new-password"
         onChange={ handleInputChange }
       />
 
@@ -95,6 +96,7 @@ function FormRegister() {
         placeholder="Confirm password"
         value={ confirmPassword }
         error={ formData.password !== confirmPassword ? 'Password do not match!' : null }
+        autocomplete="confirm-password"
         onChange={ handleConfirmPassword }
       />
 
