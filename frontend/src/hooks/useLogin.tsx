@@ -24,9 +24,9 @@ function useLogin({ username, password, keepLogged }: UseLoginProps) {
 
       if (response?.token) {
         if (keepLogged) {
-          localStorage.setItem('token', JSON.stringify(response.token));
+          localStorage.setItem('token', response.token);
         } else {
-          sessionStorage.setItem('token', JSON.stringify(response.token));
+          sessionStorage.setItem('token', response.token);
         }
       }
       return response;
