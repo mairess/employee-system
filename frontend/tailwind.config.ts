@@ -26,9 +26,13 @@ const config: Config = {
         'spacing-little-04': '0.25rem',
       },
       fontSize: {
-        'h1': ['2rem', { fontWeight: '800' }],
+        'h0': ['2rem', { fontWeight: '800' }],
+        'h1': ['2rem', { fontWeight: '500' }],
         'h2': ['1rem', { fontWeight: '500' }],
         'h3': ['1rem', { fontWeight: '400' }],
+      },
+      size: {
+        'custom-size-08': '2.12rem'
       },
       colors: {
         'dark-neutral-0': '#101214',
