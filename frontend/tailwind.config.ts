@@ -8,6 +8,28 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      boxShadow: {
+        'custom-00': '0 1px 1px 0 #00000020',
+        'custom-05': '0 1px 2px 0 #00000020',
+        'custom-10': '0 4px 4px 0 #00000025'
+      },
+      spacing: {
+        'spacing-medium-80': '5rem',
+        'spacing-medium-60': '3.75rem',
+        'spacing-medium-40': '2.5rem',
+        'spacing-medium-32': '2rem',
+        'spacing-regular-28': '1.75rem',
+        'spacing-regular-20': '1.25rem',
+        'spacing-regular-16': '1rem',
+        'spacing-little-12': '0.75rem',
+        'spacing-little-08': '0.5rem',
+        'spacing-little-04': '0.25rem',
+      },
+      fontSize: {
+        'h1': ['2rem', { fontWeight: '800' }],
+        'h2': ['1rem', { fontWeight: '500' }],
+        'h3': ['1rem', { fontWeight: '400' }],
+      },
       colors: {
         'dark-neutral-0': '#101214',
         'dark-neutral-50': '#161A1D',
@@ -37,7 +59,9 @@ const config: Config = {
         'light-neutral-1000': '#172B4D',
         'light-neutral-1100': '#091E42',
         error:'#B00020',
-        success: '#388E3C'
+        success: '#388E3C',
+        primary: '#594ED2',
+        secondary: '#5A84C0',
       },
     },
   },
