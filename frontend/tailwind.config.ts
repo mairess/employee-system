@@ -58,6 +58,8 @@ const config: Config = {
         'light-neutral-900': '#2C3E5D',
         'light-neutral-1000': '#172B4D',
         'light-neutral-1100': '#091E42',
+        'black-neutral': '#1C1C1C',
+        'gray-neutral-10': '#DFDFDF',
         error:'#B00020',
         success: '#388E3C',
         primary: '#594ED2',
