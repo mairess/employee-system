@@ -10,17 +10,22 @@ type TableRowProps = {
 
 function Table({ employees = [] }: TableRowProps) {
   return (
-    <table className="w-full text-left table-fixed shadow-custom-10">
+    <div className="min-h-screen">
+      <div className="h-[43rem] overflow-auto pb-2">
+        <table className="w-full text-left table-fixed shadow-custom-10">
 
-      <TableHead />
+          <TableHead />
 
-      {employees.map((employee) => (
-        <TableRow
-          key={ employee.id }
-          employee={ employee }
-        />
-      ))}
-    </table>
+          {employees.map((employee) => (
+            <TableRow
+              key={ employee.id }
+              employee={ employee }
+            />
+          ))}
+
+        </table>
+      </div>
+    </div>
   );
 }
 

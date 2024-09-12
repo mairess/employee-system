@@ -22,19 +22,6 @@ function Dashboard() {
           employees={ employees }
         />
 
-        <div>
-
-          {employees?.map((employee) => (
-            <div key={ employee.id }>
-              <p>{employee.photo}</p>
-              <p>{employee.fullName}</p>
-              <p>{employee.position}</p>
-              <p>{employee.admission}</p>
-            </div>
-          ))}
-
-        </div>
-
       </div>
     </div>
   );
