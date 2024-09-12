@@ -1,6 +1,9 @@
+/* eslint-disable max-len */
+
 'use client';
 
 import { EmployeeType } from '../types';
+import TableFooter from './TableFooter';
 import TableHead from './TableHead';
 import TableRow from './TableRow';
 
@@ -10,22 +13,20 @@ type TableRowProps = {
 
 function Table({ employees = [] }: TableRowProps) {
   return (
-    <div className="min-h-screen">
-      <div className="h-[43rem] overflow-auto pb-2">
-        <table className="w-full text-left table-fixed shadow-custom-10">
+    <table className="w-full text-left table-fixed shadow-custom-10 rounded-bl-lg rounded-br-lg">
 
-          <TableHead />
+      <TableHead />
 
-          {employees.map((employee) => (
-            <TableRow
-              key={ employee.id }
-              employee={ employee }
-            />
-          ))}
+      {employees.map((employee) => (
+        <TableRow
+          key={ employee.id }
+          employee={ employee }
+        />
+      ))}
 
-        </table>
-      </div>
-    </div>
+      <TableFooter />
+
+    </table>
   );
 }
 
