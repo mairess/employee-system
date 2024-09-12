@@ -32,7 +32,7 @@ const config: Config = {
         'h3': ['1rem', { fontWeight: '400' }],
       },
       size: {
-        'custom-size-08': '2.12rem'
+        'custom-size-08': '2.5rem'
       },
       colors: {
         'dark-neutral-0': '#101214',
@@ -65,9 +65,14 @@ const config: Config = {
         'black-neutral': '#1C1C1C',
         'gray-neutral-10': '#DFDFDF',
         error:'#B00020',
+        'hover-error':'#8C001A',
         success: '#388E3C',
+        'hover-success': '#2C6E30',
         primary: '#594ED2',
         secondary: '#5A84C0',
+      },
+      backgroundImage: {
+        'gradient-primary': 'linear-gradient(to bottom, #5A84C0, #594ED2)',
       },
     },
   },

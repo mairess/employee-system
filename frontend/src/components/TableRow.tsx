@@ -1,7 +1,7 @@
 'use client';
 
-import Image from 'next/image';
 import { EmployeeType } from '../types';
+import ActionButton from './ActionButton';
 
 type TableRowProps = {
   employee: EmployeeType
@@ -9,19 +9,29 @@ type TableRowProps = {
 
 function TableRow({ employee }: TableRowProps) {
   return (
-    <tbody className="text-dark-neutral-500">
+    <tbody className="text-dark-neutral-500 border-t-2">
       <tr>
         <td className="pl-spacing-regular-20 py-spacing-little-12">
           <img
+            className="rounded-full w-8 h-8 border"
             src={ employee.photo }
-            alt="employee"
-            className="rounded-full size-custom-size-08 border"
+            alt="employee avatar"
           />
         </td>
         <td>{employee.fullName}</td>
         <td>{employee.position}</td>
         <td>{employee.admission}</td>
         <td>{employee.phone}</td>
+        <td>
+          <div>
+            <ActionButton
+              label="edit"
+            />
+            <ActionButton
+              label="delete"
+            />
+          </div>
+        </td>
       </tr>
     </tbody>
   );
