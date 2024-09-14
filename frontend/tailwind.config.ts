@@ -8,6 +8,32 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      boxShadow: {
+        'custom-00': '0 1px 1px 0 #00000020',
+        'custom-05': '0 1px 2px 0 #00000020',
+        'custom-10': '0 4px 4px 0 #00000025'
+      },
+      spacing: {
+        'spacing-medium-80': '5rem',
+        'spacing-medium-60': '3.75rem',
+        'spacing-medium-40': '2.5rem',
+        'spacing-medium-32': '2rem',
+        'spacing-regular-28': '1.75rem',
+        'spacing-regular-20': '1.25rem',
+        'spacing-regular-16': '1rem',
+        'spacing-little-12': '0.75rem',
+        'spacing-little-08': '0.5rem',
+        'spacing-little-04': '0.25rem',
+      },
+      fontSize: {
+        'h0': ['2rem', { fontWeight: '800' }],
+        'h1': ['2rem', { fontWeight: '500' }],
+        'h2': ['1rem', { fontWeight: '500' }],
+        'h3': ['1rem', { fontWeight: '400' }],
+      },
+      size: {
+        'custom-size-08': '2.5rem'
+      },
       colors: {
         'dark-neutral-0': '#101214',
         'dark-neutral-50': '#161A1D',
@@ -36,8 +62,17 @@ const config: Config = {
         'light-neutral-900': '#2C3E5D',
         'light-neutral-1000': '#172B4D',
         'light-neutral-1100': '#091E42',
+        'black-neutral': '#1C1C1C',
+        'gray-neutral-10': '#DFDFDF',
         error:'#B00020',
-        success: '#388E3C'
+        'hover-error':'#8C001A',
+        success: '#388E3C',
+        'hover-success': '#2C6E30',
+        primary: '#594ED2',
+        secondary: '#5A84C0',
+      },
+      backgroundImage: {
+        'gradient-primary': 'linear-gradient(to bottom, #5A84C0, #594ED2)',
       },
     },
   },
