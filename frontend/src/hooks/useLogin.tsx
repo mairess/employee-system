@@ -1,44 +1,16 @@
-import { useState } from 'react';
-import fetchLogin from '../services/fetchLogin';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState, AppDispatch } from '../store';
+import loginUser from '../services/loginUser';
 
-type UseLoginProps = {
-  username: string,
-  password: string,
-  keepLogged: boolean
-};
+function useLogin() {
+  const dispatch = useDispatch<AppDispatch>();
+  const { token, loading, error } = useSelector((state: RootState) => state.auth);
 
-function useLogin({ username, password, keepLogged }: UseLoginProps) {
-  const [error, setError] = useState<string | string[] | null>(null);
-  const [loading, setLoading] = useState<boolean>(false);
-
-  const fetchData = async () => {
-    try {
-      setLoading(true);
-      const data = await fetchLogin({ username, password });
-
-      const response = await data.json();
-
-      if (!data.ok) {
-        setError(response.message);
-      }
-
-      if (response?.token) {
-        if (keepLogged) {
-          localStorage.setItem('token', response.token);
-        } else {
-          sessionStorage.setItem('token', response.token);
-        }
-      }
-      return response;
-    } catch (err) {
-      console.error(err);
-      setError('Something went wrong.');
-    } finally {
-      setLoading(false);
-    }
+  const handleLogin = (username: string, password: string, keepLogged: boolean) => {
+    dispatch(loginUser({ username, password, keepLogged }));
   };
 
-  return { setError, error, loading, fetchData };
+  return { token, loading, error, handleLogin };
 }
 
 export default useLogin;

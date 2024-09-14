@@ -12,7 +12,7 @@ function Dashboard() {
   const { setError, error, loading, employees } = useEmployees();
 
   return (
-    <div className="bg-white pb-4">
+    <div className="bg-white pb-4 min-h-screen">
       <Header />
       <div className="px-spacing-regular-20">
 
