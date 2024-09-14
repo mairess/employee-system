@@ -1,7 +1,7 @@
 /* eslint-disable max-len */
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
-const loginUser = createAsyncThunk(
+const login = createAsyncThunk(
   'auth',
   async (credentials: { username: string, password: string, keepLogged: boolean }, { rejectWithValue }) => {
     try {
@@ -39,4 +39,4 @@ const loginUser = createAsyncThunk(
 
 );
 
-export default loginUser;
+export default login;

@@ -2,7 +2,7 @@
 
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Input from './Input';
 import Button from './Button';
@@ -11,10 +11,14 @@ import AuthFooter from './AuthFooter';
 import useRegister from '../hooks/useRegister';
 
 function FormRegister() {
+  const { handleRegister, loading, error, user } = useRegister();
   const [formData, setFormaData] = useState({ fullName: '', username: '', email: '', password: '', role: 'user' });
   const [confirmPassword, setConfirmPassword] = useState('');
-  const { setError, error, loading, fetchData } = useRegister({ ...formData });
   const router = useRouter();
+
+  // useEffect(() => {
+  //   if (user) { router.push('/dashboard'); }
+  // }, [user, router]);
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
@@ -28,12 +32,9 @@ function FormRegister() {
   const isFormValid = confirmPassword === formData.password;
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    setError(null);
     event.preventDefault();
-    const data = await fetchData();
-
-    if ('id' in data) {
-      router.push('/');
+    if (isFormValid) {
+      handleRegister(formData);
     }
   };
 

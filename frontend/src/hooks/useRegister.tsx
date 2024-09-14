@@ -1,38 +1,20 @@
-import { useState } from 'react';
-import fetchRegister from '../services/fetchRegister';
+/* eslint-disable max-params */
+/* eslint-disable max-len */
 
-type UseRegisterProps = {
-  fullName: string,
-  username: string,
-  email: string,
-  password: string,
-  role: string,
-};
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, RootState } from '../store';
+import register from '../services/register';
 
-function useRegister({ fullName, username, email, password, role }: UseRegisterProps) {
-  const [error, setError] = useState<string | string[] | null>(null);
-  const [loading, setLoading] = useState<boolean>(false);
+function useRegister() {
+  const dispatch = useDispatch<AppDispatch>();
+  const { loading, user, error } = useSelector((state: RootState) => state.user);
+  console.log('call useRegister');
 
-  const fetchData = async () => {
-    try {
-      setLoading(true);
-      const data = await fetchRegister({ fullName, username, email, password, role });
-
-      const response = await data.json();
-
-      if (!data.ok) {
-        setError(response.message);
-      }
-      return response;
-    } catch (err) {
-      console.error(err);
-      setError('Something went wrong.');
-    } finally {
-      setLoading(false);
-    }
+  const handleRegister = (userData: { fullName: string, username: string, email: string, password: string, role: string }) => {
+    dispatch(register(userData));
   };
 
-  return { setError, error, loading, fetchData };
+  return { handleRegister, loading, error, user };
 }
 
 export default useRegister;

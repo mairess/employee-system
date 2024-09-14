@@ -17,9 +17,6 @@
         "name": "next"
       }
     ],
-    "paths": {
-      "@/*": ["./src/*"]
-    },
     "sourceMap": true,
     "inlineSources": true
   },
