@@ -4,7 +4,7 @@ function TableFooter() {
       <tr>
         <td
           className="p-spacing-little-12 rounded-bl-lg rounded-br-lg"
-          colSpan={ 6 }
+          colSpan={ 5 }
         >
           <div>
             footer here

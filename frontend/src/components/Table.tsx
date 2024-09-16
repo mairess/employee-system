@@ -10,6 +10,7 @@ import TableRow from './TableRow';
 import { AppDispatch, RootState } from '../store';
 import listEmployees from '../services/listEmployees';
 import useToken from '../hooks/useToken';
+import Loading from './Loading';
 
 function Table() {
   const dispatch = useDispatch<AppDispatch>();
@@ -27,7 +28,9 @@ function Table() {
 
       <TableHead />
 
-      {employees?.map((employee) => (
+      {loading && (<Loading />)}
+
+      {!loading && employees?.map((employee) => (
         <TableRow
           key={ employee.id }
           employee={ employee }
