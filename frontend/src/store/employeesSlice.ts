@@ -25,7 +25,7 @@ const employeesSlice = createSlice({
         state.error = null;
       })
       .addCase(listEmployees.fulfilled, (state, action) => {
-        state.loading = true;
+        state.loading = false;
         state.employees = action.payload;
       })
       .addCase(listEmployees.rejected, (state, action) => {
