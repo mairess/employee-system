@@ -21,7 +21,6 @@ function FormLogin() {
   const [formData, setFormaData] = useState({ username: '', password: '' });
   const [isLoaded, setIsLoaded] = useState(false);
   const [keepLogged, setKeepLogged] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -56,20 +55,12 @@ function FormLogin() {
     });
   };
 
-  const showModal = (event: React.MouseEvent<HTMLDivElement | HTMLButtonElement>) => {
-    event.preventDefault();
-    setIsModalOpen(!isModalOpen);
-  };
-
   if (!isLoaded) return null; // review this and find a better approach to Keep me logged selection
 
   return (
     <>
 
-      <ModalChangePassword
-        isModalOpen={ isModalOpen }
-        onClose={ showModal }
-      />
+      <ModalChangePassword />
 
       <form
         className="flex flex-col gap-6 bg-light-neutral-100 border border-light-neutral-400 rounded-lg p-8 shadow-xl"
@@ -118,7 +109,6 @@ function FormLogin() {
           forgotPassword="Forgot your password?"
           doNotHaveAccountText="Don't have an account?"
           doNotHaveAccountLinkTo="Register"
-          onClick={ showModal }
           href="/register"
         />
 
