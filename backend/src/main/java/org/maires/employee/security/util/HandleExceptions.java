@@ -63,6 +63,12 @@ public class HandleExceptions {
           "%s".formatted(exception.getMessage())
       );
 
+    } else {
+      returnExceptionResponse(
+          response,
+          HttpServletResponse.SC_UNAUTHORIZED,
+          "%s".formatted(exception.getMessage())
+      );
     }
   }
 

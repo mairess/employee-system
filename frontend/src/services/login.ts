@@ -15,6 +15,7 @@ const login = createAsyncThunk(
 
       if (!response.ok) {
         const errorData = await response.json();
+        console.error('Error fetching:', errorData.message);
         return rejectWithValue(errorData.message);
       }
 
