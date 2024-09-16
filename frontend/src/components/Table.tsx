@@ -11,6 +11,7 @@ import { AppDispatch, RootState } from '../store';
 import listEmployees from '../services/listEmployees';
 import useToken from '../hooks/useToken';
 import Loading from './Loading';
+import Error from './Error';
 
 function Table() {
   const dispatch = useDispatch<AppDispatch>();
@@ -37,7 +38,9 @@ function Table() {
         </tbody>
       )}
 
-      {!loading && employees?.map((employee) => (
+      {error && (<Error />)}
+
+      {!loading && !error && employees?.map((employee) => (
         <TableRow key={ employee.id } employee={ employee } />
       ))}
 
