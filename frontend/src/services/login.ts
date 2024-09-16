@@ -5,8 +5,6 @@ const login = createAsyncThunk(
   'auth',
   async (credentials: { username: string, password: string, keepLogged: boolean }, { rejectWithValue }) => {
     try {
-      console.log('username', credentials.username, 'password', credentials.password, 'keepLogged', credentials.keepLogged);
-
       const response = await fetch('http://localhost:8080/auth/login', {
         method: 'POST',
         headers: {
@@ -33,6 +31,7 @@ const login = createAsyncThunk(
 
       return token;
     } catch (error) {
+      console.error('Error fetching:', error);
       return rejectWithValue('Something went wrong.');
     }
   },

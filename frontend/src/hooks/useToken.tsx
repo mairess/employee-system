@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react';
 
 function useToken() {
-  const [token, setToken] = useState<string | null>(null);
+  const [token, setToken] = useState<string>('');
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      const sessionStorageToken = sessionStorage.getItem('token');
-      const localStorageToken = localStorage.getItem('token');
+      const sessionStorageToken = sessionStorage.getItem('token') || '';
+      const localStorageToken = localStorage.getItem('token') || '';
       const storedToken = sessionStorageToken || localStorageToken;
       setToken(storedToken);
     }

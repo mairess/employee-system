@@ -4,21 +4,24 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { useDispatch, useSelector } from 'react-redux';
 import Input from './Input';
 import Button from './Button';
 import Divider from './Divider';
 import AuthFooter from './AuthFooter';
-import useRegister from '../hooks/useRegister';
+import { AppDispatch, RootState } from '../store';
+import register from '../services/register';
 
 function FormRegister() {
-  const { handleRegister, loading, error, user } = useRegister();
+  const dispatch = useDispatch<AppDispatch>();
+  const { loading, user, error } = useSelector((state: RootState) => state.user);
   const [formData, setFormaData] = useState({ fullName: '', username: '', email: '', password: '', role: 'user' });
   const [confirmPassword, setConfirmPassword] = useState('');
   const router = useRouter();
 
-  // useEffect(() => {
-  //   if (user) { router.push('/dashboard'); }
-  // }, [user, router]);
+  useEffect(() => {
+    if (user.id) { router.push('/'); }
+  }, [user, router]);
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
@@ -34,7 +37,7 @@ function FormRegister() {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (isFormValid) {
-      handleRegister(formData);
+      dispatch(register(formData));
     }
   };
 

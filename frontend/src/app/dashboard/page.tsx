@@ -5,12 +5,9 @@
 
 import Header from '../../components/Header';
 import SearchBar from '../../components/SearchBar';
-import useEmployees from '../../hooks/useEmployees';
 import Table from '../../components/Table';
 
 function Dashboard() {
-  const { setError, error, loading, employees } = useEmployees();
-
   return (
     <div className="bg-white pb-4 min-h-screen">
       <Header />
@@ -18,9 +15,7 @@ function Dashboard() {
 
         <SearchBar />
 
-        <Table
-          employees={ employees }
-        />
+        <Table />
 
       </div>
     </div>

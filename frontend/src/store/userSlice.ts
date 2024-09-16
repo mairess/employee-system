@@ -9,6 +9,7 @@ type UserState = {
 };
 
 const initialUser = {
+  id: null,
   fullName: '',
   username: '',
   email: '',

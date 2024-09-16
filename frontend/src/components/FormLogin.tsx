@@ -4,16 +4,19 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { useDispatch, useSelector } from 'react-redux';
 import AuthFooter from './AuthFooter';
 import Button from './Button';
 import Divider from './Divider';
 import Input from './Input';
 import KeepLogged from './KeepLogged';
-import useLogin from '../hooks/useLogin';
 import ModalChangePassword from './ModalChangePassword';
+import { AppDispatch, RootState } from '../store';
+import login from '../services/login';
 
 function FormLogin() {
-  const { handleLogin, loading, error, token } = useLogin();
+  const dispatch = useDispatch<AppDispatch>();
+  const { token, loading, error } = useSelector((state: RootState) => state.auth);
   const [formData, setFormaData] = useState({ username: '', password: '' });
   const [isLoaded, setIsLoaded] = useState(false);
   const [keepLogged, setKeepLogged] = useState(false);
@@ -37,7 +40,7 @@ function FormLogin() {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    handleLogin(formData.username, formData.password, keepLogged);
+    dispatch(login({ ...formData, keepLogged }));
   };
 
   const handleKeepLogged = () => {
