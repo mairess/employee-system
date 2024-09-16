@@ -13,7 +13,7 @@ import KeepLogged from './KeepLogged';
 import ModalChangePassword from './ModalChangePassword';
 import { AppDispatch, RootState } from '../store';
 import login from '../services/login';
-import { clearError } from '../store/authSlice';
+import { clearError } from '../store/loginSlice';
 
 function FormLogin() {
   const dispatch = useDispatch<AppDispatch>();

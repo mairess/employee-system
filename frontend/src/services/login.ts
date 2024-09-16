@@ -2,7 +2,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
 const login = createAsyncThunk(
-  'auth',
+  'login',
   async (credentials: { username: string, password: string, keepLogged: boolean }, { rejectWithValue }) => {
     try {
       const response = await fetch('http://localhost:8080/auth/login', {
