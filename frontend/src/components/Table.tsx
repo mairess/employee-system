@@ -18,9 +18,7 @@ function Table() {
   const token = useToken();
 
   useEffect(() => {
-    if (token) {
-      dispatch(listEmployees(token));
-    }
+    if (token) { dispatch(listEmployees(token)); }
   }, [token, dispatch]);
 
   return (
@@ -28,13 +26,19 @@ function Table() {
 
       <TableHead />
 
-      {loading && (<Loading />)}
+      {loading && (
+        <tbody>
+          <tr>
+            <td colSpan={ 5 } className="p-10">
+              <Loading />
+              <p className="text-dark-neutral-0 text-center">Loading data...</p>
+            </td>
+          </tr>
+        </tbody>
+      )}
 
       {!loading && employees?.map((employee) => (
-        <TableRow
-          key={ employee.id }
-          employee={ employee }
-        />
+        <TableRow key={ employee.id } employee={ employee } />
       ))}
 
       <TableFooter />
