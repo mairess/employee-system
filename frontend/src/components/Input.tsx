@@ -3,7 +3,7 @@
 
 'use client';
 
-import ErrorInputField from './ErrorInputField';
+import handleErrosInputFields from '../utils/handleErrosInputFields';
 
 type InputProps = {
   type: string,
@@ -17,17 +17,6 @@ type InputProps = {
 };
 
 function Input({ type, name, id, placeholder, value, error = '', autocomplete = '', onChange }: InputProps) {
-  const handleErrors = (errorData: string | string[] | null, identifier: string) => {
-    if (Array.isArray(errorData)) {
-      const filteredErrors = errorData
-        .filter((err) => (err.toLocaleLowerCase().includes(identifier.toLocaleLowerCase()) || err.toLowerCase().includes(placeholder.toLowerCase())));
-
-      return (<div className="flex flex-col">{filteredErrors.map((err, index) => (<ErrorInputField key={ index } errors={ err } />))}</div>);
-    }
-
-    return (<div><ErrorInputField errors={ errorData } /></div>);
-  };
-
   return (
     <div>
       <input
@@ -40,9 +29,7 @@ function Input({ type, name, id, placeholder, value, error = '', autocomplete = 
         autoComplete={ autocomplete }
         onChange={ onChange }
       />
-      {(error && typeof error === 'string' && (error.includes(placeholder.toLocaleLowerCase()) || error.includes(placeholder))) && handleErrors(error, id)}
-      {(error && typeof error !== 'string' && handleErrors(error, id))}
-      {(error && typeof error === 'string' && (error.includes('credentials') || error.includes('Password do not match!')) && handleErrors(error, id))}
+      {handleErrosInputFields(error, id, placeholder)}
     </div>
   );
 }
