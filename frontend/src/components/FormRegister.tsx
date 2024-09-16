@@ -11,6 +11,7 @@ import Divider from './Divider';
 import AuthFooter from './AuthFooter';
 import { AppDispatch, RootState } from '../store';
 import register from '../services/register';
+import { clearError } from '../store/userSlice';
 
 function FormRegister() {
   const dispatch = useDispatch<AppDispatch>();
@@ -18,6 +19,10 @@ function FormRegister() {
   const [formData, setFormaData] = useState({ fullName: '', username: '', email: '', password: '', role: 'user' });
   const [confirmPassword, setConfirmPassword] = useState('');
   const router = useRouter();
+
+  useEffect(() => {
+    dispatch(clearError());
+  }, [dispatch, router]);
 
   useEffect(() => {
     if (user.id) { router.push('/'); }

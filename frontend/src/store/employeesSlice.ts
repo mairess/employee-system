@@ -17,7 +17,11 @@ const initialState: EmployeesState = {
 const employeesSlice = createSlice({
   name: 'employees',
   initialState,
-  reducers: {},
+  reducers: {
+    clearError: (state) => {
+      state.error = null;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(listEmployees.pending, (state) => {
@@ -35,4 +39,5 @@ const employeesSlice = createSlice({
   },
 });
 
+export const { clearError } = employeesSlice.actions;
 export default employeesSlice.reducer;

@@ -13,6 +13,7 @@ import KeepLogged from './KeepLogged';
 import ModalChangePassword from './ModalChangePassword';
 import { AppDispatch, RootState } from '../store';
 import login from '../services/login';
+import { clearError } from '../store/authSlice';
 
 function FormLogin() {
   const dispatch = useDispatch<AppDispatch>();
@@ -22,6 +23,10 @@ function FormLogin() {
   const [keepLogged, setKeepLogged] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const router = useRouter();
+
+  useEffect(() => {
+    dispatch(clearError());
+  }, [dispatch]);
 
   useEffect(() => {
     const storedLogged = localStorage.getItem('keepLogged');

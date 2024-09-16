@@ -24,6 +24,10 @@ const authSlice = createSlice({
         sessionStorage.removeItem('token');
       }
     },
+
+    clearError: (state) => {
+      state.error = null;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -42,6 +46,6 @@ const authSlice = createSlice({
   },
 });
 
-export const { logout } = authSlice.actions;
+export const { logout, clearError } = authSlice.actions;
 
 export default authSlice.reducer;

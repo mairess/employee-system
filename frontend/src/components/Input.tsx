@@ -11,12 +11,12 @@ type InputProps = {
   id: string,
   placeholder: string,
   value: string,
-  error?: string | string[] | null
+  error?: string | string[] | null,
   autocomplete?: string
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void,
 };
 
-function Input({ type, name, id, placeholder, value, error = '', autocomplete = '', onChange }: InputProps) {
+function Input({ type, name, id, placeholder, value, error = null, autocomplete = '', onChange }: InputProps) {
   return (
     <div>
       <input

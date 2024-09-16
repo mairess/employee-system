@@ -11,7 +11,7 @@ function ErrorInputField({ errors }:ErrorInputFieldProps) {
   const isError = errors !== 'Password reset link sent to your email!';
 
   return (
-    <p className={ `text-${isError ? 'error' : 'success'} text-xs mt-2 flex items-center` }>
+    <p className={ `text-${isError ? 'error' : 'success'} text-sm mt-2 flex items-center` }>
       <Image
         className="mr-1"
         src={ isError ? errorIcon : successIcon }
