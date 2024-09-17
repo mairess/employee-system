@@ -6,14 +6,15 @@ import Image from 'next/image';
 import iconSearch from '../../public/iconSearch.svg';
 
 type SearchBarProps = {
+  title: string
   placeholder: string
 };
 
-function SearchBar({ placeholder }: SearchBarProps) {
+function SearchBar({ placeholder, title }: SearchBarProps) {
   return (
     <div className="flex flex-col items-center justify-center w-full md:flex-row my-spacing-regular-20">
 
-      <h1 className="w-full mb-spacing-regular-20 text-h1 text-black-neutral">Employees</h1>
+      <h1 className="w-full mb-spacing-regular-20 text-h1 text-black-neutral">{title}</h1>
 
       <div className="w-full relative md:w-5/12">
 

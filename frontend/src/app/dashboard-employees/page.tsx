@@ -14,6 +14,7 @@ function DashboardEmployees() {
       <div className="px-spacing-regular-20">
 
         <SearchBar
+          title="Employees"
           placeholder="Search Employee"
         />
 
