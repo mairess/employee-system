@@ -1,4 +1,7 @@
 /* eslint-disable max-len */
+
+'use client';
+
 type ActionButtonProps = {
   label?: 'edit' | 'delete',
 };

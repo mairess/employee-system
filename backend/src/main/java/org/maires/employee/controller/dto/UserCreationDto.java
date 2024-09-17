@@ -17,7 +17,7 @@ public record UserCreationDto(
     @NotBlank(message = "Full name cannot be blank!")
     @Size(min = 4, message = "Full name must be >= 4 characters!")
     @Pattern(
-        regexp = "\\D+",
+        regexp = "^[^0-9]*$",
         message = "Full name must not contain digit!"
     )
     String fullName,

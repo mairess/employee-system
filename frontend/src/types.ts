@@ -6,3 +6,12 @@ export type EmployeeType = {
   admission: string,
   phone: string
 };
+
+export type UserType = {
+  id: number | null,
+  fullName: string,
+  username: string,
+  email: string,
+  password: string,
+  role: string,
+};

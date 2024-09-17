@@ -1,4 +1,7 @@
 /* eslint-disable max-len */
+
+'use client';
+
 import FormRegister from '../../components/FormRegister';
 
 function RegisterPage() {

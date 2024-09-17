@@ -4,21 +4,38 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { useDispatch, useSelector } from 'react-redux';
 import AuthFooter from './AuthFooter';
 import Button from './Button';
 import Divider from './Divider';
 import Input from './Input';
 import KeepLogged from './KeepLogged';
-import useLogin from '../hooks/useLogin';
 import ModalChangePassword from './ModalChangePassword';
+import { AppDispatch, RootState } from '../store';
+import login from '../services/login';
+import { clearError } from '../store/loginSlice';
 
 function FormLogin() {
+  const dispatch = useDispatch<AppDispatch>();
+  const { token, loading, error } = useSelector((state: RootState) => state.auth);
   const [formData, setFormaData] = useState({ username: '', password: '' });
   const [isLoaded, setIsLoaded] = useState(false);
   const [keepLogged, setKeepLogged] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const { setError, error, loading, fetchData } = useLogin({ ...formData, keepLogged });
   const router = useRouter();
+
+  useEffect(() => {
+    dispatch(clearError());
+  }, [dispatch]);
+
+  useEffect(() => {
+    const storedLogged = localStorage.getItem('keepLogged');
+    if (storedLogged !== null) { setKeepLogged(JSON.parse(storedLogged)); }
+    setIsLoaded(true);
+  }, []);
+
+  useEffect(() => {
+    if (token) { router.push('/dashboard'); }
+  }, [token, router]);
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
@@ -26,20 +43,9 @@ function FormLogin() {
   };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    setError(null);
     event.preventDefault();
-    const data = await fetchData();
-
-    if ('token' in data) {
-      router.push('/dashboard');
-    }
+    dispatch(login({ ...formData, keepLogged }));
   };
-
-  useEffect(() => {
-    const storedLogged = localStorage.getItem('keepLogged');
-    setKeepLogged(storedLogged === 'true');
-    setIsLoaded(true);
-  }, []);
 
   const handleKeepLogged = () => {
     setKeepLogged((prev) => {
@@ -51,18 +57,10 @@ function FormLogin() {
 
   if (!isLoaded) return null; // review this and find a better approach to Keep me logged selection
 
-  const showModal = (event: React.MouseEvent<HTMLDivElement | HTMLButtonElement>) => {
-    event.preventDefault();
-    setIsModalOpen(!isModalOpen);
-  };
-
   return (
     <>
 
-      <ModalChangePassword
-        isModalOpen={ isModalOpen }
-        onClose={ showModal }
-      />
+      <ModalChangePassword />
 
       <form
         className="flex flex-col gap-6 bg-light-neutral-100 border border-light-neutral-400 rounded-lg p-8 shadow-xl"
@@ -111,7 +109,6 @@ function FormLogin() {
           forgotPassword="Forgot your password?"
           doNotHaveAccountText="Don't have an account?"
           doNotHaveAccountLinkTo="Register"
-          onClick={ showModal }
           href="/register"
         />
 

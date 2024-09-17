@@ -2,19 +2,31 @@
 
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { useDispatch, useSelector } from 'react-redux';
 import Input from './Input';
 import Button from './Button';
 import Divider from './Divider';
 import AuthFooter from './AuthFooter';
-import useRegister from '../hooks/useRegister';
+import { AppDispatch, RootState } from '../store';
+import register from '../services/register';
+import { clearError } from '../store/userSlice';
 
 function FormRegister() {
+  const dispatch = useDispatch<AppDispatch>();
+  const { loading, user, error } = useSelector((state: RootState) => state.user);
   const [formData, setFormaData] = useState({ fullName: '', username: '', email: '', password: '', role: 'user' });
   const [confirmPassword, setConfirmPassword] = useState('');
-  const { setError, error, loading, fetchData } = useRegister({ ...formData });
   const router = useRouter();
+
+  useEffect(() => {
+    dispatch(clearError());
+  }, [dispatch, router]);
+
+  useEffect(() => {
+    if (user.id) { router.push('/'); }
+  }, [user, router]);
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
@@ -28,12 +40,9 @@ function FormRegister() {
   const isFormValid = confirmPassword === formData.password;
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    setError(null);
     event.preventDefault();
-    const data = await fetchData();
-
-    if ('id' in data) {
-      router.push('/');
+    if (isFormValid) {
+      dispatch(register(formData));
     }
   };
 
