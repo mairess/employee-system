@@ -65,7 +65,8 @@ public class PasswordResetIntegrationTest {
   public void cleanUp() {
     userRepository.deleteAll();
 
-    User admin = new User("Evangevaldo de Lima Soares", "vange", "vange@example.com", "123456",
+    User admin = new User("https://robohash.org/179.106.168.35.png", "Evangevaldo de Lima Soares",
+        "vange", "vange@example.com", "123456",
         Role.ADMIN);
     userAdmin = userRepository.save(admin);
   }

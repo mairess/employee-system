@@ -24,6 +24,8 @@ public class User implements UserDetails {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
+  private String photo;
+
   private String fullName;
 
   @Column(unique = true)
@@ -47,13 +49,16 @@ public class User implements UserDetails {
   /**
    * Instantiates a new User.
    *
+   * @param photo    the photo
    * @param fullName the name
    * @param username the username
    * @param email    the email
    * @param password the password
    * @param role     the role
    */
-  public User(String fullName, String username, String email, String password, Role role) {
+  public User(String photo, String fullName, String username, String email, String password,
+      Role role) {
+    this.photo = photo;
     this.fullName = fullName;
     this.username = username;
     this.email = email;
@@ -77,6 +82,25 @@ public class User implements UserDetails {
    */
   public void setId(Long id) {
     this.id = id;
+  }
+
+  /**
+   * Gets photo.
+   *
+   * @return the photo
+   */
+  public String getPhoto() {
+    return photo;
+  }
+
+
+  /**
+   * Sets photo.
+   *
+   * @param photo the photo
+   */
+  public void setPhoto(String photo) {
+    this.photo = photo;
   }
 
   /**

@@ -13,6 +13,12 @@ import org.maires.employee.validation.EnumValidator;
  * The type User creation dto.
  */
 public record UserCreationDto(
+    @Pattern(
+        regexp = "^(https?|ftp)://[^\\s/$.?#].[^\\s]*$",
+        message = "Invalid URL format"
+    )
+    String photo,
+
     @NotNull(message = "Full name cannot be null!")
     @NotBlank(message = "Full name cannot be blank!")
     @Size(min = 4, message = "Full name must be >= 4 characters!")
@@ -48,7 +54,7 @@ public record UserCreationDto(
    * @return the user
    */
   public User toEntity() {
-    return new User(fullName, username, email, password, Role.valueOf(role.toUpperCase()));
+    return new User(photo, fullName, username, email, password, Role.valueOf(role.toUpperCase()));
   }
 
 }

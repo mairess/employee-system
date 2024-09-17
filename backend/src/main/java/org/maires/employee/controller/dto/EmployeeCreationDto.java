@@ -11,6 +11,11 @@ import org.maires.employee.entity.Employee;
  * The type Employee creation dto.
  */
 public record EmployeeCreationDto(
+
+    @Pattern(
+        regexp = "^(https?|ftp)://[^\\s/$.?#].[^\\s]*$",
+        message = "Invalid URL format"
+    )
     String photo,
 
     @NotNull(message = "FullName cannot be null!")
