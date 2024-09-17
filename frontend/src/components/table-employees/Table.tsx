@@ -6,12 +6,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
 import TableFooter from './TableFooter';
 import TableHead from './TableHead';
-import TableRowEmployees from './TableRowEmployees';
-import { AppDispatch, RootState } from '../store';
-import listEmployees from '../services/listEmployees';
-import useToken from '../hooks/useToken';
-import Loading from './Loading';
-import Error from './Error';
+import TableRowEmployees from './TableRow';
+import { AppDispatch, RootState } from '../../store';
+import listEmployees from '../../services/listEmployees';
+import useToken from '../../hooks/useToken';
+import Loading from '../Loading';
+import Error from '../Error';
 
 function TableEmployees() {
   const dispatch = useDispatch<AppDispatch>();

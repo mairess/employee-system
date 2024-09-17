@@ -5,7 +5,7 @@
 
 import Header from '../../components/Header';
 import SearchBar from '../../components/SearchBar';
-import TableEmployees from '../../components/TableEmployees';
+import Table from '../../components/table-employees/Table';
 
 function DashboardEmployees() {
   return (
@@ -18,7 +18,7 @@ function DashboardEmployees() {
           placeholder="Search Employee"
         />
 
-        <TableEmployees />
+        <Table />
 
       </div>
     </div>
