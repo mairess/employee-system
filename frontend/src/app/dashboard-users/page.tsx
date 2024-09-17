@@ -5,21 +5,23 @@
 
 import Header from '../../components/Header';
 import SearchBar from '../../components/SearchBar';
-import Table from '../../components/Table';
+import TableUsers from '../../components/TableUsers';
 
-function Dashboard() {
+function DashboardUsers() {
   return (
     <div className="bg-white pb-4 min-h-screen">
       <Header />
       <div className="px-spacing-regular-20">
 
-        <SearchBar />
+        <SearchBar
+          placeholder="Search User"
+        />
 
-        <Table />
+        <TableUsers />
 
       </div>
     </div>
   );
 }
 
-export default Dashboard;
+export default DashboardUsers;

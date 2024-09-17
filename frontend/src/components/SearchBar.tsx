@@ -1,10 +1,15 @@
+/* eslint-disable max-len */
+
 'use client';
 
 import Image from 'next/image';
 import iconSearch from '../../public/iconSearch.svg';
 
-/* eslint-disable max-len */
-function SearchBar() {
+type SearchBarProps = {
+  placeholder: string
+};
+
+function SearchBar({ placeholder }: SearchBarProps) {
   return (
     <div className="flex flex-col items-center justify-center w-full md:flex-row my-spacing-regular-20">
 
@@ -15,7 +20,7 @@ function SearchBar() {
         <input
           className="w-full text-black border border-gray-neutral-10 rounded-lg py-3 pl-4 pr-10 shadow-custom-10"
           type="text"
-          placeholder="Search employee"
+          placeholder={ placeholder }
         />
 
         <div className="absolute top-0 flex h-full right-4">

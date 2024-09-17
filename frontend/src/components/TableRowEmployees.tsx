@@ -5,11 +5,11 @@
 import { EmployeeType } from '../types';
 import ActionButton from './ActionButton';
 
-type TableRowProps = {
+type TableRowEmployeesProps = {
   employee: EmployeeType
 };
 
-function TableRow({ employee }: TableRowProps) {
+function TableRowEmployees({ employee }: TableRowEmployeesProps) {
   return (
     <tbody className="text-dark-neutral-500 border-t-2">
       <tr>
@@ -39,4 +39,4 @@ function TableRow({ employee }: TableRowProps) {
   );
 }
 
-export default TableRow;
+export default TableRowEmployees;

@@ -14,7 +14,7 @@ const initialState: EmployeesState = {
   error: null,
 };
 
-const employeesSlice = createSlice({
+const listEmployeesSlice = createSlice({
   name: 'employees',
   initialState,
   reducers: {
@@ -39,5 +39,5 @@ const employeesSlice = createSlice({
   },
 });
 
-export const { clearError } = employeesSlice.actions;
-export default employeesSlice.reducer;
+export const { clearError } = listEmployeesSlice.actions;
+export default listEmployeesSlice.reducer;

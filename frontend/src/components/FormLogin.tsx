@@ -34,7 +34,7 @@ function FormLogin() {
   }, []);
 
   useEffect(() => {
-    if (token) { router.push('/dashboard'); }
+    if (token) { router.push('/dashboard-employees'); }
   }, [token, router]);
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {

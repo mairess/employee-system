@@ -9,9 +9,9 @@ export type EmployeeType = {
 
 export type UserType = {
   id: number | null,
+  photo: string,
   fullName: string,
   username: string,
   email: string,
-  password: string,
   role: string,
 };
