@@ -5,7 +5,7 @@
 
 import Header from '../../components/Header';
 import SearchBar from '../../components/SearchBar';
-import TableUsers from '../../components/TableUsers';
+import Table from '../../components/table-user/Table';
 
 function DashboardUsers() {
   return (
@@ -18,7 +18,7 @@ function DashboardUsers() {
           placeholder="Search User"
         />
 
-        <TableUsers />
+        <Table />
 
       </div>
     </div>

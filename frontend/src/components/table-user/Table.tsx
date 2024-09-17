@@ -6,12 +6,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
 import TableFooter from './TableFooter';
 import TableHead from './TableHead';
-import TableRowUsers from './TableRowUsers';
-import { AppDispatch, RootState } from '../store';
-import listUsers from '../services/listUsers';
-import useToken from '../hooks/useToken';
-import Loading from './Loading';
-import Error from './Error';
+import TableRowUsers from './TableRow';
+import { AppDispatch, RootState } from '../../store';
+import listUsers from '../../services/listUsers';
+import useToken from '../../hooks/useToken';
+import Loading from '../Loading';
+import Error from '../Error';
 
 function TableUsers() {
   const dispatch = useDispatch<AppDispatch>();
@@ -25,12 +25,7 @@ function TableUsers() {
   return (
     <table className="w-full text-left table-fixed shadow-custom-10 rounded-bl-lg rounded-br-lg">
 
-      <TableHead
-        colOne="NAME"
-        colTwo="USERNAME"
-        colThree="EMAIL"
-        colFour="ROLE"
-      />
+      <TableHead />
 
       {loading && (
         <tbody>
