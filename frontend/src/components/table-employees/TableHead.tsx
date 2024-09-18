@@ -14,8 +14,8 @@ function TableHead() {
         <th className="hidden sm:table-cell">POSITION</th>
         <th className="hidden md:table-cell">ADMISSION</th>
         <th className="hidden lg:table-cell">PHONE</th>
-        <th className="hidden rounded-tr-lg xl:table-cell">ACTIONS</th>
-        <th className="rounded-tr-lg xl:hidden">
+        <th className="hidden rounded-tr-lg lg:table-cell">ACTIONS</th>
+        <th className="rounded-tr-lg lg:hidden">
           <div className="flex justify-center items-center">
             <Image src={ ellipse } alt="ellipse to indicates hidden columns" />
           </div>

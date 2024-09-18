@@ -55,7 +55,8 @@ function FormLogin() {
     });
   };
 
-  if (!isLoaded) return null; // review this and find a better approach to Keep me logged selection
+  // review this maybe interfering on loading page
+  if (!isLoaded) return null;
 
   return (
     <>

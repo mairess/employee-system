@@ -25,12 +25,7 @@ function TableEmployees() {
   return (
     <table className="w-full text-left table-fixed shadow-custom-10 rounded-bl-lg rounded-br-lg">
 
-      <TableHead
-        colOne="NAME"
-        colTwo="JOB ROLE"
-        colThree="ADMISSION"
-        colFour="PHONE"
-      />
+      <TableHead />
 
       {loading && (
         <tbody>
