@@ -12,11 +12,15 @@ import listUsers from '../../services/listUsers';
 import useToken from '../../hooks/useToken';
 import Loading from '../Loading';
 import Error from '../Error';
+import useWindowWidth from '../../hooks/useWindowWidth';
+import getColSpan from '../../utils/handleColSpan';
 
 function TableUsers() {
   const dispatch = useDispatch<AppDispatch>();
   const { loading, users, error } = useSelector((state: RootState) => state.users);
   const token = useToken();
+
+  const windowWidth = useWindowWidth();
 
   useEffect(() => {
     if (token) { dispatch(listUsers(token)); }
@@ -30,7 +34,7 @@ function TableUsers() {
       {loading && (
         <tbody>
           <tr>
-            <td colSpan={ 5 } className="p-10">
+            <td colSpan={ getColSpan(windowWidth) } className="p-10">
               <Loading />
               <p className="text-dark-neutral-0 text-center">Loading data...</p>
             </td>
