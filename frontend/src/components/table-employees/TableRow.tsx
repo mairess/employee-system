@@ -9,7 +9,7 @@ import { EmployeeType } from '../../types';
 import ActionButton from '../ActionButton';
 import iconChevronDown from '../../../public/iconChevronDown.svg';
 import iconChevronUp from '../../../public/iconChevronUp.svg';
-import RowDetail from './RowDetail';
+import RowDetail from '../RowDetail';
 import useWindowWidth from '../../hooks/useWindowWidth';
 
 type TableRowEmployeesProps = {
@@ -32,9 +32,9 @@ function TableRowEmployees({ employee }: TableRowEmployeesProps) {
   };
 
   return (
-    <tbody className="text-dark-neutral-500 border-t-2">
-      <tr>
-        <td className="flex items-center justify-center py-spacing-little-12 sm:table-cell sm:pl-spacing-regular-20">
+    <tbody className="text-dark-neutral-500 border-t">
+      <tr className="text-black-neutral text-h3">
+        <td className="px-spacing-regular-20 sm:table-cell sm:pl-spacing-regular-20">
           <img
             className="rounded-full w-8 h-8 border"
             src={ employee.photo }
@@ -45,18 +45,14 @@ function TableRowEmployees({ employee }: TableRowEmployeesProps) {
         <td className="hidden sm:table-cell">{employee.position}</td>
         <td className="hidden md:table-cell">{employee.admission}</td>
         <td className="hidden lg:table-cell">{employee.phone}</td>
-        <td className="hidden lg:table-cell">
+        <td className="hidden xl:table-cell">
           <div>
-            <ActionButton
-              label="edit"
-            />
-            <ActionButton
-              label="delete"
-            />
+            <ActionButton label="edit" />
+            <ActionButton label="delete" />
           </div>
         </td>
-        <td className="lg:hidden">
-          <div className="flex justify-center items-center cursor-pointer">
+        <td className="xl:hidden p-spacing-little-12">
+          <div className="flex justify-end items-center cursor-pointer">
             <button
               onClick={ handleDetail }
             >
@@ -85,12 +81,12 @@ function TableRowEmployees({ employee }: TableRowEmployeesProps) {
               employeeData={ employee.position }
             />
 
-            <tr className="lg:hidden">
+            <tr className="xl:hidden">
               <td
                 className="px-spacing-regular-20"
                 colSpan={ getColSpan() }
               >
-                <div className="flex w-full justify-end">
+                <div className="flex w-full justify-end lg:border-t lg:border-dashed lg:border-t-gray-neutral-10">
                   <ActionButton label="edit" />
                   <ActionButton label="delete" />
                 </div>

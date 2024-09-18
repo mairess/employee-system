@@ -1,4 +1,4 @@
-import useWindowWidth from '../../hooks/useWindowWidth';
+import useWindowWidth from '../hooks/useWindowWidth';
 
 /* eslint-disable max-len */
 type RowDetailProps = {
@@ -21,7 +21,7 @@ function RowDetail({ employeeData, head, breakpoint }:RowDetailProps) {
     <tr className="text-black-neutral">
 
       <td
-        className={ `px-spacing-regular-20 ${breakpoint}` }
+        className={ `px-spacing-regular-20 py-spacing-little-04 ${breakpoint}` }
         colSpan={ getColSpan() }
       >
         <div className="flex justify-between border-b border-dashed border-b-gray-neutral-10">
