@@ -11,6 +11,7 @@ import iconChevronDown from '../../../public/iconChevronDown.svg';
 import iconChevronUp from '../../../public/iconChevronUp.svg';
 import RowDetail from '../RowDetail';
 import useWindowWidth from '../../hooks/useWindowWidth';
+import getColSpan from '../../utils/handleColSpan';
 
 type TableRowEmployeesProps = {
   employee: EmployeeType
@@ -19,13 +20,6 @@ type TableRowEmployeesProps = {
 function TableRowEmployees({ employee }: TableRowEmployeesProps) {
   const [showDetails, setShowDetails] = useState(false);
   const windowWidth = useWindowWidth();
-
-  const getColSpan = () => {
-    if (windowWidth >= 1024) return 6;
-    if (windowWidth >= 768) return 5;
-    if (windowWidth >= 640) return 4;
-    return 3;
-  };
 
   const handleDetail = () => {
     setShowDetails(!showDetails);
@@ -84,7 +78,7 @@ function TableRowEmployees({ employee }: TableRowEmployeesProps) {
             <tr className="xl:hidden">
               <td
                 className="px-spacing-regular-20"
-                colSpan={ getColSpan() }
+                colSpan={ getColSpan(windowWidth) }
               >
                 <div className="flex w-full justify-end lg:border-t lg:border-dashed lg:border-t-gray-neutral-10">
                   <ActionButton label="edit" />

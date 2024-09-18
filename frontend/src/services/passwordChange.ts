@@ -14,14 +14,11 @@ const passwordChange = createAsyncThunk(
 
       if (!response.ok) {
         const errorData = await response.json();
-        console.log('errorData', errorData);
         console.error('Error fetching:', errorData.message);
         return rejectWithValue(errorData.message);
       }
 
       const data = await response.json();
-
-      console.log('data', data);
 
       return data.message;
     } catch (error) {
