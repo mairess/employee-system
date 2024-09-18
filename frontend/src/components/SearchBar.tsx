@@ -26,7 +26,11 @@ function SearchBar({ placeholder, title }: SearchBarProps) {
 
         <div className="absolute top-0 flex h-full right-4">
 
-          <Image src={ iconSearch } alt="search icon" />
+          <Image
+            className="w-6 h-auto"
+            src={ iconSearch }
+            alt="search icon"
+          />
 
         </div>
 
