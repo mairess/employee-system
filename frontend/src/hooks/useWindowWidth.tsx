@@ -1,3 +1,5 @@
+/* eslint-disable max-len */
+
 'use client';
 
 import { useEffect, useState } from 'react';
@@ -5,9 +7,7 @@ import { useEffect, useState } from 'react';
 function useWindowWidth() {
   const isClient = typeof window === 'object';
 
-  const [windowWidth, setWindowWidth] = useState(
-    isClient ? window.innerWidth : undefined,
-  );
+  const [windowWidth, setWindowWidth] = useState<number>(isClient ? window.innerWidth : 0);
 
   useEffect(() => {
     if (!isClient) return;

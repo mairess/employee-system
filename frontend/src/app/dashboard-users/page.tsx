@@ -6,8 +6,15 @@
 import Header from '../../components/Header';
 import SearchBar from '../../components/SearchBar';
 import Table from '../../components/table-user/Table';
+import useAuth from '../../hooks/useAuth';
 
 function DashboardUsers() {
+  const isAuthenticated = useAuth();
+
+  if (isAuthenticated === null || !isAuthenticated) {
+    return null;
+  }
+
   return (
     <div className="bg-white pb-4 min-h-screen">
       <Header />
