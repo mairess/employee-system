@@ -1,15 +1,14 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
-const passwordChange = createAsyncThunk(
-  'passwordChange',
-  async (email: string, { rejectWithValue }) => {
+const listUsers = createAsyncThunk(
+  'listUsers',
+  async (token: string, { rejectWithValue }) => {
     try {
-      const response = await fetch('http://localhost:8080/password/reset-request', {
-        method: 'POST',
+      const response = await fetch('http://localhost:8080/users', {
+        method: 'GET',
         headers: {
-          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({ email }),
       });
 
       if (!response.ok) {
@@ -20,7 +19,7 @@ const passwordChange = createAsyncThunk(
 
       const data = await response.json();
 
-      return data.message;
+      return data;
     } catch (error) {
       console.error('Error fetching:', error);
       return rejectWithValue('Something went wrong.');
@@ -28,4 +27,4 @@ const passwordChange = createAsyncThunk(
   },
 );
 
-export default passwordChange;
+export default listUsers;

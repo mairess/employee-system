@@ -8,6 +8,7 @@ import org.maires.employee.security.Role;
  */
 public record UserDto(
     Long id,
+    String photo,
     String fullName,
     String username,
     String email,
@@ -23,6 +24,7 @@ public record UserDto(
   public static UserDto fromEntity(User user) {
     return new UserDto(
         user.getId(),
+        user.getPhoto(),
         user.getFullName(),
         user.getUsername(),
         user.getEmail(),

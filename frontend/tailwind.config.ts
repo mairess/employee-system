@@ -8,6 +8,12 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        roboto: ['roboto', 'sans-serif'],
+      },
+      size: {
+        'custom-size-08': '2.5rem'
+      },
       boxShadow: {
         'custom-00': '0 1px 1px 0 #00000020',
         'custom-05': '0 1px 2px 0 #00000020',
@@ -30,9 +36,6 @@ const config: Config = {
         'h1': ['2rem', { fontWeight: '500' }],
         'h2': ['1rem', { fontWeight: '500' }],
         'h3': ['1rem', { fontWeight: '400' }],
-      },
-      size: {
-        'custom-size-08': '2.5rem'
       },
       colors: {
         'dark-neutral-0': '#101214',

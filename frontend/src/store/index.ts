@@ -1,7 +1,8 @@
 import { configureStore } from '@reduxjs/toolkit';
 import authReducer from './loginSlice';
 import userReducer from './userSlice';
-import employeesReducer from './employeesSlice';
+import usersReducer from './listUsersSlice';
+import listEmployeesReducer from './listEmployeesSlice';
 import passwordChangeReducer from './passwordChangeSlice';
 import modalReducer from './modalSlice';
 
@@ -9,7 +10,8 @@ const store = configureStore({
   reducer: {
     auth: authReducer,
     user: userReducer,
-    employees: employeesReducer,
+    users: usersReducer,
+    employees: listEmployeesReducer,
     password: passwordChangeReducer,
     modal: modalReducer,
   },

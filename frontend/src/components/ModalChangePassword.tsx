@@ -34,6 +34,7 @@ function ModalChangePassword() {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    dispatch(clearError());
     dispatch(passwordChange(formData.email));
   };
 

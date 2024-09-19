@@ -34,7 +34,7 @@ function FormLogin() {
   }, []);
 
   useEffect(() => {
-    if (token) { router.push('/dashboard'); }
+    if (token) { router.push('/dashboard-employees'); }
   }, [token, router]);
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -55,7 +55,8 @@ function FormLogin() {
     });
   };
 
-  if (!isLoaded) return null; // review this and find a better approach to Keep me logged selection
+  // review this maybe interfering on loading page
+  if (!isLoaded) return null;
 
   return (
     <>

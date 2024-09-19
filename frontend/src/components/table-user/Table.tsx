@@ -6,20 +6,24 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
 import TableFooter from './TableFooter';
 import TableHead from './TableHead';
-import TableRow from './TableRow';
-import { AppDispatch, RootState } from '../store';
-import listEmployees from '../services/listEmployees';
-import useToken from '../hooks/useToken';
-import Loading from './Loading';
-import Error from './Error';
+import TableRowUsers from './TableRow';
+import { AppDispatch, RootState } from '../../store';
+import listUsers from '../../services/listUsers';
+import useToken from '../../hooks/useToken';
+import Loading from '../Loading';
+import Error from '../Error';
+import useWindowWidth from '../../hooks/useWindowWidth';
+import getColSpan from '../../utils/handleColSpan';
 
-function Table() {
+function TableUsers() {
   const dispatch = useDispatch<AppDispatch>();
-  const { loading, employees, error } = useSelector((state: RootState) => state.employees);
+  const { loading, users, error } = useSelector((state: RootState) => state.users);
   const token = useToken();
 
+  const windowWidth = useWindowWidth();
+
   useEffect(() => {
-    if (token) { dispatch(listEmployees(token)); }
+    if (token) { dispatch(listUsers(token)); }
   }, [token, dispatch]);
 
   return (
@@ -30,7 +34,7 @@ function Table() {
       {loading && (
         <tbody>
           <tr>
-            <td colSpan={ 5 } className="p-10">
+            <td colSpan={ getColSpan(windowWidth) } className="p-10">
               <Loading />
               <p className="text-dark-neutral-0 text-center">Loading data...</p>
             </td>
@@ -40,8 +44,8 @@ function Table() {
 
       {error && (<Error />)}
 
-      {!loading && !error && employees?.map((employee) => (
-        <TableRow key={ employee.id } employee={ employee } />
+      {!loading && !error && users?.map((user) => (
+        <TableRowUsers key={ user.id } user={ user } />
       ))}
 
       <TableFooter />
@@ -50,4 +54,4 @@ function Table() {
   );
 }
 
-export default Table;
+export default TableUsers;

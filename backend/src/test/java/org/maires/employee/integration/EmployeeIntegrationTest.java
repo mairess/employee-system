@@ -1,5 +1,6 @@
 package org.maires.employee.integration;
 
+import static org.hamcrest.Matchers.hasItem;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -27,6 +28,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultActions;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
@@ -65,7 +67,8 @@ public class EmployeeIntegrationTest {
     userRepository.deleteAll();
     employeeRepository.deleteAll();
 
-    User admin = new User("Gilmar de Castro", "gilmar", "gilmar@example.com", "123456", Role.ADMIN);
+    User admin = new User("https://robohash.org/179.106.168.19.png", "Gilmar de Castro", "gilmar",
+        "gilmar@example.com", "123456", Role.ADMIN);
     userRepository.save(admin);
     tokenAdmin = tokenService.generateToken(admin.getUsername());
   }
@@ -74,11 +77,13 @@ public class EmployeeIntegrationTest {
   @DisplayName("Retrieval all employees")
   public void testRetrievalAll() throws Exception {
 
+    LocalDate admissionDate = LocalDate.now();
+
     Employee Gahan = new Employee(
         "https://robohash.org/employee170",
         "David Gahan",
         "Backend",
-        LocalDate.now(),
+        admissionDate,
         "77912345678"
     );
 
@@ -86,7 +91,7 @@ public class EmployeeIntegrationTest {
         "https://robohash.org/employee170",
         "Martin Gore",
         "Frontend",
-        LocalDate.now(),
+        admissionDate,
         "77987654321"
     );
 
@@ -94,7 +99,7 @@ public class EmployeeIntegrationTest {
         "https://robohash.org/employee170",
         "Andrew Fletcher",
         "UX Designer",
-        LocalDate.now(),
+        admissionDate,
         "77987653210"
     );
 
@@ -110,7 +115,23 @@ public class EmployeeIntegrationTest {
         .andExpect(jsonPath("$").isArray())
         .andExpect(jsonPath("$.length()").value(3))
         .andExpect(jsonPath("$[0].id").exists())
-        .andExpect(jsonPath("$[0].fullName").value("David Gahan"));
+        .andExpect(jsonPath("$[0].photo").value("https://robohash.org/employee170"))
+        .andExpect(jsonPath("$[0].fullName").value("David Gahan"))
+        .andExpect(jsonPath("$[0].position").value("Backend"))
+        .andExpect(jsonPath("$[0].admission").value(admissionDate.toString()))
+        .andExpect(jsonPath("$[0].phone").value("77912345678"))
+        .andExpect(jsonPath("$[1].id").exists())
+        .andExpect(jsonPath("$[1].photo").value("https://robohash.org/employee170"))
+        .andExpect(jsonPath("$[1].fullName").value("Martin Gore"))
+        .andExpect(jsonPath("$[1].position").value("Frontend"))
+        .andExpect(jsonPath("$[1].admission").value(admissionDate.toString()))
+        .andExpect(jsonPath("$[1].phone").value("77987654321"))
+        .andExpect(jsonPath("$[2].id").exists())
+        .andExpect(jsonPath("$[2].photo").value("https://robohash.org/employee170"))
+        .andExpect(jsonPath("$[2].fullName").value("Andrew Fletcher"))
+        .andExpect(jsonPath("$[2].position").value("UX Designer"))
+        .andExpect(jsonPath("$[2].admission").value(admissionDate.toString()))
+        .andExpect(jsonPath("$[2].phone").value("77987653210"));
   }
 
   @Test
@@ -261,21 +282,65 @@ public class EmployeeIntegrationTest {
   }
 
   @Test
+  @DisplayName("Employee validation errors")
+  public void testEmployeeValidationErrors() throws Exception {
+
+    String invalidEmployeeJson = """
+        {
+            "photo": "invalid url",
+            "WrongKey": "David Gahan",
+            "WrongKey": "Frontend",
+            "WrongKey": "2023-08-22",
+            "WrongKey": "77912345678"
+        }
+        """;
+
+    String employeeUrl = "/employees";
+
+    ResultActions resultActions = mockMvc.perform(post(employeeUrl)
+            .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenAdmin)
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(invalidEmployeeJson))
+        .andExpect(status().isBadRequest())
+        .andExpect(jsonPath("$.message").isArray());
+
+    String[] expectedMessages = {
+        "Phone cannot be null!",
+        "Position cannot be blank!",
+        "FullName cannot be null!",
+        "Admission cannot be null!",
+        "Position cannot be null!",
+        "FullName cannot be blank!",
+        "Invalid URL format",
+        "Phone cannot be blank!"
+    };
+
+    for (String expectedMessage : expectedMessages) {
+      resultActions.andExpect(jsonPath("$.message").value(hasItem(expectedMessage)));
+    }
+
+  }
+
+  @Test
   @DisplayName("Update employee")
   public void testUpdate() throws Exception {
+    LocalDate admissionDate = LocalDate.now();
 
     Employee Gahan = new Employee(
         "https://robohash.org/employee170",
         "David Gahan",
         "Backend",
-        LocalDate.now(),
+        admissionDate,
         "77912345678"
     );
 
     employeeRepository.save(Gahan);
 
-    Gahan.setFullName("David Gahan Mirosmar Juliano de Almeida");
+    Gahan.setPhoto("https://robohash.org/employee141");
+    Gahan.setFullName("Mirosmar Juliano de Almeida");
     Gahan.setPosition("Fullstack");
+    Gahan.setAdmission(admissionDate.minusYears(1));
+    Gahan.setPhone("77912340000");
 
     ObjectMapper objectMapper = new ObjectMapper();
     objectMapper.registerModule(new JavaTimeModule());
@@ -288,8 +353,11 @@ public class EmployeeIntegrationTest {
             .contentType(MediaType.APPLICATION_JSON)
             .content(updatedEmployeeAsString))
         .andExpect(status().isOk())
-        .andExpect(jsonPath("$.fullName").value("David Gahan Mirosmar Juliano de Almeida"))
-        .andExpect(jsonPath("$.position").value("Fullstack"));
+        .andExpect(jsonPath("$.photo").value("https://robohash.org/employee141"))
+        .andExpect(jsonPath("$.fullName").value("Mirosmar Juliano de Almeida"))
+        .andExpect(jsonPath("$.position").value("Fullstack"))
+        .andExpect(jsonPath("$.admission").value(admissionDate.minusYears(1).toString()))
+        .andExpect(jsonPath("$.phone").value("77912340000"));
   }
 
   @Test

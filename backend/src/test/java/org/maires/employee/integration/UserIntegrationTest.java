@@ -64,7 +64,8 @@ public class UserIntegrationTest {
   public void cleanUp() {
     userRepository.deleteAll();
 
-    User admin = new User("Evangevaldo de Lima Soares", "vange", "vange@example.com", "123456",
+    User admin = new User("https://robohash.org/179.106.168.58.png", "Evangevaldo de Lima Soares",
+        "vange", "vange@example.com", "123456",
         Role.ADMIN);
     userAdmin = userRepository.save(admin);
     tokenAdmin = tokenService.generateToken(userAdmin.getUsername());
@@ -73,9 +74,11 @@ public class UserIntegrationTest {
   @Test
   @DisplayName("Retrieval all users")
   public void testRetrievalAll() throws Exception {
-    User Ermenegildo = new User("Ermenegildo Fagundes", "gildo", "gildo@example.com", "123456",
+    User Ermenegildo = new User("https://robohash.org/179.106.168.38.png", "Ermenegildo Fagundes",
+        "gildo", "gildo@example.com", "123456",
         Role.USER);
-    User Gilmar = new User("Gilmar de Castro", "gilmar", "gilmar@example.com", "123456", Role.USER);
+    User Gilmar = new User("https://robohash.org/179.106.168.48.png", "Gilmar de Castro", "gilmar",
+        "gilmar@example.com", "123456", Role.USER);
 
     userRepository.save(Ermenegildo);
     userRepository.save(Gilmar);
@@ -86,12 +89,18 @@ public class UserIntegrationTest {
         .andExpect(status().isOk())
         .andExpect(jsonPath("$").isArray())
         .andExpect(jsonPath("$.length()").value(3))
-        .andExpect(jsonPath("$[0].id").exists())
-        .andExpect(jsonPath("$[0].username").value("vange"))
         .andExpect(jsonPath("$[1].id").exists())
+        .andExpect(jsonPath("$[1].photo").value("https://robohash.org/179.106.168.38.png"))
+        .andExpect(jsonPath("$[1].fullName").value("Ermenegildo Fagundes"))
         .andExpect(jsonPath("$[1].username").value("gildo"))
+        .andExpect(jsonPath("$[1].email").value("gildo@example.com"))
+        .andExpect(jsonPath("$[1].role").value("USER"))
         .andExpect(jsonPath("$[2].id").exists())
-        .andExpect(jsonPath("$[2].username").value("gilmar"));
+        .andExpect(jsonPath("$[2].photo").value("https://robohash.org/179.106.168.48.png"))
+        .andExpect(jsonPath("$[2].fullName").value("Gilmar de Castro"))
+        .andExpect(jsonPath("$[2].username").value("gilmar"))
+        .andExpect(jsonPath("$[2].email").value("gilmar@example.com"))
+        .andExpect(jsonPath("$[2].role").value("USER"));
   }
 
   @Test
@@ -148,7 +157,8 @@ public class UserIntegrationTest {
   @DisplayName("Create user")
   public void testCreate() throws Exception {
 
-    User newUser = new User("Gilmar de Castro", "gilmar", "gilmar@example.com", "123456",
+    User newUser = new User("https://robohash.org/179.106.168.88.png", "Gilmar de Castro", "gilmar",
+        "gilmar@example.com", "123456",
         Role.USER);
 
     ObjectMapper objectMapper = new ObjectMapper();
@@ -160,6 +170,8 @@ public class UserIntegrationTest {
             .content(newUserJson))
         .andExpect(status().isCreated())
         .andExpect(jsonPath("$.id").exists())
+        .andExpect(jsonPath("$.photo").value("https://robohash.org/179.106.168.88.png"))
+        .andExpect(jsonPath("$.fullName").value("Gilmar de Castro"))
         .andExpect(jsonPath("$.username").value("gilmar"))
         .andExpect(jsonPath("$.role").value("USER"));
   }
@@ -168,7 +180,8 @@ public class UserIntegrationTest {
   @DisplayName("Email in use exception")
   public void testEmailAlreadyInUse() throws Exception {
 
-    User newUser = new User("Vange Carlos Aguiar", "vange", "vange@example.com", "123456",
+    User newUser = new User("https://robohash.org/179.106.168.18.png", "Vange Carlos Aguiar",
+        "vange", "vange@example.com", "123456",
         Role.ADMIN);
 
     ObjectMapper objectMapper = new ObjectMapper();
@@ -186,7 +199,8 @@ public class UserIntegrationTest {
   @DisplayName("Username in use exception")
   public void testUsernameAlreadyInUse() throws Exception {
 
-    User newUser = new User("Vange Carlos Aguiar", "vange", "vangecarlos@example.com", "123456",
+    User newUser = new User("https://robohash.org/179.106.168.32.png", "Vange Carlos Aguiar",
+        "vange", "vangecarlos@example.com", "123456",
         Role.ADMIN);
 
     ObjectMapper objectMapper = new ObjectMapper();
@@ -206,6 +220,7 @@ public class UserIntegrationTest {
 
     String invalidUserJson = """
         {
+            "photo": "invalid url",
             "WrongKey": "David Gahan",
             "WrongKey": "david",
             "WrongKey": "david@example.com",
@@ -223,6 +238,7 @@ public class UserIntegrationTest {
         .andExpect(jsonPath("$.message").isArray());
 
     String[] expectedMessages = {
+        "Invalid URL format",
         "Username cannot be blank!",
         "Username cannot be null!",
         "Role cannot be null! Try ADMIN or TECHNICIAN",
@@ -244,7 +260,12 @@ public class UserIntegrationTest {
   @DisplayName("Update user")
   public void testUpdate() throws Exception {
 
-    User updatedUser = new User("Gilmar de Castro", "gilmar", "gilmar@example.com", "123456",
+    User admin = new User("https://robohash.org/179.106.168.58.png", "Evangevaldo de Lima Soares",
+        "vange", "vange@example.com", "123456",
+        Role.ADMIN);
+
+    User updatedUser = new User("https://robohash.org/179.106.168.66.png", "Gilmar de Castro",
+        "gilmar", "gilmar@example.com", "123456",
         Role.USER);
 
     ObjectMapper objectMapper = new ObjectMapper();
@@ -256,7 +277,10 @@ public class UserIntegrationTest {
             .contentType(MediaType.APPLICATION_JSON)
             .content(updatedUserJson))
         .andExpect(status().isOk())
+        .andExpect(jsonPath("$.photo").value("https://robohash.org/179.106.168.66.png"))
+        .andExpect(jsonPath("$.fullName").value("Gilmar de Castro"))
         .andExpect(jsonPath("$.username").value("gilmar"))
+        .andExpect(jsonPath("$.email").value("gilmar@example.com"))
         .andExpect(jsonPath("$.role").value("USER"));
   }
 
@@ -264,7 +288,8 @@ public class UserIntegrationTest {
   @DisplayName("Delete user")
   public void testDelete() throws Exception {
 
-    User userToDelete = new User("Gilmar de Castro", "gilmar", "gilmar@example.com", "123456",
+    User userToDelete = new User("https://robohash.org/179.106.168.22.png", "Gilmar de Castro",
+        "gilmar", "gilmar@example.com", "123456",
         Role.USER);
 
     userRepository.save(userToDelete);

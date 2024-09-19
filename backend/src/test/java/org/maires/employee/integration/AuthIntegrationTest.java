@@ -59,7 +59,8 @@ public class AuthIntegrationTest {
 
     String hashedPassword = new BCryptPasswordEncoder().encode("123456");
 
-    User admin = new User("Gilmar de Castro", "gilmar", "gilmar@example.com", hashedPassword,
+    User admin = new User("https://robohash.org/179.106.168.54.png", "Gilmar de Castro", "gilmar",
+        "gilmar@example.com", hashedPassword,
         Role.ADMIN);
     userRepository.save(admin);
     tokenAdmin = tokenService.generateToken(admin.getUsername());
