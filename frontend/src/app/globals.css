@@ -8,9 +8,18 @@
   @apply font-roboto;
 }
 
-td {
-  @apply py-spacing-little-08
+td, th {
+  @apply p-spacing-little-08
 }
+
+th.photo, td.photo {
+  @apply pl-spacing-regular-24
+}
+
+th.actions, th.elipse, td.actions {
+  @apply pr-spacing-regular-24
+}
+
 
 * {
   @apply transition-colors duration-300

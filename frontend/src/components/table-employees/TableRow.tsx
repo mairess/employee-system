@@ -6,12 +6,14 @@
 import Image from 'next/image';
 import { useState } from 'react';
 import { EmployeeType } from '../../types';
-import ActionButton from '../ActionButton';
 import iconChevronDown from '../../../public/iconChevronDown.svg';
 import iconChevronUp from '../../../public/iconChevronUp.svg';
 import RowDetail from '../RowDetail';
 import useWindowWidth from '../../hooks/useWindowWidth';
 import getColSpan from '../../utils/handleColSpan';
+
+import ButtonDelete from '../ButtonDelete';
+import ButtonEdit from '../ButtonEdit';
 
 type TableRowEmployeesProps = {
   employee: EmployeeType
@@ -26,34 +28,38 @@ function TableRowEmployees({ employee }: TableRowEmployeesProps) {
   };
 
   return (
-    <tbody className="text-dark-neutral-500 border-t">
-      <tr className="text-black-neutral text-h3">
-        <td className="px-spacing-regular-20 sm:table-cell sm:pl-spacing-regular-20">
-          <img
-            className="rounded-full w-8 h-8 border"
-            src={ employee.photo }
-            alt="employee avatar"
-          />
+    <>
+      <tr className="border-t">
+
+        <td className="flex justify-start photo sm:flex sm:justify-start">
+          <img className="rounded-full w-8 h-8 border" src={ employee.photo } alt="employee avatar" />
         </td>
-        <td>{employee.fullName}</td>
+
+        <td className="text-center sm:text-left">{employee.fullName}</td>
+
         <td className="hidden sm:table-cell">{employee.position}</td>
+
         <td className="hidden md:table-cell">{employee.admission}</td>
+
         <td className="hidden lg:table-cell">{employee.phone}</td>
-        <td className="hidden xl:table-cell">
-          <div>
-            <ActionButton label="edit" />
-            <ActionButton label="delete" />
-          </div>
+
+        <td className="hidden lg:flex justify-end actions gap-2">
+
+          <ButtonEdit />
+          <ButtonDelete />
+
         </td>
-        <td className="xl:hidden p-spacing-little-12">
-          <div className="flex justify-end items-center cursor-pointer">
-            <button
-              onClick={ handleDetail }
-            >
-              <Image className="size-8" src={ showDetails ? iconChevronUp : iconChevronDown } alt="button to hide or show row details" />
-            </button>
-          </div>
+
+        <td className="text-center lg:hidden">
+
+          <button
+            onClick={ handleDetail }
+          >
+            <Image className="size-8" src={ showDetails ? iconChevronUp : iconChevronDown } alt="button to hide or show row details" />
+          </button>
+
         </td>
+
       </tr>
 
       {
@@ -75,22 +81,24 @@ function TableRowEmployees({ employee }: TableRowEmployeesProps) {
               employeeData={ employee.position }
             />
 
-            <tr className="xl:hidden">
-              <td
-                className="px-spacing-regular-20"
-                colSpan={ getColSpan(windowWidth) }
-              >
-                <div className="flex w-full justify-end lg:border-t lg:border-dashed lg:border-t-gray-neutral-10">
-                  <ActionButton label="edit" />
-                  <ActionButton label="delete" />
+            <tr className="lg:hidden">
+
+              <td className="px-spacing-regular-20" colSpan={ getColSpan(windowWidth) }>
+
+                <div className="flex w-full justify-end gap-2">
+                  <ButtonEdit />
+                  <ButtonDelete />
                 </div>
+
               </td>
+
             </tr>
+
           </>
         )
       }
+    </>
 
-    </tbody>
   );
 }
 
