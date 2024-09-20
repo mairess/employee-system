@@ -1,6 +1,6 @@
 function TableFooter() {
   return (
-    <tfoot className="bg-gradient-primary text-white">
+    <tfoot className="bg-gradient-primary text-white sticky bottom-0">
       <tr>
         <td
           className="p-spacing-little-12 rounded-bl-lg"

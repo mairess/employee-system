@@ -8,11 +8,23 @@
   @apply font-roboto;
 }
 
-td {
-  @apply py-spacing-little-08
+td, th {
+  @apply p-spacing-little-08
 }
+
+th.photo, td.photo {
+  @apply pl-spacing-regular-24
+}
+
+th.actions, td.actions {
+  @apply pr-spacing-regular-24
+}
+
 
 * {
   @apply transition-colors duration-300
 }
 
+.custom-scrollbar {
+  scrollbar-width: thin;
+}

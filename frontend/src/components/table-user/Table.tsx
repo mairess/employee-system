@@ -27,7 +27,7 @@ function TableUsers() {
   }, [token, dispatch]);
 
   return (
-    <table className="w-full text-left table-fixed shadow-custom-10 rounded-bl-lg rounded-br-lg">
+    <table className="w-full shadow-custom-10 rounded-bl-lg rounded-br-lg table-fixed">
 
       <TableHead />
 
@@ -44,9 +44,11 @@ function TableUsers() {
 
       {error && (<Error />)}
 
-      {!loading && !error && users?.map((user) => (
-        <TableRowUsers key={ user.id } user={ user } />
-      ))}
+      <tbody>
+        {!loading && !error && users?.map((user) => (
+          <TableRowUsers key={ user.id } user={ user } />
+        ))}
+      </tbody>
 
       <TableFooter />
 

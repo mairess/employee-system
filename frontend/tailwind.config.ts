@@ -25,6 +25,7 @@ const config: Config = {
         'spacing-medium-40': '2.5rem',
         'spacing-medium-32': '2rem',
         'spacing-regular-28': '1.75rem',
+        'spacing-regular-24': '1.50rem',
         'spacing-regular-20': '1.25rem',
         'spacing-regular-16': '1rem',
         'spacing-little-12': '0.75rem',
