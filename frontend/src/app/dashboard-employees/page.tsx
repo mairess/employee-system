@@ -16,18 +16,16 @@ function DashboardEmployees() {
   }
 
   return (
-    <div className="bg-white pb-4 min-h-screen">
-      <Header />
-      <div className="px-spacing-regular-20">
+    <div className="bg-white px-spacing-regular-20">
 
-        <SearchBar
-          title="Employees"
-          placeholder="Search Employee"
-        />
+      <SearchBar title="Employees" placeholder="Search Employee" />
+
+      <div className="h-[75vh] overflow-y-auto custom-scrollbar">
 
         <Table />
 
       </div>
+
     </div>
   );
 }

@@ -7,7 +7,7 @@ import ellipse from '../../../public/ellipse.svg';
 
 function TableHead() {
   return (
-    <thead className="bg-gradient-primary text-white text-h2">
+    <thead className="bg-gradient-primary text-white text-h2 sticky top-0">
       <tr>
         <th className="text-left photo rounded-tl-lg sm:text-left">PHOTO</th>
         <th className="text-center sm:text-left">NAME</th>

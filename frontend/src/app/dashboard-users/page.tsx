@@ -3,7 +3,6 @@
 
 'use client';
 
-import Header from '../../components/Header';
 import SearchBar from '../../components/SearchBar';
 import Table from '../../components/table-user/Table';
 import useAuth from '../../hooks/useAuth';
@@ -16,18 +15,16 @@ function DashboardUsers() {
   }
 
   return (
-    <div className="bg-white pb-4 min-h-screen">
-      <Header />
-      <div className="px-spacing-regular-20">
+    <div className="bg-white px-spacing-regular-20">
 
-        <SearchBar
-          title="Users"
-          placeholder="Search User"
-        />
+      <SearchBar title="Users" placeholder="Search User" />
+
+      <div className="h-[75vh] overflow-y-auto custom-scrollbar">
 
         <Table />
 
       </div>
+
     </div>
   );
 }
