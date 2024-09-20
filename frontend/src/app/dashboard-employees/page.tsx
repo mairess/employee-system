@@ -3,7 +3,6 @@
 
 'use client';
 
-import Header from '../../components/Header';
 import SearchBar from '../../components/SearchBar';
 import Table from '../../components/table-employees/Table';
 import useAuth from '../../hooks/useAuth';

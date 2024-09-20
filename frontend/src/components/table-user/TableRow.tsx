@@ -30,7 +30,7 @@ function TableRowUsers({ user }: TableRowUsersProps) {
     <>
       <tr className="border-t">
 
-        <td className="flex justify-start photo sm:flex sm:justify-start">
+        <td className="flex justify-center photo sm:flex sm:justify-start">
           <img className="rounded-full w-8 h-8 border" src={ user.photo } alt="employee avatar" />
         </td>
 
@@ -42,7 +42,7 @@ function TableRowUsers({ user }: TableRowUsersProps) {
 
         <td className="hidden lg:table-cell">{user.role}</td>
 
-        <td className="hidden lg:flex justify-end actions gap-2">
+        <td className="hidden lg:flex justify-center actions gap-2">
 
           <ButtonEdit />
           <ButtonDelete />

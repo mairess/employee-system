@@ -27,7 +27,7 @@ function TableUsers() {
   }, [token, dispatch]);
 
   return (
-    <table className="w-full shadow-custom-10 rounded-bl-lg rounded-br-lg">
+    <table className="w-full shadow-custom-10 rounded-bl-lg rounded-br-lg table-fixed">
 
       <TableHead />
 

@@ -14,11 +14,11 @@ function TableHead() {
         <th className="text-left hidden sm:table-cell">USERNAME</th>
         <th className="text-left hidden md:table-cell">EMAIL</th>
         <th className="text-left hidden lg:table-cell">ROLE</th>
-        <th className="text-right hidden rounded-tr-lg lg:table-cell actions">ACTIONS</th>
-        <th className="rounded-tr-lg lg:hidden elipse">
-          <span className="flex justify-end">
+        <th className="text-center hidden rounded-tr-lg lg:table-cell actions">ACTIONS</th>
+        <th className="rounded-tr-lg lg:hidden">
+          <div className="flex justify-center">
             <Image src={ ellipse } alt="dot to indicating hidden columns" />
-          </span>
+          </div>
         </th>
       </tr>
     </thead>

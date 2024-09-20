@@ -11,7 +11,7 @@ import iconChevronUp from '../../../public/iconChevronUp.svg';
 import RowDetail from '../RowDetail';
 import useWindowWidth from '../../hooks/useWindowWidth';
 import getColSpan from '../../utils/handleColSpan';
-
+import { formatPhoneNumber, formatDate } from '../../utils/handleFormat';
 import ButtonDelete from '../ButtonDelete';
 import ButtonEdit from '../ButtonEdit';
 
@@ -31,7 +31,7 @@ function TableRowEmployees({ employee }: TableRowEmployeesProps) {
     <>
       <tr className="border-t">
 
-        <td className="flex justify-start photo sm:flex sm:justify-start">
+        <td className="flex justify-center photo sm:flex sm:justify-start">
           <img className="rounded-full w-8 h-8 border" src={ employee.photo } alt="employee avatar" />
         </td>
 
@@ -39,11 +39,11 @@ function TableRowEmployees({ employee }: TableRowEmployeesProps) {
 
         <td className="hidden sm:table-cell">{employee.position}</td>
 
-        <td className="hidden md:table-cell">{employee.admission}</td>
+        <td className="hidden md:table-cell">{formatDate(employee.admission)}</td>
 
-        <td className="hidden lg:table-cell">{employee.phone}</td>
+        <td className="hidden lg:table-cell">{formatPhoneNumber(employee.phone)}</td>
 
-        <td className="hidden lg:flex justify-end actions gap-2">
+        <td className="hidden lg:flex justify-center actions gap-2">
 
           <ButtonEdit />
           <ButtonDelete />
@@ -68,12 +68,12 @@ function TableRowEmployees({ employee }: TableRowEmployeesProps) {
             <RowDetail
               breakpoint="lg:hidden"
               head="Phone"
-              employeeData={ employee.phone }
+              employeeData={ formatPhoneNumber(employee.phone) }
             />
             <RowDetail
               breakpoint="md:hidden"
               head="Admission"
-              employeeData={ employee.admission }
+              employeeData={ formatDate(employee.admission) }
             />
             <RowDetail
               breakpoint="sm:hidden"
