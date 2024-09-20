@@ -26,7 +26,7 @@ const listUsersSlice = createSlice({
       })
       .addCase(listUsers.fulfilled, (state, action) => {
         state.loading = false;
-        state.users = action.payload;
+        state.users = action.payload.data;
       })
       .addCase(listUsers.rejected, (state, action) => {
         state.loading = false;

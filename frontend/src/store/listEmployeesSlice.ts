@@ -30,7 +30,7 @@ const listEmployeesSlice = createSlice({
       })
       .addCase(listEmployees.fulfilled, (state, action) => {
         state.loading = false;
-        state.employees = action.payload;
+        state.employees = action.payload.data;
       })
       .addCase(listEmployees.rejected, (state, action) => {
         state.loading = false;
