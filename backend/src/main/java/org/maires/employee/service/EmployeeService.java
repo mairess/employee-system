@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.transaction.Transactional;
 import java.time.LocalDate;
-import java.util.List;
+import java.util.Map;
 import org.maires.employee.controller.dto.EmployeeCreationDto;
 import org.maires.employee.entity.Employee;
 import org.maires.employee.repository.EmployeeRepository;
@@ -41,17 +41,28 @@ public class EmployeeService {
 
 
   /**
-   * Find all list.
+   * Find all map.
    *
-   * @return the list
+   * @param pageNumber the page number
+   * @param pageSize   the page size
+   * @return the map
    */
-  public List<Employee> findAll(int pageNumber, int pageSize) {
+  public Map<String, Object> findAll(int pageNumber, int pageSize) {
 
     Pageable pageable = PageRequest.of(pageNumber, pageSize);
 
     Page<Employee> page = employeeRepository.findAll(pageable);
 
-    return page.toList();
+    return Map.of(
+        "data", page.getContent(),
+
+        "pagination", Map.of(
+            "currentPage", page.getNumber(),
+            "totalPages", page.getTotalPages(),
+            "pageSize", page.getSize(),
+            "totalItems", page.getTotalElements()
+        )
+    );
 
   }
 
@@ -79,6 +90,7 @@ public class EmployeeService {
    *
    * @param employee the employee
    * @return the employee
+   * @throws FutureDateException the future date exception
    */
   public Employee create(Employee employee) throws FutureDateException {
 

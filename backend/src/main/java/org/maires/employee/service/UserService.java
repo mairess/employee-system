@@ -3,7 +3,7 @@ package org.maires.employee.service;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.transaction.Transactional;
-import java.util.List;
+import java.util.Map;
 import org.maires.employee.controller.dto.UserCreationDto;
 import org.maires.employee.entity.User;
 import org.maires.employee.repository.UserRepository;
@@ -41,19 +41,27 @@ public class UserService implements UserDetailsService {
 
 
   /**
-   * Find all list.
+   * Find all map.
    *
    * @param pageNumber the page number
    * @param pageSize   the page size
-   * @return the list
+   * @return the map
    */
-  public List<User> findAll(int pageNumber, int pageSize) {
+  public Map<String, Object> findAll(int pageNumber, int pageSize) {
 
     Pageable pageable = PageRequest.of(pageNumber, pageSize);
 
     Page<User> page = userRepository.findAll(pageable);
 
-    return page.toList();
+    return Map.of(
+        "data", page.getContent(),
+        "pagination", Map.of(
+            "currentPage", page.getNumber(),
+            "totalPages", page.getTotalPages(),
+            "pageSize", page.getSize(),
+            "totalItems", page.getTotalElements()
+        )
+    );
   }
 
   /**
