@@ -3,33 +3,23 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { FaChevronRight, FaChevronLeft } from 'react-icons/fa';
-import { usePathname } from 'next/navigation';
-import { AppDispatch, RootState } from '../store';
-import useToken from '../hooks/useToken';
-import listEmployees from '../services/listEmployees';
-import listUsers from '../services/listUsers';
+import { AppDispatch, RootState } from '../../store';
+import useToken from '../../hooks/useToken';
+import listEmployees from '../../services/listEmployees';
 
-function PaginationController() {
-  const pathName = usePathname();
-  const { data: employees } = useSelector((state: RootState) => state.employees);
-  const { data: users } = useSelector((state: RootState) => state.users);
+function Pagination() {
+  const { data } = useSelector((state: RootState) => state.employees);
   const dispatch = useDispatch<AppDispatch>();
   const [pageNumber, setPageNumber] = useState(0);
   const [pageSize, setPageSize] = useState(20);
   const token = useToken();
 
-  const totalPagesEmployees = employees?.pagination.totalPages ?? 0;
-  const totalPagesUsers = users?.pagination.totalPages ?? 0;
-
-  const totalPages = pathName.includes('employees') ? totalPagesEmployees : totalPagesUsers;
+  const totalPages = data?.pagination.totalPages ?? 0;
 
   const isDisabled = pageNumber === totalPages - 1;
 
   useEffect(() => {
-    console.log('token PaginationController', token);
-
     if (token) { dispatch(listEmployees({ token, pageNumber, pageSize })); }
-    if (token) { dispatch(listUsers({ token, pageNumber, pageSize })); }
   }, [token, dispatch, pageNumber, pageSize]);
 
   const goToNextPage = () => {
@@ -49,11 +39,11 @@ function PaginationController() {
       <div>
         Showing
         {' '}
-        {pageSize}
+        {data?.employees.length}
         {' '}
         from
         {' '}
-        {pathName.includes('employees') ? employees?.pagination.totalItems : users?.pagination.totalItems}
+        {data?.pagination.totalItems}
       </div>
 
       <button
@@ -86,4 +76,4 @@ function PaginationController() {
   );
 }
 
-export default PaginationController;
+export default Pagination;

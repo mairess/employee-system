@@ -3,7 +3,7 @@
 
 import useWindowWidth from '../../hooks/useWindowWidth';
 import getColSpan from '../../utils/handleColSpan';
-import PaginationController from '../PaginationController';
+import Pagination from './Pagination';
 
 function TableFooter() {
   const windowWidth = useWindowWidth();
@@ -13,7 +13,7 @@ function TableFooter() {
       <tr>
 
         <td colSpan={ getColSpan(windowWidth) } className="rounded-b-lg">
-          <PaginationController />
+          <Pagination />
         </td>
 
       </tr>

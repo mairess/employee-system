@@ -20,7 +20,6 @@ const listUsers = createAsyncThunk(
 
       if (!response.ok) {
         const errorData = await response.json();
-        console.log('token', token);
 
         console.error('Error fetching:', errorData.message);
         return rejectWithValue(errorData.message);
