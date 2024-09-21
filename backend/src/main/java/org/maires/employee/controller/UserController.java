@@ -63,14 +63,14 @@ public class UserController {
 
     Map<String, Object> users = new HashMap<>(userService.findAll(pageNumber, pageSize));
 
-    List<?> data = (List<?>) users.get("data");
+    List<?> data = (List<?>) users.get("users");
 
     List<UserDto> userDtoList = data
         .stream()
         .map(employee -> UserDto.fromEntity((User) employee))
         .toList();
 
-    users.put("data", userDtoList);
+    users.put("users", userDtoList);
 
     return ResponseEntity.status(HttpStatus.OK).body(users);
 

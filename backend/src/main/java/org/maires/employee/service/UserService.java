@@ -54,7 +54,7 @@ public class UserService implements UserDetailsService {
     Page<User> page = userRepository.findAll(pageable);
 
     return Map.of(
-        "data", page.getContent(),
+        "users", page.getContent(),
         "pagination", Map.of(
             "currentPage", page.getNumber(),
             "totalPages", page.getTotalPages(),

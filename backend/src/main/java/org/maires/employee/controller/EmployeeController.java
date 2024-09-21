@@ -63,14 +63,14 @@ public class EmployeeController {
 
     Map<String, Object> employees = new HashMap<>(employeeService.findAll(pageNumber, pageSize));
 
-    List<?> data = (List<?>) employees.get("data");
+    List<?> data = (List<?>) employees.get("employees");
 
     List<EmployeeDto> employeeDtoList = data
         .stream()
         .map(employee -> EmployeeDto.fromEntity((Employee) employee))
         .toList();
 
-    employees.put("data", employeeDtoList);
+    employees.put("employees", employeeDtoList);
 
     return ResponseEntity.status(HttpStatus.OK).body(employees);
 

@@ -54,7 +54,7 @@ public class EmployeeService {
     Page<Employee> page = employeeRepository.findAll(pageable);
 
     return Map.of(
-        "data", page.getContent(),
+        "employees", page.getContent(),
 
         "pagination", Map.of(
             "currentPage", page.getNumber(),
