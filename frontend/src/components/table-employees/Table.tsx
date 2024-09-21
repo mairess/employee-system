@@ -14,15 +14,16 @@ import Loading from '../Loading';
 import Error from '../Error';
 import useWindowWidth from '../../hooks/useWindowWidth';
 import getColSpan from '../../utils/handleColSpan';
+import { EmployeeType } from '../../types';
 
 function TableEmployees() {
   const dispatch = useDispatch<AppDispatch>();
-  const { loading, employees, error } = useSelector((state: RootState) => state.employees);
+  const { loading, data, error } = useSelector((state: RootState) => state.employees);
   const token = useToken();
   const windowWidth = useWindowWidth();
 
   useEffect(() => {
-    if (token) { dispatch(listEmployees(token)); }
+    if (token) { dispatch(listEmployees({ token })); }
   }, [token, dispatch]);
 
   return (
@@ -44,7 +45,7 @@ function TableEmployees() {
       {error && (<Error />)}
 
       <tbody>
-        {!loading && !error && employees?.map((employee) => (
+        {!loading && !error && data?.employees.map((employee: EmployeeType) => (
           <TableRowEmployees key={ employee.id } employee={ employee } />
         ))}
       </tbody>

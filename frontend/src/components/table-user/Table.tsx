@@ -17,13 +17,12 @@ import getColSpan from '../../utils/handleColSpan';
 
 function TableUsers() {
   const dispatch = useDispatch<AppDispatch>();
-  const { loading, users, error } = useSelector((state: RootState) => state.users);
+  const { loading, data, error } = useSelector((state: RootState) => state.users);
   const token = useToken();
-
   const windowWidth = useWindowWidth();
 
   useEffect(() => {
-    if (token) { dispatch(listUsers(token)); }
+    if (token) { dispatch(listUsers({ token })); }
   }, [token, dispatch]);
 
   return (
@@ -45,7 +44,7 @@ function TableUsers() {
       {error && (<Error />)}
 
       <tbody>
-        {!loading && !error && users?.map((user) => (
+        {!loading && !error && data?.users.map((user) => (
           <TableRowUsers key={ user.id } user={ user } />
         ))}
       </tbody>

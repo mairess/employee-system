@@ -1,15 +1,15 @@
 import { createSlice } from '@reduxjs/toolkit';
 import listEmployees from '../services/listEmployees';
-import { EmployeeType } from '../types';
+import { ApiResponseEmployeeType } from '../types';
 
 type EmployeesState = {
-  employees: EmployeeType[] | null;
+  data: ApiResponseEmployeeType | null;
   loading: boolean;
   error: string | null
 };
 
 const initialState: EmployeesState = {
-  employees: null,
+  data: null,
   loading: false,
   error: null,
 };
@@ -30,7 +30,7 @@ const listEmployeesSlice = createSlice({
       })
       .addCase(listEmployees.fulfilled, (state, action) => {
         state.loading = false;
-        state.employees = action.payload.data;
+        state.data = action.payload;
       })
       .addCase(listEmployees.rejected, (state, action) => {
         state.loading = false;

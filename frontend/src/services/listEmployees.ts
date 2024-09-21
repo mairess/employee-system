@@ -1,10 +1,17 @@
+/* eslint-disable max-len */
 import { createAsyncThunk } from '@reduxjs/toolkit';
+
+type ListEmployeesParams = {
+  token: string;
+  pageNumber?: number;
+  pageSize?: number;
+};
 
 const listEmployees = createAsyncThunk(
   'listEmployees',
-  async (token: string, { rejectWithValue }) => {
+  async ({ token, pageNumber = 0, pageSize = 20 }: ListEmployeesParams, { rejectWithValue }) => {
     try {
-      const response = await fetch('http://localhost:8080/employees', {
+      const response = await fetch(`http://localhost:8080/employees?pageNumber=${pageNumber}&pageSize=${pageSize}`, {
         method: 'GET',
         headers: {
           Authorization: `Bearer ${token}`,
