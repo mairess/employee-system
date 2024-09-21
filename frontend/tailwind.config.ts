@@ -74,6 +74,7 @@ const config: Config = {
         'hover-success': '#2C6E30',
         primary: '#594ED2',
         secondary: '#5A84C0',
+        'hover-primary-transparent': '#FFFFFF33'
       },
       backgroundImage: {
         'gradient-primary': 'linear-gradient(to bottom, #5A84C0, #594ED2)',

@@ -1,76 +1,93 @@
 /* eslint-disable max-len */
 
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { FaChevronRight, FaChevronLeft } from 'react-icons/fa';
 import { AppDispatch, RootState } from '../../store';
 import useToken from '../../hooks/useToken';
 import listUsers from '../../services/listUsers';
+import handlePagination from '../../utils/handlePagination';
+import ButtonPagination from '../ButtonPagination';
 
 function Pagination() {
-  const { data } = useSelector((state: RootState) => state.users);
   const dispatch = useDispatch<AppDispatch>();
+  const token = useToken();
+  const { data } = useSelector((state: RootState) => state.users);
   const [pageNumber, setPageNumber] = useState(0);
   const [pageSize, setPageSize] = useState(20);
-  const token = useToken();
-
-  const totalPages = data?.pagination.totalPages ?? 0;
-
-  const isDisabled = pageNumber === totalPages - 1;
 
   useEffect(() => {
     if (token) { dispatch(listUsers({ token, pageNumber, pageSize })); }
   }, [token, dispatch, pageNumber, pageSize]);
 
+  if (data === null) return null;
+  const { users } = data;
+  const { currentPage, totalPages, totalItems } = data.pagination;
+
+  const arrayOfPages = handlePagination(data.pagination);
+
+  const isDisabled = pageNumber === totalPages - 1;
+
   const goToNextPage = () => {
-    if (pageNumber < totalPages - 1) {
-      setPageNumber((prev) => prev + 1);
-    }
+    if (pageNumber < totalPages - 1) { setPageNumber((prev) => prev + 1); }
   };
 
   const goToPreviousPage = () => {
-    if (pageNumber > 0) {
-      setPageNumber((prev) => prev - 1);
-    }
+    if (pageNumber > 0) { setPageNumber((prev) => prev - 1); }
+  };
+
+  const goToPage = (page: number) => {
+    setPageNumber(page);
   };
 
   return (
-    <div className="flex justify-evenly items-center">
-      <div>
-        Showing
-        {' '}
-        {data?.users.length}
-        {' '}
-        from
-        {' '}
-        {data?.pagination.totalItems}
-      </div>
-
-      <button
-        onClick={ goToPreviousPage }
-        disabled={ pageNumber === 0 }
-        aria-label="Previous page"
-      >
-
-        <FaChevronLeft className={ pageNumber === 0 ? 'text-gray-400' : 'text-white' } />
-
-      </button>
-
-      <div className="px-2">
+    <div className="flex items-center justify-evenly">
+      <div className="flex justify-center items-center">
         Page
         {' '}
-        {pageNumber + 1}
+        {currentPage + 1}
         {' '}
-        of
+        from
         {' '}
         {totalPages}
       </div>
 
-      <button onClick={ goToNextPage } disabled={ isDisabled } aria-label="Next page">
+      <div className="flex justify-center items-center">
+        Showing
+        {' '}
+        {users.length}
+        {' '}
+        from
+        {' '}
+        {totalItems}
+      </div>
 
-        <FaChevronRight className={ isDisabled ? 'text-gray-400' : 'text-white' } />
+      <ButtonPagination
+        ariaLabel="Go to previous page"
+        isDisabled={ pageNumber === 0 }
+        onClick={ goToPreviousPage }
+      />
 
-      </button>
+      <div className="px-2 flex">
+
+        {arrayOfPages.map((item: number) => (
+          <button
+            key={ item }
+            className={ `px-1 mx-1 rounded ${currentPage === item - 1 ? 'cursor-not-allowed text-gray-400' : 'hover:bg-hover-primary-transparent cursor-pointer'}` }
+            onClick={ () => goToPage(item - 1) }
+            disabled={ currentPage === item - 1 }
+            aria-label={ `Go to page ${currentPage + 1}` }
+          >
+            {item}
+          </button>
+        ))}
+
+      </div>
+
+      <ButtonPagination
+        isDisabled={ isDisabled }
+        onClick={ goToNextPage }
+        ariaLabel="Go to next page"
+      />
 
     </div>
   );
