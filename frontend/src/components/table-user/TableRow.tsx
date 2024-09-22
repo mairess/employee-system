@@ -28,10 +28,13 @@ function TableRowUsers({ user }: TableRowUsersProps) {
 
   return (
     <>
+
       <tr className="border-t">
 
         <td className="photo sm:flex sm:justify-start">
+
           <img className="rounded-full w-8 h-8 border" src={ user.photo } alt="employee avatar" />
+
         </td>
 
         <td className="text-center sm:text-left">{user.fullName}</td>
@@ -64,6 +67,7 @@ function TableRowUsers({ user }: TableRowUsersProps) {
       {
         showDetails && (
           <>
+
             <RowDetail
               breakpoint="lg:hidden"
               head="Role"
@@ -94,10 +98,13 @@ function TableRowUsers({ user }: TableRowUsersProps) {
             </tr>
 
           </>
+
         )
+
       }
 
     </>
+
   );
 }
 

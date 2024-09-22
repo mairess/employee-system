@@ -28,7 +28,9 @@ function TableRowEmployees({ employee }: TableRowEmployeesProps) {
   };
 
   return (
+
     <>
+
       <tr className="border-t">
 
         <td className="flex justify-center photo sm:flex sm:justify-start">
@@ -63,8 +65,11 @@ function TableRowEmployees({ employee }: TableRowEmployeesProps) {
       </tr>
 
       {
+
         showDetails && (
+
           <>
+
             <RowDetail
               breakpoint="lg:hidden"
               head="Phone"
@@ -95,8 +100,11 @@ function TableRowEmployees({ employee }: TableRowEmployeesProps) {
             </tr>
 
           </>
+
         )
+
       }
+
     </>
 
   );

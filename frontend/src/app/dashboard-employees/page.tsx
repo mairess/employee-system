@@ -6,6 +6,7 @@
 import SearchBar from '../../components/SearchBar';
 import Table from '../../components/table-employees/Table';
 import useAuth from '../../hooks/useAuth';
+import PaginationHeader from '../../components/table-employees/PaginationHeader';
 
 function DashboardEmployees() {
   const isAuthenticated = useAuth();
@@ -15,9 +16,11 @@ function DashboardEmployees() {
   }
 
   return (
-    <div className="bg-white px-spacing-regular-20">
+    <div className="bg-white px-spacing-regular-20 mb-1">
 
       <SearchBar title="Employees" placeholder="Search Employee" />
+
+      <PaginationHeader />
 
       <div className="h-[75vh] overflow-y-auto custom-scrollbar">
 

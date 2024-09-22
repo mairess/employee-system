@@ -26,32 +26,44 @@ function TableUsers() {
   }, [token, dispatch]);
 
   return (
+
     <table className="w-full shadow-custom-10 rounded-bl-lg rounded-br-lg table-fixed">
 
       <TableHead />
 
       {loading && (
+
         <tbody>
+
           <tr>
+
             <td colSpan={ getColSpan(windowWidth) } className="p-10">
+
               <Loading />
+
               <p className="text-dark-neutral-0 text-center">Loading data...</p>
+
             </td>
+
           </tr>
+
         </tbody>
       )}
 
       {error && (<Error />)}
 
       <tbody>
+
         {!loading && !error && data?.users.map((user) => (
           <TableRowUsers key={ user.id } user={ user } />
         ))}
+
       </tbody>
 
       <TableFooter />
 
     </table>
+
   );
 }
 

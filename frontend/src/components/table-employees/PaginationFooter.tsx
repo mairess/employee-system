@@ -1,52 +1,44 @@
 /* eslint-disable max-len */
 
-import React, { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../../store';
 import useToken from '../../hooks/useToken';
-import listUsers from '../../services/listUsers';
-import handlePagination from '../../utils/handlePagination';
+import listEmployees from '../../services/listEmployees';
 import ButtonPagination from '../ButtonPagination';
+import handlePagination from '../../utils/handlePagination';
 import ButtonPaginationJump from '../ButtonPaginationJump';
+import { setPageNumber } from '../../store/pageSizeSlice';
 
-function Pagination() {
+function PaginationFooter() {
   const dispatch = useDispatch<AppDispatch>();
   const token = useToken();
-  const { data } = useSelector((state: RootState) => state.users);
-  const [pageNumber, setPageNumber] = useState(0);
-  const [pageSize, setPageSize] = useState(20);
+  const { data } = useSelector((state: RootState) => state.employees);
+  const { pageSize, pageNumber } = useSelector((state: RootState) => state.pagination);
 
   useEffect(() => {
-    if (token) { dispatch(listUsers({ token, pageNumber, pageSize })); }
+    if (token) { dispatch(listEmployees({ token, pageNumber, pageSize })); }
   }, [token, dispatch, pageNumber, pageSize]);
 
   if (data === null) return null;
-  const { users } = data;
-  const { currentPage, totalPages, totalItems } = data.pagination;
+
+  const { currentPage, totalPages } = data.pagination;
 
   const arrayOfPages = handlePagination(data.pagination);
 
   const isDisabled = pageNumber === totalPages - 1;
 
-  const goToNextPage = () => {
-    if (pageNumber < totalPages - 1) { setPageNumber((prev) => prev + 1); }
+  const goToNextPage = (newPageNumber: number) => {
+    if (pageNumber < totalPages - 1) { dispatch(setPageNumber(newPageNumber)); }
   };
 
-  const goToPreviousPage = () => {
-    if (pageNumber > 0) { setPageNumber((prev) => prev - 1); }
-  };
+  const goToPreviousPage = (newPageNumber: number) => { if (pageNumber > 0) { dispatch(setPageNumber(newPageNumber)); } };
 
-  const goToPage = (page: number) => {
-    setPageNumber(page);
-  };
+  const goToPage = (newPageNumber: number) => { dispatch(setPageNumber(newPageNumber)); };
 
-  const goToHead = () => {
-    setPageNumber(0);
-  };
+  const goToHead = () => { dispatch(setPageNumber(0)); };
 
-  const goToTail = (page: number) => {
-    setPageNumber(page - 1);
-  };
+  const goToTail = (newPageNumber: number) => { dispatch(setPageNumber(newPageNumber)); };
 
   return (
     <div className="flex items-center justify-evenly">
@@ -61,18 +53,17 @@ function Pagination() {
       </div>
 
       <div className="flex">
-        <ButtonPagination
-          ariaLabel="Go to previous page"
-          isDisabled={ pageNumber === 0 }
-          onClick={ goToPreviousPage }
-        />
-
         <ButtonPaginationJump
           isDisabled={ pageNumber === 0 }
           onClick={ goToHead }
           ariaLabel="Go to previous page"
         />
 
+        <ButtonPagination
+          ariaLabel="Go to previous page"
+          isDisabled={ pageNumber === 0 }
+          onClick={ () => goToPreviousPage(pageNumber - 1) }
+        />
         <div className="px-2 flex">
 
           {arrayOfPages.map((item: number) => (
@@ -91,19 +82,20 @@ function Pagination() {
 
         <ButtonPagination
           isDisabled={ isDisabled }
-          onClick={ goToNextPage }
+          onClick={ () => goToNextPage(pageNumber + 1) }
           ariaLabel="Go to next page"
         />
 
         <ButtonPaginationJump
           isDisabled={ isDisabled }
-          onClick={ () => goToTail(totalPages) }
+          onClick={ () => goToTail(totalPages - 1) }
           ariaLabel="Go to next page"
         />
+
       </div>
 
     </div>
   );
 }
 
-export default Pagination;
+export default PaginationFooter;
