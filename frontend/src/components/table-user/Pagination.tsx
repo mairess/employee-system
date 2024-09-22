@@ -78,7 +78,7 @@ function Pagination() {
           {arrayOfPages.map((item: number) => (
             <button
               key={ item }
-              className={ `px-1 mx-1 rounded ${currentPage === item - 1 ? 'cursor-not-allowed text-gray-400' : 'hover:bg-hover-primary-transparent cursor-pointer'}` }
+              className={ `px-1 rounded ${currentPage === item - 1 ? 'cursor-not-allowed text-gray-400' : 'hover:bg-hover-primary-transparent cursor-pointer'}` }
               onClick={ () => goToPage(item - 1) }
               disabled={ currentPage === item - 1 }
               aria-label={ `Go to page ${currentPage + 1}` }
