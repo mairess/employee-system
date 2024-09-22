@@ -50,7 +50,7 @@ function TableRowEmployees({ employee }: TableRowEmployeesProps) {
 
         </td>
 
-        <td className="text-center lg:hidden">
+        <td className="text-right ellipse lg:hidden">
 
           <button
             onClick={ handleDetail }

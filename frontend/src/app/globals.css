@@ -16,7 +16,7 @@ th.photo, td.photo {
   @apply pl-spacing-regular-24
 }
 
-th.actions, td.actions {
+th.actions, th.ellipse, td.ellipse, td.actions {
   @apply pr-spacing-regular-24
 }
 

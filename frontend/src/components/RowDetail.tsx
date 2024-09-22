@@ -26,7 +26,7 @@ function RowDetail({ employeeData, head, breakpoint }:RowDetailProps) {
       >
         <div className="flex justify-between border-b border-dashed border-b-gray-neutral-10">
           <h2 className="text-h2 text-black-neutral">{head}</h2>
-          <h3 className="text-h3 text-black-neutral">{employeeData}</h3>
+          <h3 className="text-h3 text-black-neutral pr-spacing-little-12">{employeeData}</h3>
         </div>
       </td>
 

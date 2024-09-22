@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { FaChevronRight, FaChevronLeft } from 'react-icons/fa';
 import { AppDispatch, RootState } from '../../store';
 import useToken from '../../hooks/useToken';
 import listEmployees from '../../services/listEmployees';
