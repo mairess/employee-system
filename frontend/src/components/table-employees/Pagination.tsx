@@ -7,6 +7,7 @@ import useToken from '../../hooks/useToken';
 import listEmployees from '../../services/listEmployees';
 import ButtonPagination from '../ButtonPagination';
 import handlePagination from '../../utils/handlePagination';
+import ButtonPaginationJump from '../ButtonPaginationJump';
 
 function Pagination() {
   const dispatch = useDispatch<AppDispatch>();
@@ -43,55 +44,68 @@ function Pagination() {
     setPageNumber(page);
   };
 
+  const goToHead = () => {
+    setPageNumber(0);
+  };
+
+  const goToTail = (page: number) => {
+    setPageNumber(page - 1);
+  };
+
   return (
     <div className="flex items-center justify-evenly">
       <div className="flex justify-center items-center">
-        Page
-        {' '}
         {currentPage + 1}
         {' '}
-        from
+        of
         {' '}
         {totalPages}
+        {' '}
+        pages
       </div>
 
-      <div className="flex justify-center items-center">
-        Showing
-        {' '}
-        {employees.length}
-        {' '}
-        from
-        {' '}
-        {totalItems}
+      <div className="flex">
+        <ButtonPagination
+          ariaLabel="Go to previous page"
+          isDisabled={ pageNumber === 0 }
+          onClick={ goToPreviousPage }
+        />
+
+        <ButtonPaginationJump
+          isDisabled={ pageNumber === 0 }
+          onClick={ goToHead }
+          ariaLabel="Go to previous page"
+        />
+
+        <div className="px-2 flex">
+
+          {arrayOfPages.map((item: number) => (
+            <button
+              key={ item }
+              className={ `px-1  rounded ${currentPage === item - 1 ? 'cursor-not-allowed text-gray-400' : 'hover:bg-hover-primary-transparent cursor-pointer'}` }
+              onClick={ () => goToPage(item - 1) }
+              disabled={ currentPage === item - 1 }
+              aria-label={ `Go to page ${currentPage + 1}` }
+            >
+              {item}
+            </button>
+          ))}
+
+        </div>
+
+        <ButtonPagination
+          isDisabled={ isDisabled }
+          onClick={ goToNextPage }
+          ariaLabel="Go to next page"
+        />
+
+        <ButtonPaginationJump
+          isDisabled={ isDisabled }
+          onClick={ () => goToTail(totalPages) }
+          ariaLabel="Go to next page"
+        />
+
       </div>
-
-      <ButtonPagination
-        ariaLabel="Go to previous page"
-        isDisabled={ pageNumber === 0 }
-        onClick={ goToPreviousPage }
-      />
-
-      <div className="px-2 flex">
-
-        {arrayOfPages.map((item: number) => (
-          <button
-            key={ item }
-            className={ `px-1 mx-1 rounded ${currentPage === item - 1 ? 'cursor-not-allowed text-gray-400' : 'hover:bg-hover-primary-transparent cursor-pointer'}` }
-            onClick={ () => goToPage(item - 1) }
-            disabled={ currentPage === item - 1 }
-            aria-label={ `Go to page ${currentPage + 1}` }
-          >
-            {item}
-          </button>
-        ))}
-
-      </div>
-
-      <ButtonPagination
-        isDisabled={ isDisabled }
-        onClick={ goToNextPage }
-        ariaLabel="Go to next page"
-      />
 
     </div>
   );
