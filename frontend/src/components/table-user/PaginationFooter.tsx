@@ -1,10 +1,8 @@
 /* eslint-disable max-len */
 
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../../store';
-import useToken from '../../hooks/useToken';
-import listUsers from '../../services/listUsers';
 import handlePagination from '../../utils/handlePagination';
 import ButtonPagination from '../ButtonPagination';
 import ButtonPaginationJump from '../ButtonPaginationJump';
@@ -12,14 +10,8 @@ import { setPageNumber } from '../../store/pageSizeSlice';
 
 function PaginationFooter() {
   const dispatch = useDispatch<AppDispatch>();
-  const token = useToken();
   const { data } = useSelector((state: RootState) => state.users);
-  const { column, direction } = useSelector((state: RootState) => state.sort);
-  const { pageSize, pageNumber } = useSelector((state: RootState) => state.pagination);
-
-  useEffect(() => {
-    if (token) { dispatch(listUsers({ token, pageNumber, pageSize, column, direction })); }
-  }, [token, dispatch, pageNumber, pageSize, column, direction]);
+  const { pageNumber } = useSelector((state: RootState) => state.pagination);
 
   if (data === null) return null;
 

@@ -3,46 +3,43 @@
 'use client';
 
 import Image from 'next/image';
-import { useDispatch, useSelector } from 'react-redux';
-import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { useState } from 'react';
 import ellipse from '../../../public/ellipse.svg';
 import ButtonSort from '../ButtonSort';
-import { AppDispatch, RootState } from '../../store';
-import useToken from '../../hooks/useToken';
+import { AppDispatch } from '../../store';
 import { setColumn, setDirection } from '../../store/sortSlice';
-import listUsers from '../../services/listUsers';
 
 function TableHead() {
   const dispatch = useDispatch<AppDispatch>();
-  const { column, direction } = useSelector((state: RootState) => state.sort);
-  const { pageNumber, pageSize } = useSelector((state: RootState) => state.pagination);
-  const token = useToken();
+  const [sortOrder, setSortOrder] = useState('asc');
+  const [activeButton, setActiveButton] = useState<string | null>(null);
 
-  const sortDirection = direction === 'asc' ? 'desc' : 'asc';
+  const sortDirection = sortOrder === 'asc' ? 'desc' : 'asc';
 
   const handleSortName = () => {
+    dispatch(setDirection(sortOrder));
     dispatch(setColumn('fullName'));
-    dispatch(setDirection(sortDirection));
+    setSortOrder(sortDirection);
   };
 
   const handleSortUsername = () => {
+    dispatch(setDirection(sortOrder));
     dispatch(setColumn('username'));
-    dispatch(setDirection(sortDirection));
+    setSortOrder(sortDirection);
   };
 
   const handleSortEmail = () => {
+    dispatch(setDirection(sortOrder));
     dispatch(setColumn('email'));
-    dispatch(setDirection(sortDirection));
+    setSortOrder(sortDirection);
   };
 
   const handleSortRole = () => {
+    dispatch(setDirection(sortOrder));
     dispatch(setColumn('role'));
-    dispatch(setDirection(sortDirection));
+    setSortOrder(sortDirection);
   };
-
-  useEffect(() => {
-    if (token) { dispatch(listUsers({ token, pageNumber, pageSize, column, direction })); }
-  }, [token, dispatch, pageNumber, pageSize, column, direction]);
 
   return (
 
@@ -57,7 +54,13 @@ function TableHead() {
           NAME
           {' '}
 
-          <ButtonSort onClick={ handleSortName } ariaLabel="Sort column name" />
+          <ButtonSort
+            onClick={ handleSortName }
+            ariaLabel="Sort column name"
+            id="name"
+            activeButton={ activeButton }
+            setActiveButton={ setActiveButton }
+          />
 
         </th>
 
@@ -66,7 +69,13 @@ function TableHead() {
           USERNAME
           {' '}
 
-          <ButtonSort onClick={ handleSortUsername } ariaLabel="Sort column username" />
+          <ButtonSort
+            onClick={ handleSortUsername }
+            ariaLabel="Sort column username"
+            id="username"
+            activeButton={ activeButton }
+            setActiveButton={ setActiveButton }
+          />
 
         </th>
 
@@ -75,7 +84,13 @@ function TableHead() {
           EMAIL
           {' '}
 
-          <ButtonSort onClick={ handleSortEmail } ariaLabel="Sort column email" />
+          <ButtonSort
+            onClick={ handleSortEmail }
+            ariaLabel="Sort column email"
+            id="email"
+            activeButton={ activeButton }
+            setActiveButton={ setActiveButton }
+          />
 
         </th>
 
@@ -84,7 +99,13 @@ function TableHead() {
           ROLE
           {' '}
 
-          <ButtonSort onClick={ handleSortRole } ariaLabel="Sort column role" />
+          <ButtonSort
+            onClick={ handleSortRole }
+            ariaLabel="Sort column role"
+            id="role"
+            activeButton={ activeButton }
+            setActiveButton={ setActiveButton }
+          />
 
         </th>
 

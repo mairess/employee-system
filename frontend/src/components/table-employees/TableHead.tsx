@@ -3,46 +3,44 @@
 'use client';
 
 import Image from 'next/image';
-import { useDispatch, useSelector } from 'react-redux';
-import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { useState } from 'react';
 import ellipse from '../../../public/ellipse.svg';
-import { AppDispatch, RootState } from '../../store';
+import { AppDispatch } from '../../store';
 import { setColumn, setDirection } from '../../store/sortSlice';
-import listEmployees from '../../services/listEmployees';
-import useToken from '../../hooks/useToken';
+
 import ButtonSort from '../ButtonSort';
 
 function TableHead() {
   const dispatch = useDispatch<AppDispatch>();
-  const { column, direction } = useSelector((state: RootState) => state.sort);
-  const { pageNumber, pageSize } = useSelector((state: RootState) => state.pagination);
-  const token = useToken();
+  const [sortOrder, setSortOrder] = useState('asc');
+  const [activeButton, setActiveButton] = useState<string | null>(null);
 
-  const sortDirection = direction === 'asc' ? 'desc' : 'asc';
+  const sortDirection = sortOrder === 'asc' ? 'desc' : 'asc';
 
   const handleSortName = () => {
+    dispatch(setDirection(sortOrder));
     dispatch(setColumn('fullName'));
-    dispatch(setDirection(sortDirection));
+    setSortOrder(sortDirection);
   };
 
   const handleSortPosition = () => {
+    dispatch(setDirection(sortOrder));
     dispatch(setColumn('position'));
-    dispatch(setDirection(sortDirection));
+    setSortOrder(sortDirection);
   };
 
   const handleSortAdmission = () => {
+    dispatch(setDirection(sortOrder));
     dispatch(setColumn('admission'));
-    dispatch(setDirection(sortDirection));
+    setSortOrder(sortDirection);
   };
 
   const handleSortAPhone = () => {
+    dispatch(setDirection(sortOrder));
     dispatch(setColumn('phone'));
-    dispatch(setDirection(sortDirection));
+    setSortOrder(sortDirection);
   };
-
-  useEffect(() => {
-    if (token) { dispatch(listEmployees({ token, pageNumber, pageSize, column, direction })); }
-  }, [token, dispatch, pageNumber, pageSize, column, direction]);
 
   return (
 
@@ -57,7 +55,13 @@ function TableHead() {
           NAME
           {' '}
 
-          <ButtonSort onClick={ handleSortName } ariaLabel="Sort column name" />
+          <ButtonSort
+            onClick={ handleSortName }
+            ariaLabel="Sort column name"
+            id="name"
+            activeButton={ activeButton }
+            setActiveButton={ setActiveButton }
+          />
 
         </th>
 
@@ -66,7 +70,13 @@ function TableHead() {
           POSITION
           {' '}
 
-          <ButtonSort onClick={ handleSortPosition } ariaLabel="Sort column position" />
+          <ButtonSort
+            onClick={ handleSortPosition }
+            ariaLabel="Sort column position"
+            id="position"
+            activeButton={ activeButton }
+            setActiveButton={ setActiveButton }
+          />
 
         </th>
 
@@ -75,7 +85,13 @@ function TableHead() {
           ADMISSION
           {' '}
 
-          <ButtonSort onClick={ handleSortAdmission } ariaLabel="Sort column admission" />
+          <ButtonSort
+            onClick={ handleSortAdmission }
+            ariaLabel="Sort column admission"
+            id="admission"
+            activeButton={ activeButton }
+            setActiveButton={ setActiveButton }
+          />
 
         </th>
 
@@ -84,7 +100,13 @@ function TableHead() {
           PHONE
           {' '}
 
-          <ButtonSort onClick={ handleSortAPhone } ariaLabel="Sort column phone" />
+          <ButtonSort
+            onClick={ handleSortAPhone }
+            ariaLabel="Sort column phone"
+            id="phone"
+            activeButton={ activeButton }
+            setActiveButton={ setActiveButton }
+          />
 
         </th>
 

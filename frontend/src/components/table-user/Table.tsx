@@ -18,12 +18,14 @@ import getColSpan from '../../utils/handleColSpan';
 function TableUsers() {
   const dispatch = useDispatch<AppDispatch>();
   const { loading, data, error } = useSelector((state: RootState) => state.users);
+  const { pageSize, pageNumber } = useSelector((state: RootState) => state.pagination);
+  const { column, direction } = useSelector((state: RootState) => state.sort);
   const token = useToken();
   const windowWidth = useWindowWidth();
 
   useEffect(() => {
-    if (token) { dispatch(listUsers({ token })); }
-  }, [token, dispatch]);
+    if (token) { dispatch(listUsers({ token, pageNumber, pageSize, column, direction })); }
+  }, [token, dispatch, pageNumber, pageSize, column, direction]);
 
   return (
 
