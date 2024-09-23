@@ -10,7 +10,6 @@ function PaginationHeader() {
   const dispatch = useDispatch<AppDispatch>();
   const { data } = useSelector((state: RootState) => state.employees);
   const { pageNumber } = useSelector((state: RootState) => state.pagination);
-
   if (data === null) return null;
 
   const { totalItems, currentPage, pageSize } = data.pagination;
@@ -46,7 +45,13 @@ function PaginationHeader() {
 
         <label htmlFor="pages">
 
-          <select name="pages" id="pages" value={ pageSize } onChange={ handlePageSelect }>
+          <select
+            className="rounded-md border hover:border-dark-neutral-300"
+            name="pages"
+            id="pages"
+            value={ pageSize }
+            onChange={ handlePageSelect }
+          >
 
             <option value="10">10</option>
 

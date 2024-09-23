@@ -10,7 +10,7 @@ type ButtonPaginationProps = {
 function ButtonPaginationJump({ onClick, isDisabled, ariaLabel }: ButtonPaginationProps) {
   return (
     <button
-      className={ `flex p-1 rounded ${isDisabled ? 'cursor-not-allowed' : 'hover:bg-hover-primary-transparent cursor-pointer'}` }
+      className={ `flex p-1 rounded ${isDisabled ? 'cursor-default' : 'hover:bg-hover-primary-transparent cursor-pointer'}` }
       onClick={ onClick }
       disabled={ isDisabled }
       aria-label={ ariaLabel }

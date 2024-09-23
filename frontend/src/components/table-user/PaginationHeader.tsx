@@ -46,7 +46,13 @@ function PaginationHeader() {
 
         <label htmlFor="pages">
 
-          <select name="pages" id="pages" value={ pageSize } onChange={ handlePageSelect }>
+          <select
+            className="rounded-md border hover:border-dark-neutral-300"
+            name="pages"
+            id="pages"
+            value={ pageSize }
+            onChange={ handlePageSelect }
+          >
 
             <option value="10">10</option>
 
