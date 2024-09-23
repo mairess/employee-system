@@ -52,16 +52,22 @@ public class UserController {
    *
    * @param pageNumber the page number
    * @param pageSize   the page size
+   * @param column     the column
+   * @param direction  the direction
    * @return the response entity
    */
   @GetMapping
   @PreAuthorize("hasAnyAuthority('ADMIN')")
   public ResponseEntity<Map<String, Object>> findAll(
       @RequestParam(required = false, defaultValue = "0") int pageNumber,
-      @RequestParam(required = false, defaultValue = "20") int pageSize
+      @RequestParam(required = false, defaultValue = "20") int pageSize,
+      @RequestParam(required = false, defaultValue = "id") String column,
+      @RequestParam(required = false, defaultValue = "asc") String direction
   ) {
 
-    Map<String, Object> users = new HashMap<>(userService.findAll(pageNumber, pageSize));
+    Map<String, Object> users = new HashMap<>(
+        userService.findAll(pageNumber, pageSize, column, direction)
+    );
 
     List<?> data = (List<?>) users.get("users");
 

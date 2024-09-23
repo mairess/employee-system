@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 
@@ -45,11 +46,16 @@ public class EmployeeService {
    *
    * @param pageNumber the page number
    * @param pageSize   the page size
+   * @param column     the column
+   * @param direction  the direction
    * @return the map
    */
-  public Map<String, Object> findAll(int pageNumber, int pageSize) {
+  public Map<String, Object> findAll(int pageNumber, int pageSize, String column,
+      String direction) {
 
-    Pageable pageable = PageRequest.of(pageNumber, pageSize);
+    Pageable pageable = PageRequest.of(
+        pageNumber, pageSize, Sort.by(Sort.Direction.fromString(direction), column)
+    );
 
     Page<Employee> page = employeeRepository.findAll(pageable);
 

@@ -52,16 +52,22 @@ public class EmployeeController {
    *
    * @param pageNumber the page number
    * @param pageSize   the page size
+   * @param column     the column
+   * @param direction  the direction
    * @return the response entity
    */
   @GetMapping
   @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
   public ResponseEntity<Map<String, Object>> findAll(
       @RequestParam(required = false, defaultValue = "0") int pageNumber,
-      @RequestParam(required = false, defaultValue = "20") int pageSize
+      @RequestParam(required = false, defaultValue = "20") int pageSize,
+      @RequestParam(required = false, defaultValue = "id") String column,
+      @RequestParam(required = false, defaultValue = "asc") String direction
   ) {
 
-    Map<String, Object> employees = new HashMap<>(employeeService.findAll(pageNumber, pageSize));
+    Map<String, Object> employees = new HashMap<>(
+        employeeService.findAll(pageNumber, pageSize, column, direction)
+    );
 
     List<?> data = (List<?>) employees.get("employees");
 
