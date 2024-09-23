@@ -6,6 +6,7 @@ import listEmployeesReducer from './listEmployeesSlice';
 import passwordChangeReducer from './passwordChangeSlice';
 import modalReducer from './modalSlice';
 import pageSizeSlice from './pageSizeSlice';
+import sortSlice from './sortSlice';
 
 const store = configureStore({
   reducer: {
@@ -16,6 +17,7 @@ const store = configureStore({
     password: passwordChangeReducer,
     modal: modalReducer,
     pagination: pageSizeSlice,
+    sort: sortSlice,
   },
 });
 

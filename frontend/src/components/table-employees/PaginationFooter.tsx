@@ -14,11 +14,12 @@ function PaginationFooter() {
   const dispatch = useDispatch<AppDispatch>();
   const token = useToken();
   const { data } = useSelector((state: RootState) => state.employees);
+  const { column, direction } = useSelector((state: RootState) => state.sort);
   const { pageSize, pageNumber } = useSelector((state: RootState) => state.pagination);
 
   useEffect(() => {
-    if (token) { dispatch(listEmployees({ token, pageNumber, pageSize })); }
-  }, [token, dispatch, pageNumber, pageSize]);
+    if (token) { dispatch(listEmployees({ token, pageNumber, pageSize, column, direction })); }
+  }, [token, dispatch, pageNumber, pageSize, column, direction]);
 
   if (data === null) return null;
 

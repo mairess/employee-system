@@ -33,8 +33,10 @@ function TableRowEmployees({ employee }: TableRowEmployeesProps) {
 
       <tr className="border-t">
 
-        <td className="flex justify-center photo sm:flex sm:justify-start">
+        <td className="photo sm:flex sm:justify-start">
+
           <img className="rounded-full w-8 h-8 border" src={ employee.photo } alt="employee avatar" />
+
         </td>
 
         <td className="text-center sm:text-left">{employee.fullName}</td>
