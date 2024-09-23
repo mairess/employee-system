@@ -41,15 +41,18 @@ function PaginationFooter() {
   const goToTail = (newPageNumber: number) => { dispatch(setPageNumber(newPageNumber)); };
 
   return (
-    <div className="flex items-center justify-evenly">
+
+    <div className="flex items-center justify-between px-spacing-regular-24">
+
       <div className="flex justify-center items-center">
+
         {currentPage + 1}
         {' '}
         of
         {' '}
         {totalPages}
         {' '}
-        pages
+
       </div>
 
       <div className="flex">
@@ -95,6 +98,7 @@ function PaginationFooter() {
       </div>
 
     </div>
+
   );
 }
 

@@ -21,6 +21,7 @@ function PaginationFooter() {
   }, [token, dispatch, pageNumber, pageSize]);
 
   if (data === null) return null;
+
   const { currentPage, totalPages } = data.pagination;
 
   const arrayOfPages = handlePagination(data.pagination);
@@ -39,16 +40,16 @@ function PaginationFooter() {
 
   return (
 
-    <div className="flex items-center justify-evenly">
+    <div className="flex items-center justify-between px-spacing-regular-24">
 
       <div className="flex justify-center items-center">
+
         {currentPage + 1}
         {' '}
         of
         {' '}
         {totalPages}
-        {' '}
-        pages
+
       </div>
 
       <div className="flex">

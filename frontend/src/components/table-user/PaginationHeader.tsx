@@ -4,15 +4,17 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../../store';
 import { setPageSize, setPageNumber } from '../../store/pageSizeSlice';
+import handlePaginationInfo from '../../utils/handlePaginationInfo';
 
 function PaginationHeader() {
   const dispatch = useDispatch<AppDispatch>();
   const { data } = useSelector((state: RootState) => state.users);
-  const { pageSize, pageNumber } = useSelector((state: RootState) => state.pagination);
+  const { pageNumber } = useSelector((state: RootState) => state.pagination);
 
   if (data === null) return null;
-  const { users } = data;
-  const { totalItems } = data.pagination;
+  const { totalItems, currentPage, pageSize } = data.pagination;
+
+  const { startItem, endItem } = handlePaginationInfo(totalItems, currentPage, pageSize);
 
   const handlePageSelect = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const newPageSize = Number(event.target.value);
@@ -25,34 +27,41 @@ function PaginationHeader() {
   };
 
   return (
-    <div className="flex items-center justify-evenly">
+
+    <div className="flex items-center justify-between px-spacing-regular-24">
+
       <div className="flex justify-center items-center">
 
-        {users.length}
+        {startItem}
+        -
+        {endItem}
         {' '}
         of
         {' '}
         {totalItems}
-        {' '}
-        users
 
       </div>
 
       <div>
 
-        <label htmlFor="pages">Rows per page </label>
+        <label htmlFor="pages">
 
-        <select name="pages" id="pages" value={ pageSize } onChange={ handlePageSelect }>
+          <select name="pages" id="pages" value={ pageSize } onChange={ handlePageSelect }>
 
-          <option value="10">10</option>
+            <option value="10">10</option>
 
-          <option value="20">20</option>
+            <option value="20">20</option>
 
-          <option value="30">30</option>
+            <option value="30">30</option>
 
-          <option value="40">40</option>
+            <option value="40">40</option>
 
-        </select>
+          </select>
+
+          {' '}
+          users
+
+        </label>
 
       </div>
 
