@@ -16,7 +16,7 @@ function ButtonSort({ onClick, ariaLabel, id }: ButtonSortProps) {
 
   return (
     <button
-      className={ colLowerCase === idLowerCase ? 'text-light-neutral-500' : '' }
+      className={ colLowerCase === idLowerCase ? '' : 'text-light-neutral-500' }
       onClick={ onClick }
       aria-label={ ariaLabel }
     >

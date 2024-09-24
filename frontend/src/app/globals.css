@@ -28,3 +28,13 @@ th.actions, th.ellipse, td.ellipse, td.actions {
 .custom-scrollbar {
   scrollbar-width: thin;
 }
+
+
+@layer utilities {
+  .no-arrows::-webkit-outer-spin-button,
+  .no-arrows::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+    padding: 0;
+  }
+}

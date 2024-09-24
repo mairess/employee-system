@@ -1,6 +1,6 @@
 /* eslint-disable max-len */
 
-import React from 'react';
+import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../../store';
 import handlePagination from '../../utils/handlePagination';
@@ -12,6 +12,7 @@ function PaginationFooter() {
   const dispatch = useDispatch<AppDispatch>();
   const { data } = useSelector((state: RootState) => state.users);
   const { pageNumber } = useSelector((state: RootState) => state.pagination);
+  const [goToPageNumber, setGotoPageNumber] = useState('');
 
   if (data === null) return null;
 
@@ -31,11 +32,29 @@ function PaginationFooter() {
 
   const goToTail = (newPageNumber: number) => { dispatch(setPageNumber(newPageNumber)); };
 
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setGotoPageNumber(event.target.value);
+  };
+
+  const handleSelectPage = () => {
+    const value = Number(goToPageNumber);
+
+    if (value > totalPages) {
+      return dispatch(setPageNumber(Number(totalPages - 1)));
+    }
+
+    if (value < 0) {
+      return dispatch(setPageNumber(Number(0)));
+    }
+
+    return dispatch(setPageNumber(Number(goToPageNumber) - 1));
+  };
+
   return (
 
-    <div className="flex items-center justify-between px-spacing-regular-24">
+    <div className="sm:flex items-center justify-between px-spacing-regular-24">
 
-      <div className="flex justify-center items-center">
+      <div className="flex justify-center sm:justify-start items-center w-full">
 
         {currentPage + 1}
         {' '}
@@ -43,9 +62,30 @@ function PaginationFooter() {
         {' '}
         {totalPages}
 
+        <div className="mx-2">
+
+          <button
+            className="hover:bg-hover-primary-transparent p-1 rounded"
+            onClick={ handleSelectPage }
+            aria-label="go to page"
+          >
+
+            Go to
+
+          </button>
+
+          <input
+            className="w-8 border ml-2 rounded-md text-dark-neutral-0 no-arrows"
+            type="number"
+            value={ goToPageNumber }
+            onChange={ handleInputChange }
+          />
+
+        </div>
+
       </div>
 
-      <div className="flex">
+      <div className="flex justify-center items-center">
         <ButtonPaginationJump
           isDisabled={ pageNumber === 0 }
           onClick={ goToHead }
