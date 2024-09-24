@@ -3,38 +3,25 @@
 'use client';
 
 import Image from 'next/image';
-import { useRouter } from 'next/navigation';
+
+import Link from 'next/link';
 import accessDenied from '../../../public/accessDenied.svg';
 
 function AccessDenied() {
-  const router = useRouter();
-
-  const handleLoginRedirect = () => {
-    router.push('/');
-  };
-
   return (
-    <div className="flex flex-col items-center justify-center gap-4 h-screen bg-gradient-to-br from-dark-neutral-800 via-dark-neutral-900 to-dark-neutral-1100">
 
-      <Image src={ accessDenied } alt="access denied" height={ 150 } priority />
+    <div className="flex flex-col items-center justify-center min-h-screen bg-light-neutral-150">
 
-      <h1 className="text-h0 text-error">
-        Access denied
+      <Image src={ accessDenied } alt="access denied" />
 
-      </h1>
+      <h1 className="text-h1 text-black-neutral">Access denied</h1>
 
-      <p className="text-black-neutral text-h3">
-        You must be logged in to access this page.
-      </p>
+      <p className="text-dark-neutral-450 text-center text:sm">You need to be authenticated to access this resource.</p>
 
-      <button
-        onClick={ handleLoginRedirect }
-        className="rounded-xl px-3 py-2 bg-light-neutral-500 font-bold hover:bg-dark-neutral-600 text-white"
-      >
-        Sign in
-      </button>
+      <Link className="text-light-neutral-900 hover:underline" href="/">authenticate</Link>
 
     </div>
+
   );
 }
 
