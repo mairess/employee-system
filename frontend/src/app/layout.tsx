@@ -18,7 +18,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
 
       <body className={ inter.className }>
         <Provider store={ store }>
-          {pathName.includes('dashboard') && <Header />}
+          {(pathName === 'dashboard-users' || pathName === 'dashboard-employees') && <Header />}
           {children}
         </Provider>
       </body>
