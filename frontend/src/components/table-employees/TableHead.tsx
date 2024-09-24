@@ -8,7 +8,7 @@ import ellipse from '../../../public/ellipse.svg';
 import { AppDispatch, RootState } from '../../store';
 import { setColumn, setDirection } from '../../store/sortSlice';
 
-import ButtonSort from '../ButtonSort';
+import ButtonSort from '../buttons/ButtonSort';
 
 function TableHead() {
   const dispatch = useDispatch<AppDispatch>();

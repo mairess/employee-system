@@ -1,8 +1,8 @@
+/* eslint-disable max-len */
 import useWindowWidth from '../hooks/useWindowWidth';
 import getColSpan from '../utils/handleColSpan';
-import ButtonSort from './ButtonSort';
+import ButtonSort from './buttons/ButtonSort';
 
-/* eslint-disable max-len */
 type RowDetailProps = {
   employeeData: string,
   head: string,

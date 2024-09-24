@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import iconEdit from '../../public/iconEdit.svg';
+import iconEdit from '../../../public/iconEdit.svg';
 
 function ButtonEdit() {
   return (

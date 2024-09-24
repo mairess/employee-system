@@ -13,8 +13,8 @@ import RowDetail from '../RowDetail';
 import useWindowWidth from '../../hooks/useWindowWidth';
 import getColSpan from '../../utils/handleColSpan';
 import { formatPhoneNumber, formatDate } from '../../utils/handleFormat';
-import ButtonDelete from '../ButtonDelete';
-import ButtonEdit from '../ButtonEdit';
+import ButtonDelete from '../buttons/ButtonDelete';
+import ButtonEdit from '../buttons/ButtonEdit';
 import { AppDispatch, RootState } from '../../store';
 import { setColumn, setDirection } from '../../store/sortSlice';
 

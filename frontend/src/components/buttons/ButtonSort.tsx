@@ -1,6 +1,6 @@
 /* eslint-disable max-len */
 import { useSelector } from 'react-redux';
-import { RootState } from '../store';
+import { RootState } from '../../store';
 
 type ButtonSortProps = {
   onClick: () => void,

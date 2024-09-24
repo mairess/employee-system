@@ -4,8 +4,8 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../../store';
 import handlePagination from '../../utils/handlePagination';
-import ButtonPagination from '../ButtonPagination';
-import ButtonPaginationJump from '../ButtonPaginationJump';
+import ButtonPagination from '../buttons/ButtonPagination';
+import ButtonPaginationJump from '../buttons/ButtonPaginationJump';
 import { setPageNumber } from '../../store/pageSizeSlice';
 
 function PaginationFooter() {

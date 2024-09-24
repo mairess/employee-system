@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useDispatch, useSelector } from 'react-redux';
 import Input from './Input';
-import Button from './Button';
+import Button from './buttons/Button';
 import Divider from './Divider';
 import AuthFooter from './AuthFooter';
 import { AppDispatch, RootState } from '../store';

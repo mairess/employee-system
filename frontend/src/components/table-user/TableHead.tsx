@@ -5,7 +5,7 @@
 import Image from 'next/image';
 import { useDispatch, useSelector } from 'react-redux';
 import ellipse from '../../../public/ellipse.svg';
-import ButtonSort from '../ButtonSort';
+import ButtonSort from '../buttons/ButtonSort';
 import { AppDispatch, RootState } from '../../store';
 import { setColumn, setDirection } from '../../store/sortSlice';
 

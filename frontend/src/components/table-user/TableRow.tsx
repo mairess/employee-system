@@ -12,8 +12,8 @@ import iconChevronUp from '../../../public/iconChevronUp.svg';
 import useWindowWidth from '../../hooks/useWindowWidth';
 import RowDetail from '../RowDetail';
 import getColSpan from '../../utils/handleColSpan';
-import ButtonEdit from '../ButtonEdit';
-import ButtonDelete from '../ButtonDelete';
+import ButtonEdit from '../buttons/ButtonEdit';
+import ButtonDelete from '../buttons/ButtonDelete';
 import { AppDispatch, RootState } from '../../store';
 import { setColumn, setDirection } from '../../store/sortSlice';
 

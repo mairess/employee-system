@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import iconDelete from '../../public/iconDelete.svg';
+import iconDelete from '../../../public/iconDelete.svg';
 
 function ButtonDelete() {
   return (

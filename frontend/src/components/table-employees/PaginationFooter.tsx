@@ -2,9 +2,9 @@
 
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../../store';
-import ButtonPagination from '../ButtonPagination';
+import ButtonPagination from '../buttons/ButtonPagination';
 import handlePagination from '../../utils/handlePagination';
-import ButtonPaginationJump from '../ButtonPaginationJump';
+import ButtonPaginationJump from '../buttons/ButtonPaginationJump';
 import { setPageNumber } from '../../store/pageSizeSlice';
 
 function PaginationFooter() {
