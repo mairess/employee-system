@@ -4,6 +4,7 @@
 
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import TableFooter from './TableFooter';
 import TableHeader from './TableHeader';
 import TableRowUsers from './TableRow';
@@ -20,8 +21,13 @@ function TableUsers() {
   const { loading, data, error } = useSelector((state: RootState) => state.users);
   const { pageSize, pageNumber } = useSelector((state: RootState) => state.pagination);
   const { column, direction } = useSelector((state: RootState) => state.sort);
-  const token = useToken();
   const windowWidth = useWindowWidth();
+  const token = useToken();
+  const router = useRouter();
+
+  if (error && error.includes('The Token has expired')) {
+    router.push('/access-denied');
+  }
 
   useEffect(() => {
     if (token) { dispatch(listUsers({ token, pageNumber, pageSize, column, direction })); }
