@@ -89,21 +89,21 @@ function TableRowUsers({ user }: TableRowUsersProps) {
           handleSort={ () => handleSort('role') }
           showDetails={ showDetails }
           breakpoint="lg:hidden"
-          head="Role"
+          header="Role"
           employeeData={ user.role }
         />
         <RowDetail
           handleSort={ () => handleSort('email') }
           showDetails={ showDetails }
           breakpoint="md:hidden"
-          head="Email"
+          header="Email"
           employeeData={ user.email }
         />
         <RowDetail
           handleSort={ () => handleSort('username') }
           showDetails={ showDetails }
           breakpoint="sm:hidden"
-          head="Username"
+          header="Username"
           employeeData={ user.username }
         />
 

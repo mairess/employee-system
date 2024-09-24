@@ -5,7 +5,7 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
 import TableFooter from './TableFooter';
-import TableHead from './TableHead';
+import TableHeader from './TableHeader';
 import TableRowUsers from './TableRow';
 import { AppDispatch, RootState } from '../../store';
 import listUsers from '../../services/listUsers';
@@ -31,7 +31,7 @@ function TableUsers() {
 
     <table className="w-full shadow-custom-10 rounded-bl-lg rounded-br-lg table-fixed">
 
-      <TableHead />
+      <TableHeader />
 
       {loading && (
 

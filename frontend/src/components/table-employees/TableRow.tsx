@@ -91,21 +91,21 @@ function TableRowEmployees({ employee }: TableRowEmployeesProps) {
           handleSort={ () => handleSort('phone') }
           showDetails={ showDetails }
           breakpoint="lg:hidden"
-          head="Phone"
+          header="Phone"
           employeeData={ formatPhoneNumber(employee.phone) }
         />
         <RowDetail
           handleSort={ () => handleSort('admission') }
           showDetails={ showDetails }
           breakpoint="md:hidden"
-          head="Admission"
+          header="Admission"
           employeeData={ formatDate(employee.admission) }
         />
         <RowDetail
           handleSort={ () => handleSort('position') }
           showDetails={ showDetails }
           breakpoint="sm:hidden"
-          head="Position"
+          header="Position"
           employeeData={ employee.position }
         />
 

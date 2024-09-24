@@ -5,13 +5,13 @@ import ButtonSort from './buttons/ButtonSort';
 
 type RowDetailProps = {
   employeeData: string,
-  head: string,
+  header: string,
   breakpoint: string,
   showDetails: string
   handleSort: () => void
 };
 
-function RowDetail({ employeeData, head, breakpoint, showDetails, handleSort }:RowDetailProps) {
+function RowDetail({ employeeData, header, breakpoint, showDetails, handleSort }:RowDetailProps) {
   const windowWidth = useWindowWidth();
 
   return (
@@ -26,12 +26,12 @@ function RowDetail({ employeeData, head, breakpoint, showDetails, handleSort }:R
 
           <h2 className="text-h2 text-black-neutral">
 
-            {head}
+            {header}
 
             <ButtonSort
               onClick={ handleSort }
-              ariaLabel={ `Sort column ${head}` }
-              id={ head }
+              ariaLabel={ `Sort column ${header}` }
+              id={ header }
             />
 
           </h2>

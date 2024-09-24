@@ -9,7 +9,7 @@ import ButtonSort from '../buttons/ButtonSort';
 import { AppDispatch, RootState } from '../../store';
 import { setColumn, setDirection } from '../../store/sortSlice';
 
-function TableHead() {
+function TableHeader() {
   const dispatch = useDispatch<AppDispatch>();
   const { direction, column } = useSelector((state: RootState) => state.sort);
 
@@ -106,4 +106,4 @@ function TableHead() {
   );
 }
 
-export default TableHead;
+export default TableHeader;
