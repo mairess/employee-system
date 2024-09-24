@@ -5,7 +5,7 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
 import TableFooter from './TableFooter';
-import TableHead from './TableHead';
+import TableHeader from './TableHeader';
 import TableRowEmployees from './TableRow';
 import { AppDispatch, RootState } from '../../store';
 import listEmployees from '../../services/listEmployees';
@@ -14,21 +14,24 @@ import Loading from '../Loading';
 import Error from '../Error';
 import useWindowWidth from '../../hooks/useWindowWidth';
 import getColSpan from '../../utils/handleColSpan';
+import { EmployeeType } from '../../types';
 
 function TableEmployees() {
   const dispatch = useDispatch<AppDispatch>();
-  const { loading, employees, error } = useSelector((state: RootState) => state.employees);
+  const { loading, data, error } = useSelector((state: RootState) => state.employees);
+  const { pageSize, pageNumber } = useSelector((state: RootState) => state.pagination);
+  const { column, direction } = useSelector((state: RootState) => state.sort);
   const token = useToken();
   const windowWidth = useWindowWidth();
 
   useEffect(() => {
-    if (token) { dispatch(listEmployees(token)); }
-  }, [token, dispatch]);
+    if (token) { dispatch(listEmployees({ token, pageNumber, pageSize, column, direction })); }
+  }, [token, dispatch, pageNumber, pageSize, column, direction]);
 
   return (
     <table className="w-full shadow-custom-10 rounded-bl-lg rounded-br-lg table-fixed">
 
-      <TableHead />
+      <TableHeader />
 
       {loading && (
         <tbody>
@@ -44,7 +47,7 @@ function TableEmployees() {
       {error && (<Error />)}
 
       <tbody>
-        {!loading && !error && employees?.map((employee) => (
+        {!loading && !error && data?.employees.map((employee: EmployeeType) => (
           <TableRowEmployees key={ employee.id } employee={ employee } />
         ))}
       </tbody>

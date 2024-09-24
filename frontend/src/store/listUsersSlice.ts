@@ -1,21 +1,21 @@
 import { createSlice } from '@reduxjs/toolkit';
 import listUsers from '../services/listUsers';
-import { UserType } from '../types';
+import { ApiResponseUserType } from '../types';
 
-type EmployeesState = {
-  users: UserType[] | null;
+type UsersState = {
+  data: ApiResponseUserType | null;
   loading: boolean;
   error: string | null
 };
 
-const initialState: EmployeesState = {
-  users: [],
+const initialState: UsersState = {
+  data: null,
   loading: false,
   error: null,
 };
 
 const listUsersSlice = createSlice({
-  name: 'employees',
+  name: 'users',
   initialState,
   reducers: {},
   extraReducers: (builder) => {
@@ -26,7 +26,7 @@ const listUsersSlice = createSlice({
       })
       .addCase(listUsers.fulfilled, (state, action) => {
         state.loading = false;
-        state.users = action.payload;
+        state.data = action.payload;
       })
       .addCase(listUsers.rejected, (state, action) => {
         state.loading = false;

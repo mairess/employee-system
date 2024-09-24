@@ -5,7 +5,7 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
 import TableFooter from './TableFooter';
-import TableHead from './TableHead';
+import TableHeader from './TableHeader';
 import TableRowUsers from './TableRow';
 import { AppDispatch, RootState } from '../../store';
 import listUsers from '../../services/listUsers';
@@ -17,42 +17,55 @@ import getColSpan from '../../utils/handleColSpan';
 
 function TableUsers() {
   const dispatch = useDispatch<AppDispatch>();
-  const { loading, users, error } = useSelector((state: RootState) => state.users);
+  const { loading, data, error } = useSelector((state: RootState) => state.users);
+  const { pageSize, pageNumber } = useSelector((state: RootState) => state.pagination);
+  const { column, direction } = useSelector((state: RootState) => state.sort);
   const token = useToken();
-
   const windowWidth = useWindowWidth();
 
   useEffect(() => {
-    if (token) { dispatch(listUsers(token)); }
-  }, [token, dispatch]);
+    if (token) { dispatch(listUsers({ token, pageNumber, pageSize, column, direction })); }
+  }, [token, dispatch, pageNumber, pageSize, column, direction]);
 
   return (
+
     <table className="w-full shadow-custom-10 rounded-bl-lg rounded-br-lg table-fixed">
 
-      <TableHead />
+      <TableHeader />
 
       {loading && (
+
         <tbody>
+
           <tr>
+
             <td colSpan={ getColSpan(windowWidth) } className="p-10">
+
               <Loading />
+
               <p className="text-dark-neutral-0 text-center">Loading data...</p>
+
             </td>
+
           </tr>
+
         </tbody>
       )}
 
       {error && (<Error />)}
 
       <tbody>
-        {!loading && !error && users?.map((user) => (
+
+        {!loading && !error && data?.users.map((user) => (
           <TableRowUsers key={ user.id } user={ user } />
         ))}
+
       </tbody>
 
       <TableFooter />
 
     </table>
+
   );
 }
 

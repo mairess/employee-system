@@ -10,6 +10,7 @@ type UserState = {
 
 const initialUser = {
   id: null,
+  photo: '',
   fullName: '',
   username: '',
   email: '',

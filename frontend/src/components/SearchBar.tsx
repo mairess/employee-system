@@ -19,7 +19,7 @@ function SearchBar({ placeholder, title }: SearchBarProps) {
       <div className="w-full relative md:w-5/12">
 
         <input
-          className="w-full text-black border border-gray-neutral-10 rounded-lg py-3 pl-4 pr-10 shadow-custom-10"
+          className="w-full text-black border border-gray-neutral-10 rounded-lg py-3 pl-4 pr-10 shadow-custom-10 hover:border-dark-neutral-300"
           type="text"
           placeholder={ placeholder }
         />

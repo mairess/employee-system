@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.transaction.Transactional;
 import java.time.LocalDate;
-import java.util.List;
+import java.util.Map;
 import org.maires.employee.controller.dto.EmployeeCreationDto;
 import org.maires.employee.entity.Employee;
 import org.maires.employee.repository.EmployeeRepository;
@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 
@@ -41,17 +42,33 @@ public class EmployeeService {
 
 
   /**
-   * Find all list.
+   * Find all map.
    *
-   * @return the list
+   * @param pageNumber the page number
+   * @param pageSize   the page size
+   * @param column     the column
+   * @param direction  the direction
+   * @return the map
    */
-  public List<Employee> findAll(int pageNumber, int pageSize) {
+  public Map<String, Object> findAll(int pageNumber, int pageSize, String column,
+      String direction) {
 
-    Pageable pageable = PageRequest.of(pageNumber, pageSize);
+    Pageable pageable = PageRequest.of(
+        pageNumber, pageSize, Sort.by(Sort.Direction.fromString(direction), column)
+    );
 
     Page<Employee> page = employeeRepository.findAll(pageable);
 
-    return page.toList();
+    return Map.of(
+        "employees", page.getContent(),
+
+        "pagination", Map.of(
+            "currentPage", page.getNumber(),
+            "totalPages", page.getTotalPages(),
+            "pageSize", page.getSize(),
+            "totalItems", page.getTotalElements()
+        )
+    );
 
   }
 
@@ -79,6 +96,7 @@ public class EmployeeService {
    *
    * @param employee the employee
    * @return the employee
+   * @throws FutureDateException the future date exception
    */
   public Employee create(Employee employee) throws FutureDateException {
 

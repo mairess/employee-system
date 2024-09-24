@@ -1,22 +1,26 @@
+/* eslint-disable react/jsx-max-depth */
+/* eslint-disable max-len */
+
+import useWindowWidth from '../../hooks/useWindowWidth';
+import getColSpan from '../../utils/handleColSpan';
+import PaginationFooter from './PaginationFooter';
+
 function TableFooter() {
+  const windowWidth = useWindowWidth();
   return (
+
     <tfoot className="bg-gradient-primary text-white sticky bottom-0">
+
       <tr>
-        <td
-          className="p-spacing-little-12 rounded-bl-lg"
-        >
-          <div>
-            footer here
-          </div>
+
+        <td colSpan={ getColSpan(windowWidth) } className="rounded-b-lg">
+          <PaginationFooter />
         </td>
-        <td className="hidden" />
-        <td className="hidden sm:table-cell" />
-        <td className="hidden md:table-cell" />
-        <td className="hidden lg:table-cell" />
-        <td />
-        <td className="rounded-br-lg" />
+
       </tr>
+
     </tfoot>
+
   );
 }
 

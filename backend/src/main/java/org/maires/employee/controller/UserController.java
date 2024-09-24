@@ -2,7 +2,9 @@ package org.maires.employee.controller;
 
 import com.fasterxml.jackson.databind.JsonMappingException;
 import jakarta.validation.Valid;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import org.maires.employee.controller.dto.UserCreationDto;
 import org.maires.employee.controller.dto.UserDto;
 import org.maires.employee.entity.User;
@@ -44,22 +46,37 @@ public class UserController {
     this.userService = userService;
   }
 
+
   /**
    * Find all response entity.
    *
+   * @param pageNumber the page number
+   * @param pageSize   the page size
+   * @param column     the column
+   * @param direction  the direction
    * @return the response entity
    */
   @GetMapping
   @PreAuthorize("hasAnyAuthority('ADMIN')")
-  public ResponseEntity<List<UserDto>> findAll(
+  public ResponseEntity<Map<String, Object>> findAll(
       @RequestParam(required = false, defaultValue = "0") int pageNumber,
-      @RequestParam(required = false, defaultValue = "20") int pageSize
+      @RequestParam(required = false, defaultValue = "20") int pageSize,
+      @RequestParam(required = false, defaultValue = "id") String column,
+      @RequestParam(required = false, defaultValue = "asc") String direction
   ) {
 
-    List<UserDto> users = userService
-        .findAll(pageNumber, pageSize)
-        .stream().map(UserDto::fromEntity)
+    Map<String, Object> users = new HashMap<>(
+        userService.findAll(pageNumber, pageSize, column, direction)
+    );
+
+    List<?> data = (List<?>) users.get("users");
+
+    List<UserDto> userDtoList = data
+        .stream()
+        .map(employee -> UserDto.fromEntity((User) employee))
         .toList();
+
+    users.put("users", userDtoList);
 
     return ResponseEntity.status(HttpStatus.OK).body(users);
 

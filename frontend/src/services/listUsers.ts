@@ -1,10 +1,19 @@
+/* eslint-disable max-len */
 import { createAsyncThunk } from '@reduxjs/toolkit';
+
+type ListUsersParams = {
+  token: string;
+  pageNumber?: number;
+  pageSize?: number;
+  column?: string;
+  direction?: string
+};
 
 const listUsers = createAsyncThunk(
   'listUsers',
-  async (token: string, { rejectWithValue }) => {
+  async ({ token, pageNumber = 0, pageSize = 20, column = 'id', direction = 'asc' }: ListUsersParams, { rejectWithValue }) => {
     try {
-      const response = await fetch('http://localhost:8080/users', {
+      const response = await fetch(`http://localhost:8080/users?pageNumber=${pageNumber}&pageSize=${pageSize}&column=${column}&direction=${direction}`, {
         method: 'GET',
         headers: {
           Authorization: `Bearer ${token}`,
@@ -13,6 +22,7 @@ const listUsers = createAsyncThunk(
 
       if (!response.ok) {
         const errorData = await response.json();
+
         console.error('Error fetching:', errorData.message);
         return rejectWithValue(errorData.message);
       }

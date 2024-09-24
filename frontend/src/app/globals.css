@@ -16,7 +16,7 @@ th.photo, td.photo {
   @apply pl-spacing-regular-24
 }
 
-th.actions, td.actions {
+th.actions, th.ellipse, td.ellipse, td.actions {
   @apply pr-spacing-regular-24
 }
 
@@ -27,4 +27,14 @@ th.actions, td.actions {
 
 .custom-scrollbar {
   scrollbar-width: thin;
+}
+
+
+@layer utilities {
+  .no-arrows::-webkit-outer-spin-button,
+  .no-arrows::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+    padding: 0;
+  }
 }

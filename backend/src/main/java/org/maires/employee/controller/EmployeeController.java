@@ -2,7 +2,9 @@ package org.maires.employee.controller;
 
 import com.fasterxml.jackson.databind.JsonMappingException;
 import jakarta.validation.Valid;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import org.maires.employee.controller.dto.EmployeeCreationDto;
 import org.maires.employee.controller.dto.EmployeeDto;
 import org.maires.employee.entity.Employee;
@@ -46,21 +48,35 @@ public class EmployeeController {
 
 
   /**
-   * Find all employees list.
+   * Find all response entity.
    *
-   * @return the list
+   * @param pageNumber the page number
+   * @param pageSize   the page size
+   * @param column     the column
+   * @param direction  the direction
+   * @return the response entity
    */
   @GetMapping
   @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
-  public ResponseEntity<List<EmployeeDto>> findAll(
+  public ResponseEntity<Map<String, Object>> findAll(
       @RequestParam(required = false, defaultValue = "0") int pageNumber,
-      @RequestParam(required = false, defaultValue = "20") int pageSize
+      @RequestParam(required = false, defaultValue = "20") int pageSize,
+      @RequestParam(required = false, defaultValue = "id") String column,
+      @RequestParam(required = false, defaultValue = "asc") String direction
   ) {
 
-    List<EmployeeDto> employees = employeeService
-        .findAll(pageNumber, pageSize)
-        .stream().map(EmployeeDto::fromEntity)
+    Map<String, Object> employees = new HashMap<>(
+        employeeService.findAll(pageNumber, pageSize, column, direction)
+    );
+
+    List<?> data = (List<?>) employees.get("employees");
+
+    List<EmployeeDto> employeeDtoList = data
+        .stream()
+        .map(employee -> EmployeeDto.fromEntity((Employee) employee))
         .toList();
+
+    employees.put("employees", employeeDtoList);
 
     return ResponseEntity.status(HttpStatus.OK).body(employees);
 
@@ -92,6 +108,7 @@ public class EmployeeController {
    *
    * @param employeeCreationDto the employee creation dto
    * @return the employee dto
+   * @throws FutureDateException the future date exception
    */
   @PostMapping
   @PreAuthorize("hasAnyAuthority('ADMIN')")
@@ -131,6 +148,7 @@ public class EmployeeController {
    * Delete by id.
    *
    * @param employeeId the employee id
+   * @return the response entity
    * @throws EmployeeNotFoundException the employee not found exception
    */
   @DeleteMapping("/{employeeId}")
