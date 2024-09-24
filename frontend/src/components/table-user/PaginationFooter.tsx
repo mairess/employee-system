@@ -43,7 +43,7 @@ function PaginationFooter() {
       return dispatch(setPageNumber(Number(totalPages - 1)));
     }
 
-    if (value < 0) {
+    if (value <= 0) {
       return dispatch(setPageNumber(Number(0)));
     }
 
@@ -75,7 +75,7 @@ function PaginationFooter() {
           </button>
 
           <input
-            className="w-8 border ml-2 rounded-md text-dark-neutral-0 no-arrows"
+            className="w-8 border ml-2 rounded-md text-dark-neutral-0 no-arrows hover:border-dark-neutral-300"
             type="number"
             value={ goToPageNumber }
             onChange={ handleInputChange }
@@ -109,7 +109,9 @@ function PaginationFooter() {
               disabled={ currentPage === item - 1 }
               aria-label={ `Go to page ${currentPage + 1}` }
             >
+
               {item}
+
             </button>
 
           ))}
