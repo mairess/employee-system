@@ -3,48 +3,34 @@
 'use client';
 
 import Image from 'next/image';
-import { useDispatch } from 'react-redux';
-import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import ellipse from '../../../public/ellipse.svg';
-import { AppDispatch } from '../../store';
+import { AppDispatch, RootState } from '../../store';
 import { setColumn, setDirection } from '../../store/sortSlice';
 
 import ButtonSort from '../ButtonSort';
 
 function TableHead() {
   const dispatch = useDispatch<AppDispatch>();
-  const [sortOrder, setSortOrder] = useState('asc');
-  const [activeButton, setActiveButton] = useState<string | null>(null);
+  const { direction, column } = useSelector((state: RootState) => state.sort);
 
-  const sortDirection = sortOrder === 'asc' ? 'desc' : 'asc';
-
-  const handleSortName = () => {
-    dispatch(setDirection(sortOrder));
-    dispatch(setColumn('fullName'));
-    setSortOrder(sortDirection);
+  const toggleSortDirection = () => {
+    const newDirection = direction === 'asc' ? 'desc' : 'asc';
+    dispatch(setDirection(newDirection));
   };
 
-  const handleSortPosition = () => {
-    dispatch(setDirection(sortOrder));
-    dispatch(setColumn('position'));
-    setSortOrder(sortDirection);
-  };
-
-  const handleSortAdmission = () => {
-    dispatch(setDirection(sortOrder));
-    dispatch(setColumn('admission'));
-    setSortOrder(sortDirection);
-  };
-
-  const handleSortAPhone = () => {
-    dispatch(setDirection(sortOrder));
-    dispatch(setColumn('phone'));
-    setSortOrder(sortDirection);
+  const handleSort = (col: string) => {
+    if (column !== col) {
+      dispatch(setColumn(col));
+      dispatch(setDirection('asc'));
+    } else {
+      toggleSortDirection();
+    }
   };
 
   return (
 
-    <thead className="bg-gradient-primary text-white text-h2 sticky top-0">
+    <thead className="bg-gradient-primary text-light-neutral-0 text-h2 sticky top-0">
 
       <tr>
 
@@ -56,11 +42,9 @@ function TableHead() {
           {' '}
 
           <ButtonSort
-            onClick={ handleSortName }
-            ariaLabel="Sort column name"
-            id="name"
-            activeButton={ activeButton }
-            setActiveButton={ setActiveButton }
+            onClick={ () => handleSort('fullName') }
+            ariaLabel="Sort column fullName"
+            id="fullName"
           />
 
         </th>
@@ -71,11 +55,9 @@ function TableHead() {
           {' '}
 
           <ButtonSort
-            onClick={ handleSortPosition }
+            onClick={ () => handleSort('position') }
             ariaLabel="Sort column position"
             id="position"
-            activeButton={ activeButton }
-            setActiveButton={ setActiveButton }
           />
 
         </th>
@@ -86,11 +68,9 @@ function TableHead() {
           {' '}
 
           <ButtonSort
-            onClick={ handleSortAdmission }
+            onClick={ () => handleSort('admission') }
             ariaLabel="Sort column admission"
             id="admission"
-            activeButton={ activeButton }
-            setActiveButton={ setActiveButton }
           />
 
         </th>
@@ -101,11 +81,9 @@ function TableHead() {
           {' '}
 
           <ButtonSort
-            onClick={ handleSortAPhone }
+            onClick={ () => handleSort('phone') }
             ariaLabel="Sort column phone"
             id="phone"
-            activeButton={ activeButton }
-            setActiveButton={ setActiveButton }
           />
 
         </th>

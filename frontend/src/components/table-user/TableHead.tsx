@@ -3,42 +3,28 @@
 'use client';
 
 import Image from 'next/image';
-import { useDispatch } from 'react-redux';
-import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import ellipse from '../../../public/ellipse.svg';
 import ButtonSort from '../ButtonSort';
-import { AppDispatch } from '../../store';
+import { AppDispatch, RootState } from '../../store';
 import { setColumn, setDirection } from '../../store/sortSlice';
 
 function TableHead() {
   const dispatch = useDispatch<AppDispatch>();
-  const [sortOrder, setSortOrder] = useState('asc');
-  const [activeButton, setActiveButton] = useState<string | null>(null);
+  const { direction, column } = useSelector((state: RootState) => state.sort);
 
-  const sortDirection = sortOrder === 'asc' ? 'desc' : 'asc';
-
-  const handleSortName = () => {
-    dispatch(setDirection(sortOrder));
-    dispatch(setColumn('fullName'));
-    setSortOrder(sortDirection);
+  const toggleSortDirection = () => {
+    const newDirection = direction === 'asc' ? 'desc' : 'asc';
+    dispatch(setDirection(newDirection));
   };
 
-  const handleSortUsername = () => {
-    dispatch(setDirection(sortOrder));
-    dispatch(setColumn('username'));
-    setSortOrder(sortDirection);
-  };
-
-  const handleSortEmail = () => {
-    dispatch(setDirection(sortOrder));
-    dispatch(setColumn('email'));
-    setSortOrder(sortDirection);
-  };
-
-  const handleSortRole = () => {
-    dispatch(setDirection(sortOrder));
-    dispatch(setColumn('role'));
-    setSortOrder(sortDirection);
+  const handleSort = (col: string) => {
+    if (column !== col) {
+      dispatch(setColumn(col));
+      dispatch(setDirection('asc'));
+    } else {
+      toggleSortDirection();
+    }
   };
 
   return (
@@ -55,11 +41,9 @@ function TableHead() {
           {' '}
 
           <ButtonSort
-            onClick={ handleSortName }
-            ariaLabel="Sort column name"
-            id="name"
-            activeButton={ activeButton }
-            setActiveButton={ setActiveButton }
+            onClick={ () => handleSort('fullName') }
+            ariaLabel="Sort column fullName"
+            id="fullName"
           />
 
         </th>
@@ -70,11 +54,9 @@ function TableHead() {
           {' '}
 
           <ButtonSort
-            onClick={ handleSortUsername }
+            onClick={ () => handleSort('username') }
             ariaLabel="Sort column username"
             id="username"
-            activeButton={ activeButton }
-            setActiveButton={ setActiveButton }
           />
 
         </th>
@@ -85,11 +67,9 @@ function TableHead() {
           {' '}
 
           <ButtonSort
-            onClick={ handleSortEmail }
+            onClick={ () => handleSort('email') }
             ariaLabel="Sort column email"
             id="email"
-            activeButton={ activeButton }
-            setActiveButton={ setActiveButton }
           />
 
         </th>
@@ -100,11 +80,9 @@ function TableHead() {
           {' '}
 
           <ButtonSort
-            onClick={ handleSortRole }
+            onClick={ () => handleSort('role') }
             ariaLabel="Sort column role"
             id="role"
-            activeButton={ activeButton }
-            setActiveButton={ setActiveButton }
           />
 
         </th>

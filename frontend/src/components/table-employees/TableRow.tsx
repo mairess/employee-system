@@ -5,6 +5,7 @@
 
 import Image from 'next/image';
 import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { EmployeeType } from '../../types';
 import iconChevronDown from '../../../public/iconChevronDown.svg';
 import iconChevronUp from '../../../public/iconChevronUp.svg';
@@ -14,17 +15,35 @@ import getColSpan from '../../utils/handleColSpan';
 import { formatPhoneNumber, formatDate } from '../../utils/handleFormat';
 import ButtonDelete from '../ButtonDelete';
 import ButtonEdit from '../ButtonEdit';
+import { AppDispatch, RootState } from '../../store';
+import { setColumn, setDirection } from '../../store/sortSlice';
 
 type TableRowEmployeesProps = {
   employee: EmployeeType
 };
 
 function TableRowEmployees({ employee }: TableRowEmployeesProps) {
-  const [showDetails, setShowDetails] = useState(false);
+  const dispatch = useDispatch<AppDispatch>();
+  const [showDetails, setShowDetails] = useState('hidden');
+  const { direction, column } = useSelector((state: RootState) => state.sort);
   const windowWidth = useWindowWidth();
 
+  const toggleSortDirection = () => {
+    const newDirection = direction === 'asc' ? 'desc' : 'asc';
+    dispatch(setDirection(newDirection));
+  };
+
+  const handleSort = (col: string) => {
+    if (column !== col) {
+      dispatch(setColumn(col));
+      dispatch(setDirection('asc'));
+    } else {
+      toggleSortDirection();
+    }
+  };
+
   const handleDetail = () => {
-    setShowDetails(!showDetails);
+    setShowDetails(showDetails === 'hidden' ? '' : 'hidden');
   };
 
   return (
@@ -66,46 +85,44 @@ function TableRowEmployees({ employee }: TableRowEmployeesProps) {
 
       </tr>
 
-      {
+      <>
 
-        showDetails && (
+        <RowDetail
+          handleSort={ () => handleSort('phone') }
+          showDetails={ showDetails }
+          breakpoint="lg:hidden"
+          head="Phone"
+          employeeData={ formatPhoneNumber(employee.phone) }
+        />
+        <RowDetail
+          handleSort={ () => handleSort('admission') }
+          showDetails={ showDetails }
+          breakpoint="md:hidden"
+          head="Admission"
+          employeeData={ formatDate(employee.admission) }
+        />
+        <RowDetail
+          handleSort={ () => handleSort('position') }
+          showDetails={ showDetails }
+          breakpoint="sm:hidden"
+          head="Position"
+          employeeData={ employee.position }
+        />
 
-          <>
+        <tr className={ `${showDetails} lg:hidden` }>
 
-            <RowDetail
-              breakpoint="lg:hidden"
-              head="Phone"
-              employeeData={ formatPhoneNumber(employee.phone) }
-            />
-            <RowDetail
-              breakpoint="md:hidden"
-              head="Admission"
-              employeeData={ formatDate(employee.admission) }
-            />
-            <RowDetail
-              breakpoint="sm:hidden"
-              head="Position"
-              employeeData={ employee.position }
-            />
+          <td className="px-spacing-regular-20" colSpan={ getColSpan(windowWidth) }>
 
-            <tr className="lg:hidden">
+            <div className="flex w-full justify-end gap-2">
+              <ButtonEdit />
+              <ButtonDelete />
+            </div>
 
-              <td className="px-spacing-regular-20" colSpan={ getColSpan(windowWidth) }>
+          </td>
 
-                <div className="flex w-full justify-end gap-2">
-                  <ButtonEdit />
-                  <ButtonDelete />
-                </div>
+        </tr>
 
-              </td>
-
-            </tr>
-
-          </>
-
-        )
-
-      }
+      </>
 
     </>
 

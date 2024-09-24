@@ -5,6 +5,7 @@
 
 import Image from 'next/image';
 import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { UserType } from '../../types';
 import iconChevronDown from '../../../public/iconChevronDown.svg';
 import iconChevronUp from '../../../public/iconChevronUp.svg';
@@ -13,17 +14,35 @@ import RowDetail from '../RowDetail';
 import getColSpan from '../../utils/handleColSpan';
 import ButtonEdit from '../ButtonEdit';
 import ButtonDelete from '../ButtonDelete';
+import { AppDispatch, RootState } from '../../store';
+import { setColumn, setDirection } from '../../store/sortSlice';
 
 type TableRowUsersProps = {
   user: UserType
 };
 
 function TableRowUsers({ user }: TableRowUsersProps) {
-  const [showDetails, setShowDetails] = useState(false);
+  const dispatch = useDispatch<AppDispatch>();
+  const [showDetails, setShowDetails] = useState('hidden');
+  const { direction, column } = useSelector((state: RootState) => state.sort);
   const windowWidth = useWindowWidth();
 
+  const toggleSortDirection = () => {
+    const newDirection = direction === 'asc' ? 'desc' : 'asc';
+    dispatch(setDirection(newDirection));
+  };
+
+  const handleSort = (col: string) => {
+    if (column !== col) {
+      dispatch(setColumn(col));
+      dispatch(setDirection('asc'));
+    } else {
+      toggleSortDirection();
+    }
+  };
+
   const handleDetail = () => {
-    setShowDetails(!showDetails);
+    setShowDetails(showDetails === 'hidden' ? '' : 'hidden');
   };
 
   return (
@@ -64,44 +83,44 @@ function TableRowUsers({ user }: TableRowUsersProps) {
 
       </tr>
 
-      {
-        showDetails && (
-          <>
+      <>
 
-            <RowDetail
-              breakpoint="lg:hidden"
-              head="Role"
-              employeeData={ user.role }
-            />
-            <RowDetail
-              breakpoint="md:hidden"
-              head="Email"
-              employeeData={ user.email }
-            />
-            <RowDetail
-              breakpoint="sm:hidden"
-              head="Username"
-              employeeData={ user.username }
-            />
+        <RowDetail
+          handleSort={ () => handleSort('role') }
+          showDetails={ showDetails }
+          breakpoint="lg:hidden"
+          head="Role"
+          employeeData={ user.role }
+        />
+        <RowDetail
+          handleSort={ () => handleSort('email') }
+          showDetails={ showDetails }
+          breakpoint="md:hidden"
+          head="Email"
+          employeeData={ user.email }
+        />
+        <RowDetail
+          handleSort={ () => handleSort('username') }
+          showDetails={ showDetails }
+          breakpoint="sm:hidden"
+          head="Username"
+          employeeData={ user.username }
+        />
 
-            <tr className="lg:hidden">
+        <tr className={ `${showDetails} lg:hidden` }>
 
-              <td className="px-spacing-regular-20" colSpan={ getColSpan(windowWidth) }>
+          <td className="px-spacing-regular-20" colSpan={ getColSpan(windowWidth) }>
 
-                <div className="flex w-full justify-end gap-2">
-                  <ButtonEdit />
-                  <ButtonDelete />
-                </div>
+            <div className="flex w-full justify-end gap-2">
+              <ButtonEdit />
+              <ButtonDelete />
+            </div>
 
-              </td>
+          </td>
 
-            </tr>
+        </tr>
 
-          </>
-
-        )
-
-      }
+      </>
 
     </>
 

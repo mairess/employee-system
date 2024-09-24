@@ -6,26 +6,22 @@ type ButtonSortProps = {
   onClick: () => void,
   ariaLabel: string,
   id: string,
-  activeButton: string | null,
-  setActiveButton: (value: string) => void,
 };
 
-function ButtonSort({ onClick, ariaLabel, id, activeButton, setActiveButton }: ButtonSortProps) {
-  const { direction } = useSelector((state: RootState) => state.sort);
+function ButtonSort({ onClick, ariaLabel, id }: ButtonSortProps) {
+  const { direction, column } = useSelector((state: RootState) => state.sort);
 
-  const handleClick = () => {
-    setActiveButton(id);
-    onClick();
-  };
+  const idLowerCase = id.toLocaleLowerCase();
+  const colLowerCase = column.toLocaleLowerCase();
 
   return (
     <button
-      className={ activeButton === id && activeButton ? 'text-dark-neutral-0' : 'light-neutral-0' }
-      onClick={ handleClick }
+      className={ colLowerCase === idLowerCase ? 'text-light-neutral-500' : '' }
+      onClick={ onClick }
       aria-label={ ariaLabel }
     >
 
-      {activeButton === id && direction === 'asc' ? '▼' : '▲'}
+      {colLowerCase === idLowerCase && direction === 'asc' ? '▼' : '▲'}
 
     </button>
   );
