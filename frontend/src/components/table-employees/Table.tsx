@@ -22,6 +22,7 @@ function TableEmployees() {
   const { loading, data, error } = useSelector((state: RootState) => state.findAllEmployees);
   const { pageSize, pageNumber } = useSelector((state: RootState) => state.pagination);
   const { column, direction } = useSelector((state: RootState) => state.sort);
+  const { term } = useSelector((state: RootState) => state.searchTerm);
   const windowWidth = useWindowWidth();
   const token = useToken();
   const router = useRouter();
@@ -31,7 +32,7 @@ function TableEmployees() {
   }
 
   useEffect(() => {
-    if (token) { dispatch(findAllEmployees({ token, pageNumber, pageSize, column, direction })); }
+    if (token) { dispatch(findAllEmployees({ token, pageNumber, pageSize, column, direction, term })); }
   }, [token, dispatch, pageNumber, pageSize, column, direction]);
 
   return (

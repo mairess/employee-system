@@ -6,14 +6,15 @@ type FindAllUsersParams = {
   pageNumber?: number;
   pageSize?: number;
   column?: string;
-  direction?: string
+  direction?: string;
+  term?: string
 };
 
 const findAllUsers = createAsyncThunk(
   'findAllUsers',
-  async ({ token, pageNumber = 0, pageSize = 20, column = 'id', direction = 'asc' }: FindAllUsersParams, { rejectWithValue }) => {
+  async ({ token, pageNumber = 0, pageSize = 20, column = 'id', direction = 'asc', term = '' }: FindAllUsersParams, { rejectWithValue }) => {
     try {
-      const response = await fetch(`http://localhost:8080/users?pageNumber=${pageNumber}&pageSize=${pageSize}&column=${column}&direction=${direction}`, {
+      const response = await fetch(`http://localhost:8080/users?term=${term}&pageNumber=${pageNumber}&pageSize=${pageSize}&column=${column}&direction=${direction}`, {
         method: 'GET',
         headers: {
           Authorization: `Bearer ${token}`,

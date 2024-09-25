@@ -21,6 +21,7 @@ function TableUsers() {
   const { loading, data, error } = useSelector((state: RootState) => state.findAllUsers);
   const { pageSize, pageNumber } = useSelector((state: RootState) => state.pagination);
   const { column, direction } = useSelector((state: RootState) => state.sort);
+  const { term } = useSelector((state: RootState) => state.searchTerm);
   const windowWidth = useWindowWidth();
   const token = useToken();
   const router = useRouter();
@@ -30,7 +31,7 @@ function TableUsers() {
   }
 
   useEffect(() => {
-    if (token) { dispatch(findAllUsers({ token, pageNumber, pageSize, column, direction })); }
+    if (token) { dispatch(findAllUsers({ token, pageNumber, pageSize, column, direction, term })); }
   }, [token, dispatch, pageNumber, pageSize, column, direction]);
 
   return (

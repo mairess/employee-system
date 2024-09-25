@@ -7,6 +7,7 @@ import passwordChangeReducer from './passwordChangeSlice';
 import modalPasswordChangeReducer from './modalPasswordChangeSlice';
 import paginationReducer from './paginationSlice';
 import sortReducer from './sortSlice';
+import searchTermReducer from './searchTermSlice';
 
 const store = configureStore({
   reducer: {
@@ -18,6 +19,7 @@ const store = configureStore({
     modalPasswordChange: modalPasswordChangeReducer,
     pagination: paginationReducer,
     sort: sortReducer,
+    searchTerm: searchTermReducer,
   },
 });
 
