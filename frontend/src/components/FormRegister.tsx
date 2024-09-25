@@ -16,7 +16,7 @@ import { clearError } from '../store/registerSlice';
 function FormRegister() {
   const dispatch = useDispatch<AppDispatch>();
   const { loading, user, error } = useSelector((state: RootState) => state.register);
-  const [formData, setFormaData] = useState({ fullName: '', username: '', email: '', password: '', role: 'user' });
+  const [formData, setFormaData] = useState({ photo: '', fullName: '', username: '', email: '', password: '', role: 'user' });
   const [confirmPassword, setConfirmPassword] = useState('');
   const router = useRouter();
 
@@ -56,6 +56,16 @@ function FormRegister() {
       >
         Register
       </h1>
+
+      <Input
+        type="text"
+        name="photo"
+        id="URL"
+        placeholder="Photo url"
+        value={ formData.photo }
+        error={ error }
+        onChange={ handleInputChange }
+      />
 
       <Input
         type="text"

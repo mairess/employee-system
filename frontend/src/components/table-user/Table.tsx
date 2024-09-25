@@ -25,7 +25,7 @@ function TableUsers() {
   const token = useToken();
   const router = useRouter();
 
-  if (error && error.includes('The Token has expired')) {
+  if (error && (error.includes('The Token has expired') || error.includes('Access Denied'))) {
     router.push('/access-denied');
   }
 

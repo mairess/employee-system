@@ -4,7 +4,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 
 const register = createAsyncThunk(
   'register',
-  async (userData: { fullName: string, username: string, email: string, password: string, role: string }, { rejectWithValue }) => {
+  async (userData: { photo: string, fullName: string, username: string, email: string, password: string, role: string }, { rejectWithValue }) => {
     try {
       const response = await fetch('http://localhost:8080/users', {
         method: 'POST',
