@@ -142,6 +142,62 @@ public class EmployeeIntegrationTest {
   }
 
   @Test
+  @DisplayName("Retrieval employees by search term")
+  public void testRetrievalBySearchTerm() throws Exception {
+
+    LocalDate admissionDate = LocalDate.now();
+
+    Employee Gahan = new Employee(
+        "https://robohash.org/employee170",
+        "David Gahan",
+        "Backend",
+        admissionDate,
+        "77912345678"
+    );
+
+    Employee Gore = new Employee(
+        "https://robohash.org/employee170",
+        "Martin Gore",
+        "Frontend",
+        admissionDate,
+        "77987654321"
+    );
+
+    Employee Fletcher = new Employee(
+        "https://robohash.org/employee170",
+        "Andrew Fletcher",
+        "UX Designer",
+        admissionDate,
+        "77987653210"
+    );
+
+    employeeRepository.save(Gahan);
+    employeeRepository.save(Gore);
+    employeeRepository.save(Fletcher);
+
+    String employeeUrl = "/employees/search?term=David Gahan";
+
+    mockMvc.perform(get(employeeUrl)
+            .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenAdmin))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$").isMap())
+        .andExpect(jsonPath("$.pagination").isMap())
+        .andExpect(jsonPath("$.pagination.length()").value(4))
+        .andExpect(jsonPath("$.pagination.currentPage").value(0))
+        .andExpect(jsonPath("$.pagination.totalItems").value(1))
+        .andExpect(jsonPath("$.pagination.pageSize").value(20))
+        .andExpect(jsonPath("$.pagination.totalPages").value(1))
+        .andExpect(jsonPath("$.employees").isArray())
+        .andExpect(jsonPath("$.employees.length()").value(1))
+        .andExpect(jsonPath("$.employees[0].id").exists())
+        .andExpect(jsonPath("$.employees[0].photo").value("https://robohash.org/employee170"))
+        .andExpect(jsonPath("$.employees[0].fullName").value("David Gahan"))
+        .andExpect(jsonPath("$.employees[0].position").value("Backend"))
+        .andExpect(jsonPath("$.employees[0].admission").value(admissionDate.toString()))
+        .andExpect(jsonPath("$.employees[0].phone").value("77912345678"));
+  }
+
+  @Test
   @DisplayName("Retrieval employee by id")
   public void testRetrievalById() throws Exception {
 

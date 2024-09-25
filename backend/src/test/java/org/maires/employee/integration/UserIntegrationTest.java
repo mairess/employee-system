@@ -111,6 +111,51 @@ public class UserIntegrationTest {
   }
 
   @Test
+  @DisplayName("Retrieval users by search term")
+  public void testRetrievalBySearchTerm() throws Exception {
+    User Ermenegildo = new User("https://robohash.org/179.106.168.38.png", "Ermenegildo Fagundes",
+        "gildo", "gildo@example.com", "123456",
+        Role.USER);
+
+    User Gilmar = new User("https://robohash.org/179.106.168.48.png", "Gilmar de Castro", "gilmar",
+        "gilmar@example.com", "123456", Role.USER);
+
+    User GilmarDoBar = new User("https://robohash.org/181.106.168.48.png", "Gilmar do Bar",
+        "gilmarBar",
+        "gilmarbar@example.com", "123456", Role.USER);
+
+    userRepository.save(Ermenegildo);
+    userRepository.save(Gilmar);
+    userRepository.save(GilmarDoBar);
+    String userUrl = "/users/search?term=Gilmar";
+
+    mockMvc.perform(get(userUrl)
+            .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenAdmin))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$").isMap())
+        .andExpect(jsonPath("$.pagination").isMap())
+        .andExpect(jsonPath("$.pagination.length()").value(4))
+        .andExpect(jsonPath("$.pagination.currentPage").value(0))
+        .andExpect(jsonPath("$.pagination.totalItems").value(2))
+        .andExpect(jsonPath("$.pagination.pageSize").value(20))
+        .andExpect(jsonPath("$.pagination.totalPages").value(1))
+        .andExpect(jsonPath("$.users").isArray())
+        .andExpect(jsonPath("$.users.length()").value(2))
+        .andExpect(jsonPath("$.users[0].id").exists())
+        .andExpect(jsonPath("$.users[0].photo").value("https://robohash.org/179.106.168.48.png"))
+        .andExpect(jsonPath("$.users[0].fullName").value("Gilmar de Castro"))
+        .andExpect(jsonPath("$.users[0].username").value("gilmar"))
+        .andExpect(jsonPath("$.users[0].email").value("gilmar@example.com"))
+        .andExpect(jsonPath("$.users[0].role").value("USER"))
+        .andExpect(jsonPath("$.users[1].id").exists())
+        .andExpect(jsonPath("$.users[1].photo").value("https://robohash.org/181.106.168.48.png"))
+        .andExpect(jsonPath("$.users[1].fullName").value("Gilmar do Bar"))
+        .andExpect(jsonPath("$.users[1].username").value("gilmarBar"))
+        .andExpect(jsonPath("$.users[1].email").value("gilmarbar@example.com"))
+        .andExpect(jsonPath("$.users[1].role").value("USER"));
+  }
+
+  @Test
   @DisplayName("Retrieval user by id")
   public void testRetrievalById() throws Exception {
 
