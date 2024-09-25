@@ -61,18 +61,25 @@ function PaginationFooter() {
 
       <div className="flex justify-center sm:justify-start items-center">
 
-        <input
-          className="w-10 border mr-2 rounded-md text-dark-neutral-0 no-arrows hover:border-dark-neutral-300 px-2"
-          type="number"
-          value={ goToPageNumber }
-          onChange={ handleInputChange }
-          onKeyDown={ handleKeyDown }
-        />
+        <label htmlFor="currentPage">
+          page
 
-        of
-        {' '}
-        {totalPages}
-        {' '}
+          <input
+            className="w-10 border mr-2 ml-2 rounded-md text-dark-neutral-0 no-arrows hover:border-dark-neutral-300 px-2"
+            type="number"
+            id="currentPage"
+            name="currentPage"
+            value={ goToPageNumber }
+            onChange={ handleInputChange }
+            onKeyDown={ handleKeyDown }
+          />
+
+          of
+          {' '}
+          {totalPages}
+          {' '}
+
+        </label>
 
       </div>
 
