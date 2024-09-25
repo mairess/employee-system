@@ -54,6 +54,7 @@ public class EmployeeController {
    * @param pageSize   the page size
    * @param column     the column
    * @param direction  the direction
+   * @param term       the term
    * @return the response entity
    */
   @GetMapping
@@ -82,7 +83,7 @@ public class EmployeeController {
     return ResponseEntity.status(HttpStatus.OK).body(employees);
 
   }
-  
+
   /**
    * Find by id employee dto.
    *

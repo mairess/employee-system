@@ -50,6 +50,7 @@ public class UserService implements UserDetailsService {
    * @param pageSize   the page size
    * @param column     the column
    * @param direction  the direction
+   * @param term       the term
    * @return the map
    */
   public Map<String, Object> findAll(int pageNumber, int pageSize, String column,

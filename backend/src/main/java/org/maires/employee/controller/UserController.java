@@ -54,6 +54,7 @@ public class UserController {
    * @param pageSize   the page size
    * @param column     the column
    * @param direction  the direction
+   * @param term       the term
    * @return the response entity
    */
   @GetMapping
