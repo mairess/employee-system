@@ -1,7 +1,7 @@
 /* eslint-disable max-len */
 
 import { useDispatch, useSelector } from 'react-redux';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { AppDispatch, RootState } from '../../store';
 import ButtonPagination from '../buttons/ButtonPagination';
 import handlePagination from '../../utils/handlePagination';
@@ -12,7 +12,14 @@ function PaginationFooter() {
   const dispatch = useDispatch<AppDispatch>();
   const { data } = useSelector((state: RootState) => state.employees);
   const { pageNumber } = useSelector((state: RootState) => state.pagination);
-  const [goToPageNumber, setGotoPageNumber] = useState('');
+  const [goToPageNumber, setGoToPageNumber] = useState('');
+
+  useEffect(() => {
+    if (data) {
+      const { currentPage } = data.pagination;
+      setGoToPageNumber((currentPage + 1).toString());
+    }
+  }, [data]);
 
   if (data === null) return null;
 
@@ -22,9 +29,7 @@ function PaginationFooter() {
 
   const isDisabled = pageNumber === totalPages - 1;
 
-  const goToNextPage = (newPageNumber: number) => {
-    if (pageNumber < totalPages - 1) { dispatch(setPageNumber(newPageNumber)); }
-  };
+  const goToNextPage = (newPageNumber: number) => { if (pageNumber < totalPages - 1) { dispatch(setPageNumber(newPageNumber)); } };
 
   const goToPreviousPage = (newPageNumber: number) => { if (pageNumber > 0) { dispatch(setPageNumber(newPageNumber)); } };
 
@@ -35,56 +40,46 @@ function PaginationFooter() {
   const goToTail = (newPageNumber: number) => { dispatch(setPageNumber(newPageNumber)); };
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setGotoPageNumber(event.target.value);
+    setGoToPageNumber(event.target.value);
   };
 
-  const handleSelectPage = () => {
-    const value = Number(goToPageNumber);
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      const value = Number(goToPageNumber);
 
-    if (value > totalPages) {
-      return dispatch(setPageNumber(Number(totalPages - 1)));
+      if (value > totalPages) { return dispatch(setPageNumber(Number(totalPages - 1))); }
+
+      if (value <= 0) { return dispatch(setPageNumber(Number(0))); }
+
+      dispatch(setPageNumber(value - 1));
     }
-
-    if (value <= 0) {
-      return dispatch(setPageNumber(Number(0)));
-    }
-
-    return dispatch(setPageNumber(Number(goToPageNumber) - 1));
   };
 
   return (
 
     <div className="sm:flex items-center justify-between px-spacing-regular-24">
 
-      <div className="flex justify-center sm:justify-start items-center w-full">
+      <div className="flex justify-center sm:justify-start items-center">
 
-        {currentPage + 1}
-        {' '}
-        of
-        {' '}
-        {totalPages}
-        {' '}
-
-        <div className="mx-2">
-
-          <button
-            className="hover:bg-hover-primary-transparent p-1 rounded"
-            onClick={ handleSelectPage }
-            aria-label="go to page"
-          >
-
-            Go to
-
-          </button>
+        <label htmlFor="currentPage">
+          page
 
           <input
-            className="w-8 border ml-2 rounded-md text-dark-neutral-0 no-arrows hover:border-dark-neutral-300"
+            className="w-10 border mr-2 ml-2 rounded-md text-dark-neutral-0 no-arrows hover:border-dark-neutral-300 px-2"
             type="number"
+            id="currentPage"
+            name="currentPage"
             value={ goToPageNumber }
             onChange={ handleInputChange }
+            onKeyDown={ handleKeyDown }
           />
 
-        </div>
+          of
+          {' '}
+          {totalPages}
+          {' '}
+
+        </label>
 
       </div>
 
