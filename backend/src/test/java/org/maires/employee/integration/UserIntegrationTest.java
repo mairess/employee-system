@@ -127,7 +127,7 @@ public class UserIntegrationTest {
     userRepository.save(Ermenegildo);
     userRepository.save(Gilmar);
     userRepository.save(GilmarDoBar);
-    String userUrl = "/users/search?term=Gilmar";
+    String userUrl = "/users?term=Gilmar";
 
     mockMvc.perform(get(userUrl)
             .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenAdmin))

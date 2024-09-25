@@ -175,7 +175,7 @@ public class EmployeeIntegrationTest {
     employeeRepository.save(Gore);
     employeeRepository.save(Fletcher);
 
-    String employeeUrl = "/employees/search?term=David Gahan";
+    String employeeUrl = "/employees?term=David Gahan";
 
     mockMvc.perform(get(employeeUrl)
             .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenAdmin))

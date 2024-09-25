@@ -53,41 +53,7 @@ public class EmployeeService {
    * @return the map
    */
   public Map<String, Object> findAll(int pageNumber, int pageSize, String column,
-      String direction) {
-
-    Pageable pageable = PageRequest.of(
-        pageNumber, pageSize, Sort.by(Sort.Direction.fromString(direction), column)
-    );
-
-    Page<Employee> page = employeeRepository.findAll(pageable);
-
-    return Map.of(
-        "employees", page.getContent(),
-
-        "pagination", Map.of(
-            "currentPage", page.getNumber(),
-            "totalPages", page.getTotalPages(),
-            "pageSize", page.getSize(),
-            "totalItems", page.getTotalElements()
-        )
-    );
-
-  }
-
-
-  /**
-   * Find by search term map.
-   *
-   * @param term       the term
-   * @param pageNumber the page number
-   * @param pageSize   the page size
-   * @param column     the column
-   * @param direction  the direction
-   * @return the map
-   */
-  public Map<String, Object> findBySearchTerm(String term, int pageNumber, int pageSize,
-      String column,
-      String direction) {
+      String direction, String term) {
 
     Pageable pageable = PageRequest.of(
         pageNumber, pageSize, Sort.by(Sort.Direction.fromString(direction), column)
@@ -108,8 +74,8 @@ public class EmployeeService {
             "totalItems", page.getTotalElements()
         )
     );
-  }
 
+  }
 
   /**
    * Find by id employee.

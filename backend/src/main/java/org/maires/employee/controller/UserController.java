@@ -62,11 +62,12 @@ public class UserController {
       @RequestParam(required = false, defaultValue = "0") int pageNumber,
       @RequestParam(required = false, defaultValue = "20") int pageSize,
       @RequestParam(required = false, defaultValue = "id") String column,
-      @RequestParam(required = false, defaultValue = "asc") String direction
+      @RequestParam(required = false, defaultValue = "asc") String direction,
+      @RequestParam(required = false, defaultValue = "") String term
   ) {
 
     Map<String, Object> users = new HashMap<>(
-        userService.findAll(pageNumber, pageSize, column, direction)
+        userService.findAll(pageNumber, pageSize, column, direction, term)
     );
 
     List<?> data = (List<?>) users.get("users");
@@ -79,44 +80,6 @@ public class UserController {
     users.put("users", userDtoList);
 
     return ResponseEntity.status(HttpStatus.OK).body(users);
-
-  }
-
-  /**
-   * Find by search term response entity.
-   *
-   * @param term       the term
-   * @param pageNumber the page number
-   * @param pageSize   the page size
-   * @param column     the column
-   * @param direction  the direction
-   * @return the response entity
-   */
-  @GetMapping("/search")
-  @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
-  public ResponseEntity<Map<String, Object>> findBySearchTerm(
-      @RequestParam String term,
-      @RequestParam(required = false, defaultValue = "0") int pageNumber,
-      @RequestParam(required = false, defaultValue = "20") int pageSize,
-      @RequestParam(required = false, defaultValue = "id") String column,
-      @RequestParam(required = false, defaultValue = "asc") String direction
-  ) {
-
-    Map<String, Object> users = new HashMap<>(
-        userService.findBySearchTerm(term, pageNumber, pageSize, column, direction)
-    );
-
-    List<?> data = (List<?>) users.get("users");
-
-    List<UserDto> userDtoList = data
-        .stream()
-        .map(user -> UserDto.fromEntity((User) user))
-        .toList();
-
-    users.put("users", userDtoList);
-
-    return ResponseEntity.status(HttpStatus.OK).body(users);
-
 
   }
 
