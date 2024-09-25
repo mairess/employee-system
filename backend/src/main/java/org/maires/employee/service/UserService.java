@@ -7,12 +7,14 @@ import java.util.Map;
 import org.maires.employee.controller.dto.UserCreationDto;
 import org.maires.employee.entity.User;
 import org.maires.employee.repository.UserRepository;
+import org.maires.employee.repository.specification.UserSpecification;
 import org.maires.employee.service.exception.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -61,6 +63,41 @@ public class UserService implements UserDetailsService {
 
     return Map.of(
         "users", page.getContent(),
+        "pagination", Map.of(
+            "currentPage", page.getNumber(),
+            "totalPages", page.getTotalPages(),
+            "pageSize", page.getSize(),
+            "totalItems", page.getTotalElements()
+        )
+    );
+  }
+
+  /**
+   * Find by search term map.
+   *
+   * @param term       the term
+   * @param pageNumber the page number
+   * @param pageSize   the page size
+   * @param column     the column
+   * @param direction  the direction
+   * @return the map
+   */
+  public Map<String, Object> findBySearchTerm(String term, int pageNumber, int pageSize,
+      String column,
+      String direction) {
+
+    Pageable pageable = PageRequest.of(
+        pageNumber, pageSize, Sort.by(Sort.Direction.fromString(direction), column)
+    );
+
+    Page<User> page = userRepository.findAll(
+        Specification.where(UserSpecification.containsTerm(term)),
+        pageable
+    );
+
+    return Map.of(
+        "users", page.getContent(),
+
         "pagination", Map.of(
             "currentPage", page.getNumber(),
             "totalPages", page.getTotalPages(),
