@@ -13,7 +13,7 @@ import org.maires.employee.entity.Employee;
 public record EmployeeCreationDto(
 
     @Pattern(
-        regexp = "^(https?|ftp)://[^\\s/$.?#].[^\\s]*$",
+        regexp = "$|^(https?)://.*\\.(jpg|jpeg|png|gif|bmp|webp)$",
         message = "Invalid URL format"
     )
     String photo,

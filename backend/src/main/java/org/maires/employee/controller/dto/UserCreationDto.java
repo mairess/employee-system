@@ -14,7 +14,7 @@ import org.maires.employee.validation.EnumValidator;
  */
 public record UserCreationDto(
     @Pattern(
-        regexp = "^(https?|ftp)://[^\\s/$.?#].[^\\s]*$",
+        regexp = "$|^(https?)://.*\\.(jpg|jpeg|png|gif|bmp|webp)$",
         message = "Invalid URL format"
     )
     String photo,
