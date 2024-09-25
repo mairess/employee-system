@@ -9,7 +9,7 @@ import TableFooter from './TableFooter';
 import TableHeader from './TableHeader';
 import TableRowUsers from './TableRow';
 import { AppDispatch, RootState } from '../../store';
-import listUsers from '../../services/listUsers';
+import findAllUsers from '../../services/findAllUsers';
 import useToken from '../../hooks/useToken';
 import Loading from '../Loading';
 import Error from '../Error';
@@ -18,7 +18,7 @@ import getColSpan from '../../utils/handleColSpan';
 
 function TableUsers() {
   const dispatch = useDispatch<AppDispatch>();
-  const { loading, data, error } = useSelector((state: RootState) => state.users);
+  const { loading, data, error } = useSelector((state: RootState) => state.findAllUsers);
   const { pageSize, pageNumber } = useSelector((state: RootState) => state.pagination);
   const { column, direction } = useSelector((state: RootState) => state.sort);
   const windowWidth = useWindowWidth();
@@ -30,7 +30,7 @@ function TableUsers() {
   }
 
   useEffect(() => {
-    if (token) { dispatch(listUsers({ token, pageNumber, pageSize, column, direction })); }
+    if (token) { dispatch(findAllUsers({ token, pageNumber, pageSize, column, direction })); }
   }, [token, dispatch, pageNumber, pageSize, column, direction]);
 
   return (

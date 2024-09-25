@@ -12,8 +12,8 @@ import Input from './Input';
 import KeepLogged from './KeepLogged';
 import ModalChangePassword from './ModalChangePassword';
 import { AppDispatch, RootState } from '../store';
-import login from '../services/login';
-import { clearError } from '../store/loginSlice';
+import auth from '../services/auth';
+import { clearError } from '../store/authSlice';
 
 function FormLogin() {
   const dispatch = useDispatch<AppDispatch>();
@@ -44,7 +44,7 @@ function FormLogin() {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    dispatch(login({ ...formData, keepLogged }));
+    dispatch(auth({ ...formData, keepLogged }));
   };
 
   const handleKeepLogged = () => {

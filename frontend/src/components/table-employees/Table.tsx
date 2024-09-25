@@ -9,7 +9,7 @@ import TableFooter from './TableFooter';
 import TableHeader from './TableHeader';
 import TableRowEmployees from './TableRow';
 import { AppDispatch, RootState } from '../../store';
-import listEmployees from '../../services/listEmployees';
+import findAllEmployees from '../../services/findAllEmployees';
 import useToken from '../../hooks/useToken';
 import Loading from '../Loading';
 import Error from '../Error';
@@ -19,7 +19,7 @@ import { EmployeeType } from '../../types';
 
 function TableEmployees() {
   const dispatch = useDispatch<AppDispatch>();
-  const { loading, data, error } = useSelector((state: RootState) => state.employees);
+  const { loading, data, error } = useSelector((state: RootState) => state.findAllEmployees);
   const { pageSize, pageNumber } = useSelector((state: RootState) => state.pagination);
   const { column, direction } = useSelector((state: RootState) => state.sort);
   const windowWidth = useWindowWidth();
@@ -31,7 +31,7 @@ function TableEmployees() {
   }
 
   useEffect(() => {
-    if (token) { dispatch(listEmployees({ token, pageNumber, pageSize, column, direction })); }
+    if (token) { dispatch(findAllEmployees({ token, pageNumber, pageSize, column, direction })); }
   }, [token, dispatch, pageNumber, pageSize, column, direction]);
 
   return (

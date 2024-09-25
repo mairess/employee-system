@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import { UserType } from '../types';
 import register from '../services/register';
 
-type UserState = {
+type RegisterState = {
   user: UserType;
   loading: boolean;
   error: string | null
@@ -18,14 +18,14 @@ const initialUser = {
   role: 'user',
 };
 
-const initialState: UserState = {
+const initialState: RegisterState = {
   user: initialUser,
   loading: false,
   error: null,
 };
 
-const userSlice = createSlice({
-  name: 'user',
+const registerSlice = createSlice({
+  name: 'register',
   initialState,
   reducers: {
     clearError: (state) => {
@@ -49,5 +49,5 @@ const userSlice = createSlice({
   },
 });
 
-export const { clearError } = userSlice.actions;
-export default userSlice.reducer;
+export const { clearError } = registerSlice.actions;
+export default registerSlice.reducer;

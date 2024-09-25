@@ -6,11 +6,11 @@ import { AppDispatch, RootState } from '../../store';
 import ButtonPagination from '../buttons/ButtonPagination';
 import handlePagination from '../../utils/handlePagination';
 import ButtonPaginationJump from '../buttons/ButtonPaginationJump';
-import { setPageNumber } from '../../store/pageSizeSlice';
+import { setPageNumber } from '../../store/paginationSlice';
 
 function PaginationFooter() {
   const dispatch = useDispatch<AppDispatch>();
-  const { data } = useSelector((state: RootState) => state.employees);
+  const { data } = useSelector((state: RootState) => state.findAllEmployees);
   const { pageNumber } = useSelector((state: RootState) => state.pagination);
   const [goToPageNumber, setGoToPageNumber] = useState('');
 

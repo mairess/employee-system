@@ -10,12 +10,12 @@ import Button from './buttons/Button';
 import { AppDispatch, RootState } from '../store';
 import passwordChange from '../services/passwordChange';
 import { clearError } from '../store/passwordChangeSlice';
-import { closeModal } from '../store/modalSlice';
+import { closeModal } from '../store/modalPasswordChangeSlice';
 
 function ModalChangePassword() {
   const dispatch = useDispatch<AppDispatch>();
-  const { isModalOpen } = useSelector((state: RootState) => state.modal);
-  const { loading, message, error } = useSelector((state: RootState) => state.password);
+  const { isModalOpen } = useSelector((state: RootState) => state.modalPasswordChange);
+  const { loading, message, error } = useSelector((state: RootState) => state.passwordChange);
   const [formData, setFormData] = useState({ email: '' });
 
   const isFormValid = !formData.email;

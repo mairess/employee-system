@@ -10,8 +10,8 @@ const initialState: PaginationState = {
   pageNumber: 0,
 };
 
-const pageSizeSlice = createSlice({
-  name: 'pageSizeSlice',
+const paginationSlice = createSlice({
+  name: 'pagination',
   initialState,
   reducers: {
     setPageSize(state, action: PayloadAction<number>) {
@@ -23,5 +23,5 @@ const pageSizeSlice = createSlice({
   },
 });
 
-export const { setPageSize, setPageNumber } = pageSizeSlice.actions;
-export default pageSizeSlice.reducer;
+export const { setPageSize, setPageNumber } = paginationSlice.actions;
+export default paginationSlice.reducer;
