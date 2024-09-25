@@ -108,6 +108,11 @@ public class UserService implements UserDetailsService {
    */
   public User create(User user) {
     String hashedPassword = new BCryptPasswordEncoder().encode(user.getPassword());
+
+    if (user.getPhoto() == null || user.getPhoto().isEmpty()) {
+      user.setPhoto("https://robohash.org/user0.png");
+    }
+
     user.setPassword(hashedPassword);
     return userRepository.save(user);
   }

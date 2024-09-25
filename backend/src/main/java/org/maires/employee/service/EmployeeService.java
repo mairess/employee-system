@@ -111,6 +111,10 @@ public class EmployeeService {
       throw new FutureDateException("Admission cannot be future date!");
     }
 
+    if (employee.getPhoto() == null || employee.getPhoto().isEmpty()) {
+      employee.setPhoto("https://robohash.org/employee0.png");
+    }
+
     return employeeRepository.save(employee);
 
   }
