@@ -18,6 +18,7 @@ import { clearError } from '../store/authSlice';
 function FormLogin() {
   const dispatch = useDispatch<AppDispatch>();
   const { token, loading, error } = useSelector((state: RootState) => state.auth);
+  const { isModalOpen } = useSelector((state: RootState) => state.modalPasswordChange);
   const [formData, setFormaData] = useState({ username: '', password: '' });
   const [isLoaded, setIsLoaded] = useState(false);
   const [keepLogged, setKeepLogged] = useState(false);
@@ -61,7 +62,7 @@ function FormLogin() {
   return (
     <>
 
-      <ModalChangePassword />
+      {isModalOpen && <ModalChangePassword />}
 
       <form
         className="flex flex-col gap-6 bg-light-neutral-100 border border-light-neutral-400 rounded-lg p-8 shadow-xl"
