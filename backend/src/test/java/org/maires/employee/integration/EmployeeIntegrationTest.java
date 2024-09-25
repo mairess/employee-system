@@ -237,7 +237,7 @@ public class EmployeeIntegrationTest {
   public void testCreate() throws Exception {
 
     Employee Gahan = new Employee(
-        "https://robohash.org/employee170",
+        "https://robohash.org/employee170.png",
         "David Gahan",
         "Backend",
         LocalDate.now(),
@@ -274,7 +274,7 @@ public class EmployeeIntegrationTest {
     employeeRepository.save(Gore);
 
     Employee Gahan = new Employee(
-        "https://robohash.org/employee170",
+        "https://robohash.org/employee170.png",
         "David Gahan",
         "Backend",
         LocalDate.now(),
@@ -300,7 +300,7 @@ public class EmployeeIntegrationTest {
   public void testFutureDateException() throws Exception {
 
     Employee Gahan = new Employee(
-        "https://robohash.org/employee170",
+        "https://robohash.org/employee170.png",
         "David Gahan",
         "Backend",
         LocalDate.now().plusDays(1),
@@ -390,7 +390,7 @@ public class EmployeeIntegrationTest {
     LocalDate admissionDate = LocalDate.now();
 
     Employee Gahan = new Employee(
-        "https://robohash.org/employee170",
+        "https://robohash.org/employee170.png",
         "David Gahan",
         "Backend",
         admissionDate,
@@ -399,7 +399,7 @@ public class EmployeeIntegrationTest {
 
     employeeRepository.save(Gahan);
 
-    Gahan.setPhoto("https://robohash.org/employee141");
+    Gahan.setPhoto("https://robohash.org/employee141.png");
     Gahan.setFullName("Mirosmar Juliano de Almeida");
     Gahan.setPosition("Fullstack");
     Gahan.setAdmission(admissionDate.minusYears(1));
@@ -416,7 +416,7 @@ public class EmployeeIntegrationTest {
             .contentType(MediaType.APPLICATION_JSON)
             .content(updatedEmployeeAsString))
         .andExpect(status().isOk())
-        .andExpect(jsonPath("$.photo").value("https://robohash.org/employee141"))
+        .andExpect(jsonPath("$.photo").value("https://robohash.org/employee141.png"))
         .andExpect(jsonPath("$.fullName").value("Mirosmar Juliano de Almeida"))
         .andExpect(jsonPath("$.position").value("Fullstack"))
         .andExpect(jsonPath("$.admission").value(admissionDate.minusYears(1).toString()))
