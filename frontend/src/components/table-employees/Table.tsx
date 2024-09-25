@@ -16,6 +16,7 @@ import Error from '../Error';
 import useWindowWidth from '../../hooks/useWindowWidth';
 import getColSpan from '../../utils/handleColSpan';
 import { EmployeeType } from '../../types';
+import NoDataFound from '../NoDataFound';
 
 function TableEmployees() {
   const dispatch = useDispatch<AppDispatch>();
@@ -52,6 +53,8 @@ function TableEmployees() {
       )}
 
       {error && (<Error />)}
+
+      {data?.employees.length === 0 && (<NoDataFound />)}
 
       <tbody>
         {!loading && !error && data?.employees.map((employee: EmployeeType) => (

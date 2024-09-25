@@ -15,6 +15,7 @@ import Loading from '../Loading';
 import Error from '../Error';
 import useWindowWidth from '../../hooks/useWindowWidth';
 import getColSpan from '../../utils/handleColSpan';
+import NoDataFound from '../NoDataFound';
 
 function TableUsers() {
   const dispatch = useDispatch<AppDispatch>();
@@ -60,6 +61,8 @@ function TableUsers() {
       )}
 
       {error && (<Error />)}
+
+      {data?.users.length === 0 && (<NoDataFound />)}
 
       <tbody>
 
