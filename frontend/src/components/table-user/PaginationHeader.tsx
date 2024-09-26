@@ -3,12 +3,12 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../../store';
-import { setPageSize, setPageNumber } from '../../store/pageSizeSlice';
+import { setPageSize, setPageNumber } from '../../store/paginationSlice';
 import handlePaginationInfo from '../../utils/handlePaginationInfo';
 
 function PaginationHeader() {
   const dispatch = useDispatch<AppDispatch>();
-  const { data } = useSelector((state: RootState) => state.users);
+  const { data } = useSelector((state: RootState) => state.findAllUsers);
   const { pageNumber } = useSelector((state: RootState) => state.pagination);
 
   if (data === null) return null;

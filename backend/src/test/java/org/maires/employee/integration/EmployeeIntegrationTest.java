@@ -142,6 +142,62 @@ public class EmployeeIntegrationTest {
   }
 
   @Test
+  @DisplayName("Retrieval employees by search term")
+  public void testRetrievalBySearchTerm() throws Exception {
+
+    LocalDate admissionDate = LocalDate.now();
+
+    Employee Gahan = new Employee(
+        "https://robohash.org/employee170",
+        "David Gahan",
+        "Backend",
+        admissionDate,
+        "77912345678"
+    );
+
+    Employee Gore = new Employee(
+        "https://robohash.org/employee170",
+        "Martin Gore",
+        "Frontend",
+        admissionDate,
+        "77987654321"
+    );
+
+    Employee Fletcher = new Employee(
+        "https://robohash.org/employee170",
+        "Andrew Fletcher",
+        "UX Designer",
+        admissionDate,
+        "77987653210"
+    );
+
+    employeeRepository.save(Gahan);
+    employeeRepository.save(Gore);
+    employeeRepository.save(Fletcher);
+
+    String employeeUrl = "/employees?term=David Gahan";
+
+    mockMvc.perform(get(employeeUrl)
+            .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenAdmin))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$").isMap())
+        .andExpect(jsonPath("$.pagination").isMap())
+        .andExpect(jsonPath("$.pagination.length()").value(4))
+        .andExpect(jsonPath("$.pagination.currentPage").value(0))
+        .andExpect(jsonPath("$.pagination.totalItems").value(1))
+        .andExpect(jsonPath("$.pagination.pageSize").value(20))
+        .andExpect(jsonPath("$.pagination.totalPages").value(1))
+        .andExpect(jsonPath("$.employees").isArray())
+        .andExpect(jsonPath("$.employees.length()").value(1))
+        .andExpect(jsonPath("$.employees[0].id").exists())
+        .andExpect(jsonPath("$.employees[0].photo").value("https://robohash.org/employee170"))
+        .andExpect(jsonPath("$.employees[0].fullName").value("David Gahan"))
+        .andExpect(jsonPath("$.employees[0].position").value("Backend"))
+        .andExpect(jsonPath("$.employees[0].admission").value(admissionDate.toString()))
+        .andExpect(jsonPath("$.employees[0].phone").value("77912345678"));
+  }
+
+  @Test
   @DisplayName("Retrieval employee by id")
   public void testRetrievalById() throws Exception {
 
@@ -181,7 +237,7 @@ public class EmployeeIntegrationTest {
   public void testCreate() throws Exception {
 
     Employee Gahan = new Employee(
-        "https://robohash.org/employee170",
+        "https://robohash.org/employee170.png",
         "David Gahan",
         "Backend",
         LocalDate.now(),
@@ -218,7 +274,7 @@ public class EmployeeIntegrationTest {
     employeeRepository.save(Gore);
 
     Employee Gahan = new Employee(
-        "https://robohash.org/employee170",
+        "https://robohash.org/employee170.png",
         "David Gahan",
         "Backend",
         LocalDate.now(),
@@ -244,7 +300,7 @@ public class EmployeeIntegrationTest {
   public void testFutureDateException() throws Exception {
 
     Employee Gahan = new Employee(
-        "https://robohash.org/employee170",
+        "https://robohash.org/employee170.png",
         "David Gahan",
         "Backend",
         LocalDate.now().plusDays(1),
@@ -334,7 +390,7 @@ public class EmployeeIntegrationTest {
     LocalDate admissionDate = LocalDate.now();
 
     Employee Gahan = new Employee(
-        "https://robohash.org/employee170",
+        "https://robohash.org/employee170.png",
         "David Gahan",
         "Backend",
         admissionDate,
@@ -343,7 +399,7 @@ public class EmployeeIntegrationTest {
 
     employeeRepository.save(Gahan);
 
-    Gahan.setPhoto("https://robohash.org/employee141");
+    Gahan.setPhoto("https://robohash.org/employee141.png");
     Gahan.setFullName("Mirosmar Juliano de Almeida");
     Gahan.setPosition("Fullstack");
     Gahan.setAdmission(admissionDate.minusYears(1));
@@ -360,7 +416,7 @@ public class EmployeeIntegrationTest {
             .contentType(MediaType.APPLICATION_JSON)
             .content(updatedEmployeeAsString))
         .andExpect(status().isOk())
-        .andExpect(jsonPath("$.photo").value("https://robohash.org/employee141"))
+        .andExpect(jsonPath("$.photo").value("https://robohash.org/employee141.png"))
         .andExpect(jsonPath("$.fullName").value("Mirosmar Juliano de Almeida"))
         .andExpect(jsonPath("$.position").value("Fullstack"))
         .andExpect(jsonPath("$.admission").value(admissionDate.minusYears(1).toString()))

@@ -6,11 +6,11 @@ import { AppDispatch, RootState } from '../../store';
 import ButtonPagination from '../buttons/ButtonPagination';
 import handlePagination from '../../utils/handlePagination';
 import ButtonPaginationJump from '../buttons/ButtonPaginationJump';
-import { setPageNumber } from '../../store/pageSizeSlice';
+import { setPageNumber } from '../../store/paginationSlice';
 
 function PaginationFooter() {
   const dispatch = useDispatch<AppDispatch>();
-  const { data } = useSelector((state: RootState) => state.employees);
+  const { data } = useSelector((state: RootState) => state.findAllEmployees);
   const { pageNumber } = useSelector((state: RootState) => state.pagination);
   const [goToPageNumber, setGoToPageNumber] = useState('');
 
@@ -27,7 +27,9 @@ function PaginationFooter() {
 
   const arrayOfPages = handlePagination(data.pagination);
 
-  const isDisabled = pageNumber === totalPages - 1;
+  const isButtonNextDisabled = pageNumber === totalPages - 1 || data.employees.length === 0;
+
+  const isButtonPreviousDisabled = pageNumber === 0 || data.employees.length === 0;
 
   const goToNextPage = (newPageNumber: number) => { if (pageNumber < totalPages - 1) { dispatch(setPageNumber(newPageNumber)); } };
 
@@ -62,6 +64,7 @@ function PaginationFooter() {
       <div className="flex justify-center sm:justify-start items-center">
 
         <label htmlFor="currentPage">
+
           page
 
           <input
@@ -85,14 +88,14 @@ function PaginationFooter() {
 
       <div className="flex justify-center items-center">
         <ButtonPaginationJump
-          isDisabled={ pageNumber === 0 }
+          isDisabled={ isButtonPreviousDisabled }
           onClick={ goToHead }
-          ariaLabel="Go to previous page"
+          ariaLabel="Go to first page"
         />
 
         <ButtonPagination
           ariaLabel="Go to previous page"
-          isDisabled={ pageNumber === 0 }
+          isDisabled={ isButtonPreviousDisabled }
           onClick={ () => goToPreviousPage(pageNumber - 1) }
         />
         <div className="px-2 flex">
@@ -115,15 +118,15 @@ function PaginationFooter() {
         </div>
 
         <ButtonPagination
-          isDisabled={ isDisabled }
+          isDisabled={ isButtonNextDisabled }
           onClick={ () => goToNextPage(pageNumber + 1) }
           ariaLabel="Go to next page"
         />
 
         <ButtonPaginationJump
-          isDisabled={ isDisabled }
+          isDisabled={ isButtonNextDisabled }
           onClick={ () => goToTail(totalPages - 1) }
-          ariaLabel="Go to next page"
+          ariaLabel="Jump to last page"
         />
 
       </div>

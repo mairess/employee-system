@@ -9,28 +9,30 @@ import TableFooter from './TableFooter';
 import TableHeader from './TableHeader';
 import TableRowUsers from './TableRow';
 import { AppDispatch, RootState } from '../../store';
-import listUsers from '../../services/listUsers';
+import findAllUsers from '../../services/findAllUsers';
 import useToken from '../../hooks/useToken';
 import Loading from '../Loading';
 import Error from '../Error';
 import useWindowWidth from '../../hooks/useWindowWidth';
 import getColSpan from '../../utils/handleColSpan';
+import NoDataFound from '../NoDataFound';
 
 function TableUsers() {
   const dispatch = useDispatch<AppDispatch>();
-  const { loading, data, error } = useSelector((state: RootState) => state.users);
+  const { loading, data, error } = useSelector((state: RootState) => state.findAllUsers);
   const { pageSize, pageNumber } = useSelector((state: RootState) => state.pagination);
   const { column, direction } = useSelector((state: RootState) => state.sort);
+  const { term } = useSelector((state: RootState) => state.searchTerm);
   const windowWidth = useWindowWidth();
   const token = useToken();
   const router = useRouter();
 
-  if (error && error.includes('The Token has expired')) {
+  if (error && (error.includes('The Token has expired') || error.includes('Access Denied'))) {
     router.push('/access-denied');
   }
 
   useEffect(() => {
-    if (token) { dispatch(listUsers({ token, pageNumber, pageSize, column, direction })); }
+    if (token) { dispatch(findAllUsers({ token, pageNumber, pageSize, column, direction, term })); }
   }, [token, dispatch, pageNumber, pageSize, column, direction]);
 
   return (
@@ -59,6 +61,8 @@ function TableUsers() {
       )}
 
       {error && (<Error />)}
+
+      {data?.users.length === 0 && (<NoDataFound title="user" />)}
 
       <tbody>
 

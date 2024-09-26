@@ -17,7 +17,7 @@ function ButtonPaginationJump({ onClick, isDisabled, ariaLabel }: ButtonPaginati
     >
 
       {
-        ariaLabel.includes('next')
+        ariaLabel.includes('last page')
           ? <FaAnglesRight className={ isDisabled ? 'text-gray-400' : 'text-white' } />
           : <FaAnglesLeft className={ isDisabled ? 'text-gray-400' : 'text-white' } />
       }

@@ -5,21 +5,25 @@ import errorIcon from '../../public/errorInputField.svg';
 import successIcon from '../../public/successInputField.svg';
 
 type ErrorInputFieldProps = {
-  errors: string
+  error: string
 };
 
-function ErrorInputField({ errors }:ErrorInputFieldProps) {
-  const isError = errors !== 'Password reset link sent to your email!';
+function ErrorInputField({ error }:ErrorInputFieldProps) {
+  const isError = error !== 'Password reset link sent to your email!';
 
   return (
+
     <p className={ `text-${isError ? 'error' : 'success'} text-xs mt-2 flex items-center` }>
+
       <Image
         className="mr-1"
         src={ isError ? errorIcon : successIcon }
         alt="error"
         width={ 18 }
       />
-      {errors}
+
+      {error}
+
     </p>
 
   );

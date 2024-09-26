@@ -11,7 +11,7 @@ const initialState: SortState = {
 };
 
 const sortSlice = createSlice({
-  name: 'sortSlice',
+  name: 'sort',
   initialState,
   reducers: {
     setColumn(state, action: PayloadAction<string>) {

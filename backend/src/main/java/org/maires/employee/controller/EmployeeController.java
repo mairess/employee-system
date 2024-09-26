@@ -54,6 +54,7 @@ public class EmployeeController {
    * @param pageSize   the page size
    * @param column     the column
    * @param direction  the direction
+   * @param term       the term
    * @return the response entity
    */
   @GetMapping
@@ -62,11 +63,12 @@ public class EmployeeController {
       @RequestParam(required = false, defaultValue = "0") int pageNumber,
       @RequestParam(required = false, defaultValue = "20") int pageSize,
       @RequestParam(required = false, defaultValue = "id") String column,
-      @RequestParam(required = false, defaultValue = "asc") String direction
+      @RequestParam(required = false, defaultValue = "asc") String direction,
+      @RequestParam(required = false, defaultValue = "") String term
   ) {
 
     Map<String, Object> employees = new HashMap<>(
-        employeeService.findAll(pageNumber, pageSize, column, direction)
+        employeeService.findAll(pageNumber, pageSize, column, direction, term)
     );
 
     List<?> data = (List<?>) employees.get("employees");
@@ -81,7 +83,6 @@ public class EmployeeController {
     return ResponseEntity.status(HttpStatus.OK).body(employees);
 
   }
-
 
   /**
    * Find by id employee dto.

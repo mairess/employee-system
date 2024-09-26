@@ -7,12 +7,14 @@ import java.util.Map;
 import org.maires.employee.controller.dto.UserCreationDto;
 import org.maires.employee.entity.User;
 import org.maires.employee.repository.UserRepository;
+import org.maires.employee.repository.specification.UserSpecification;
 import org.maires.employee.service.exception.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -48,16 +50,20 @@ public class UserService implements UserDetailsService {
    * @param pageSize   the page size
    * @param column     the column
    * @param direction  the direction
+   * @param term       the term
    * @return the map
    */
   public Map<String, Object> findAll(int pageNumber, int pageSize, String column,
-      String direction) {
+      String direction, String term) {
 
     Pageable pageable = PageRequest.of(
         pageNumber, pageSize, Sort.by(Sort.Direction.fromString(direction), column)
     );
 
-    Page<User> page = userRepository.findAll(pageable);
+    Page<User> page = userRepository.findAll(
+        Specification.where(UserSpecification.containsTerm(term)),
+        pageable
+    );
 
     return Map.of(
         "users", page.getContent(),
@@ -102,6 +108,11 @@ public class UserService implements UserDetailsService {
    */
   public User create(User user) {
     String hashedPassword = new BCryptPasswordEncoder().encode(user.getPassword());
+
+    if (user.getPhoto() == null || user.getPhoto().isEmpty()) {
+      user.setPhoto("https://robohash.org/user0.png");
+    }
+
     user.setPassword(hashedPassword);
     return userRepository.save(user);
   }

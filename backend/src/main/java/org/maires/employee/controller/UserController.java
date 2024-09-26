@@ -54,6 +54,7 @@ public class UserController {
    * @param pageSize   the page size
    * @param column     the column
    * @param direction  the direction
+   * @param term       the term
    * @return the response entity
    */
   @GetMapping
@@ -62,18 +63,19 @@ public class UserController {
       @RequestParam(required = false, defaultValue = "0") int pageNumber,
       @RequestParam(required = false, defaultValue = "20") int pageSize,
       @RequestParam(required = false, defaultValue = "id") String column,
-      @RequestParam(required = false, defaultValue = "asc") String direction
+      @RequestParam(required = false, defaultValue = "asc") String direction,
+      @RequestParam(required = false, defaultValue = "") String term
   ) {
 
     Map<String, Object> users = new HashMap<>(
-        userService.findAll(pageNumber, pageSize, column, direction)
+        userService.findAll(pageNumber, pageSize, column, direction, term)
     );
 
     List<?> data = (List<?>) users.get("users");
 
     List<UserDto> userDtoList = data
         .stream()
-        .map(employee -> UserDto.fromEntity((User) employee))
+        .map(user -> UserDto.fromEntity((User) user))
         .toList();
 
     users.put("users", userDtoList);

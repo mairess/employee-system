@@ -12,12 +12,13 @@ import Input from './Input';
 import KeepLogged from './KeepLogged';
 import ModalChangePassword from './ModalChangePassword';
 import { AppDispatch, RootState } from '../store';
-import login from '../services/login';
-import { clearError } from '../store/loginSlice';
+import auth from '../services/auth';
+import { clearError } from '../store/authSlice';
 
 function FormLogin() {
   const dispatch = useDispatch<AppDispatch>();
   const { token, loading, error } = useSelector((state: RootState) => state.auth);
+  const { isModalOpen } = useSelector((state: RootState) => state.modalPasswordChange);
   const [formData, setFormaData] = useState({ username: '', password: '' });
   const [isLoaded, setIsLoaded] = useState(false);
   const [keepLogged, setKeepLogged] = useState(false);
@@ -44,7 +45,7 @@ function FormLogin() {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    dispatch(login({ ...formData, keepLogged }));
+    dispatch(auth({ ...formData, keepLogged }));
   };
 
   const handleKeepLogged = () => {
@@ -61,7 +62,7 @@ function FormLogin() {
   return (
     <>
 
-      <ModalChangePassword />
+      {isModalOpen && <ModalChangePassword />}
 
       <form
         className="flex flex-col gap-6 bg-light-neutral-100 border border-light-neutral-400 rounded-lg p-8 shadow-xl"

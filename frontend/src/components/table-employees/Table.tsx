@@ -9,19 +9,21 @@ import TableFooter from './TableFooter';
 import TableHeader from './TableHeader';
 import TableRowEmployees from './TableRow';
 import { AppDispatch, RootState } from '../../store';
-import listEmployees from '../../services/listEmployees';
+import findAllEmployees from '../../services/findAllEmployees';
 import useToken from '../../hooks/useToken';
 import Loading from '../Loading';
 import Error from '../Error';
 import useWindowWidth from '../../hooks/useWindowWidth';
 import getColSpan from '../../utils/handleColSpan';
 import { EmployeeType } from '../../types';
+import NoDataFound from '../NoDataFound';
 
 function TableEmployees() {
   const dispatch = useDispatch<AppDispatch>();
-  const { loading, data, error } = useSelector((state: RootState) => state.employees);
+  const { loading, data, error } = useSelector((state: RootState) => state.findAllEmployees);
   const { pageSize, pageNumber } = useSelector((state: RootState) => state.pagination);
   const { column, direction } = useSelector((state: RootState) => state.sort);
+  const { term } = useSelector((state: RootState) => state.searchTerm);
   const windowWidth = useWindowWidth();
   const token = useToken();
   const router = useRouter();
@@ -31,7 +33,7 @@ function TableEmployees() {
   }
 
   useEffect(() => {
-    if (token) { dispatch(listEmployees({ token, pageNumber, pageSize, column, direction })); }
+    if (token) { dispatch(findAllEmployees({ token, pageNumber, pageSize, column, direction, term })); }
   }, [token, dispatch, pageNumber, pageSize, column, direction]);
 
   return (
@@ -51,6 +53,8 @@ function TableEmployees() {
       )}
 
       {error && (<Error />)}
+
+      {data?.employees.length === 0 && (<NoDataFound title="employee" />)}
 
       <tbody>
         {!loading && !error && data?.employees.map((employee: EmployeeType) => (

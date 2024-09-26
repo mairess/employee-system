@@ -8,6 +8,7 @@ import java.util.Map;
 import org.maires.employee.controller.dto.EmployeeCreationDto;
 import org.maires.employee.entity.Employee;
 import org.maires.employee.repository.EmployeeRepository;
+import org.maires.employee.repository.specification.EmployeeSpecification;
 import org.maires.employee.service.exception.EmployeeNotFoundException;
 import org.maires.employee.service.exception.FutureDateException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 
@@ -48,16 +50,20 @@ public class EmployeeService {
    * @param pageSize   the page size
    * @param column     the column
    * @param direction  the direction
+   * @param term       the term
    * @return the map
    */
   public Map<String, Object> findAll(int pageNumber, int pageSize, String column,
-      String direction) {
+      String direction, String term) {
 
     Pageable pageable = PageRequest.of(
         pageNumber, pageSize, Sort.by(Sort.Direction.fromString(direction), column)
     );
 
-    Page<Employee> page = employeeRepository.findAll(pageable);
+    Page<Employee> page = employeeRepository.findAll(
+        Specification.where(EmployeeSpecification.containsTerm(term)),
+        pageable
+    );
 
     return Map.of(
         "employees", page.getContent(),
@@ -71,7 +77,6 @@ public class EmployeeService {
     );
 
   }
-
 
   /**
    * Find by id employee.
@@ -104,6 +109,10 @@ public class EmployeeService {
 
     if (admission.isAfter(LocalDate.now())) {
       throw new FutureDateException("Admission cannot be future date!");
+    }
+
+    if (employee.getPhoto() == null || employee.getPhoto().isEmpty()) {
+      employee.setPhoto("https://robohash.org/employee0.png");
     }
 
     return employeeRepository.save(employee);

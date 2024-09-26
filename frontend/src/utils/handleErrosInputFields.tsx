@@ -11,15 +11,15 @@ const handleErrosInputFields = (errorData: string | string[] | null, id: string,
     const filteredErrors = errorData
       .filter((err) => (err.toLocaleLowerCase().includes(id.toLocaleLowerCase()) || err.toLowerCase().includes(placeholder.toLowerCase())));
 
-    return (<div className="flex flex-col">{filteredErrors.map((err, index) => (<ErrorInputField key={ index } errors={ err } />))}</div>);
+    return (<div className="flex flex-col">{filteredErrors.map((err, index) => (<ErrorInputField key={ index } error={ err } />))}</div>);
   }
 
   if (errorData.includes(placeholder.toLocaleLowerCase()) || errorData.includes(placeholder)) {
-    return (<div><ErrorInputField errors={ errorData } /></div>);
+    return (<div><ErrorInputField error={ errorData } /></div>);
   }
 
   if (errorData.includes('credentials') || errorData.includes('Password do not match!')) {
-    return (<div><ErrorInputField errors={ errorData } /></div>);
+    return (<div><ErrorInputField error={ errorData } /></div>);
   }
 };
 

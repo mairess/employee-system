@@ -1,23 +1,25 @@
 import { configureStore } from '@reduxjs/toolkit';
-import authReducer from './loginSlice';
-import userReducer from './userSlice';
-import usersReducer from './listUsersSlice';
-import listEmployeesReducer from './listEmployeesSlice';
+import authReducer from './authSlice';
+import registerReducer from './registerSlice';
+import findAllUsersReducer from './findAllUsersSlice';
+import findAllEmployeesReducer from './findAllEmployeesSlice';
 import passwordChangeReducer from './passwordChangeSlice';
-import modalReducer from './modalSlice';
-import pageSizeSlice from './pageSizeSlice';
-import sortSlice from './sortSlice';
+import modalPasswordChangeReducer from './modalPasswordChangeSlice';
+import paginationReducer from './paginationSlice';
+import sortReducer from './sortSlice';
+import searchTermReducer from './searchTermSlice';
 
 const store = configureStore({
   reducer: {
     auth: authReducer,
-    user: userReducer,
-    users: usersReducer,
-    employees: listEmployeesReducer,
-    password: passwordChangeReducer,
-    modal: modalReducer,
-    pagination: pageSizeSlice,
-    sort: sortSlice,
+    register: registerReducer,
+    findAllUsers: findAllUsersReducer,
+    findAllEmployees: findAllEmployeesReducer,
+    passwordChange: passwordChangeReducer,
+    modalPasswordChange: modalPasswordChangeReducer,
+    pagination: paginationReducer,
+    sort: sortReducer,
+    searchTerm: searchTermReducer,
   },
 });
 
