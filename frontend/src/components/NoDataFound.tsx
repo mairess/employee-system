@@ -4,7 +4,11 @@ import noDataFound from '../../public/noDataFound.svg';
 import useWindowWidth from '../hooks/useWindowWidth';
 import getColSpan from '../utils/handleColSpan';
 
-function NoDataFound() {
+type NoDataFoundProps = {
+  title: string
+};
+
+function NoDataFound({ title }: NoDataFoundProps) {
   const windowWidth = useWindowWidth();
 
   return (
@@ -21,7 +25,11 @@ function NoDataFound() {
           </div>
 
           <p className="text-dark-neutral-0 text-center">
-            No data was found
+            No
+            {' '}
+            {title}
+            {' '}
+            was found...
           </p>
 
         </td>

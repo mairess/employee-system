@@ -54,7 +54,7 @@ function TableEmployees() {
 
       {error && (<Error />)}
 
-      {data?.employees.length === 0 && (<NoDataFound />)}
+      {data?.employees.length === 0 && (<NoDataFound title="employee" />)}
 
       <tbody>
         {!loading && !error && data?.employees.map((employee: EmployeeType) => (

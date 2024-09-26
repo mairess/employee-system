@@ -62,7 +62,7 @@ function TableUsers() {
 
       {error && (<Error />)}
 
-      {data?.users.length === 0 && (<NoDataFound />)}
+      {data?.users.length === 0 && (<NoDataFound title="user" />)}
 
       <tbody>
 
