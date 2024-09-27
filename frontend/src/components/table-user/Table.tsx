@@ -26,14 +26,22 @@ function TableUsers() {
   const windowWidth = useWindowWidth();
   const token = useToken();
   const router = useRouter();
-
-  if (error && (error.includes('The Token has expired') || error.includes('Access Denied'))) {
-    router.push('/access-denied');
-  }
+  const isTokenExpired = error && error.includes('The Token has expired');
+  const isUserForbidden = error && error.includes('Access Denied');
 
   useEffect(() => {
     if (token) { dispatch(findAllUsers({ token, pageNumber, pageSize, column, direction, term })); }
   }, [token, dispatch, pageNumber, pageSize, column, direction]);
+
+  useEffect(() => {
+    if (isTokenExpired) {
+      router.push('/');
+    } else if (isUserForbidden) {
+      router.push('/forbidden');
+    }
+  }, [isTokenExpired, isUserForbidden, router]);
+
+  if (isTokenExpired || isUserForbidden) return null;
 
   return (
 
