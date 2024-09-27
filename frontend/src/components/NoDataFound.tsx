@@ -20,7 +20,7 @@ function NoDataFound({ title }: NoDataFoundProps) {
 
           <div className="flex justify-center">
 
-            <Image src={ noDataFound } alt="error" />
+            <Image src={ noDataFound } width={ 300 } alt="error" />
 
           </div>
 
