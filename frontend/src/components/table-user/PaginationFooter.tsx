@@ -31,6 +31,8 @@ function PaginationFooter() {
 
   const isButtonPreviousDisabled = pageNumber === 0 || data.users.length === 0;
 
+  const noDataFound = data.users.length === 0;
+
   const goToNextPage = (newPageNumber: number) => { if (pageNumber < totalPages - 1) { dispatch(setPageNumber(newPageNumber)); } };
 
   const goToPreviousPage = (newPageNumber: number) => { if (pageNumber > 0) { dispatch(setPageNumber(newPageNumber)); } };
@@ -72,7 +74,7 @@ function PaginationFooter() {
             type="number"
             id="currentPage"
             name="currentPage"
-            value={ goToPageNumber }
+            value={ noDataFound ? data.users.length : goToPageNumber }
             onChange={ handleInputChange }
             onKeyDown={ handleKeyDown }
           />
