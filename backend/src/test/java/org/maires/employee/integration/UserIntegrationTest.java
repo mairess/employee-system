@@ -111,6 +111,34 @@ public class UserIntegrationTest {
   }
 
   @Test
+  @DisplayName("Redirects to page forbidden")
+  public void testRedirectionToForbiddenPage() throws Exception {
+    User Ermenegildo = new User("https://robohash.org/179.106.168.38.png", "Ermenegildo Fagundes",
+        "gildo", "gildo@example.com", "123456",
+        Role.USER);
+    User Gilmar = new User("https://robohash.org/179.106.168.48.png", "Gilmar de Castro", "gilmar",
+        "gilmar@example.com", "123456", Role.USER);
+
+    User notAdminUser = new User("https://robohash.org/179877.106.168.58.png",
+        "Not Admin Silva",
+        "notAdmin", "notAdminSilva@example.com", "123456",
+        Role.USER);
+
+    User userNotAdmin = userRepository.save(notAdminUser);
+
+    String tokenNotAdmin = tokenService.generateToken(userNotAdmin.getUsername());
+
+    userRepository.save(Ermenegildo);
+    userRepository.save(Gilmar);
+    String userUrl = "/users";
+
+    mockMvc.perform(get(userUrl)
+            .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenNotAdmin))
+        .andExpect(status().isForbidden())
+        .andExpect(jsonPath("$.message").value("Access Denied"));
+  }
+
+  @Test
   @DisplayName("Retrieval users by search term")
   public void testRetrievalBySearchTerm() throws Exception {
     User Ermenegildo = new User("https://robohash.org/179.106.168.38.png", "Ermenegildo Fagundes",
