@@ -11,9 +11,7 @@ import PaginationHeader from '../../components/table-user/PaginationHeader';
 function DashboardUsers() {
   const isAuthenticated = useAuth();
 
-  if (isAuthenticated === null || !isAuthenticated) {
-    return null;
-  }
+  if (isAuthenticated === null || !isAuthenticated) return null;
 
   return (
     <div className="bg-white px-spacing-regular-20 mb-1">

@@ -19,7 +19,7 @@ function useAuth() {
 
   useEffect(() => {
     if (isAuthenticated === false) {
-      router.push('/access-denied');
+      router.push('/');
     }
   }, [isAuthenticated, router]);
 

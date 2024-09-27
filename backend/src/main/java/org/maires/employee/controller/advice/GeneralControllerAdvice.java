@@ -184,7 +184,7 @@ public class GeneralControllerAdvice {
 
     Map<String, String> response = Map.of("message", exception.getMessage());
 
-    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
+    return ResponseEntity.status(HttpStatus.FORBIDDEN).body(response);
   }
 
 

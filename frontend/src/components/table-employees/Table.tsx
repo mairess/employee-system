@@ -28,13 +28,14 @@ function TableEmployees() {
   const token = useToken();
   const router = useRouter();
 
-  if (error && error.includes('The Token has expired')) {
-    router.push('/access-denied');
-  }
-
   useEffect(() => {
     if (token) { dispatch(findAllEmployees({ token, pageNumber, pageSize, column, direction, term })); }
   }, [token, dispatch, pageNumber, pageSize, column, direction]);
+
+  if (error && error.includes('The Token has expired')) {
+    router.push('/');
+    return null;
+  }
 
   return (
     <table className="w-full shadow-custom-10 rounded-bl-lg rounded-br-lg table-fixed">
