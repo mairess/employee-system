@@ -21,6 +21,7 @@ function AuthFooter({ forgotPassword = null, doNotHaveAccountText, doNotHaveAcco
     event.preventDefault();
     dispatch(openModal());
   };
+
   return (
     <div className="flex flex-col items-center justify-center gap-4">
 

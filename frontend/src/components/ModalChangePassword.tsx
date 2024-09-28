@@ -71,7 +71,7 @@ function ModalChangePassword() {
       >
 
         <button
-          className="absolute top-2 right-2 text-light-neutral-500 hover:text-light-neutral-700"
+          className="absolute top-4 right-4 text-light-neutral-500 hover:text-light-neutral-700"
           onClick={ handleCloseModal }
           aria-label="Fechar modal"
         >

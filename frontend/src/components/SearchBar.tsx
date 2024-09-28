@@ -6,7 +6,6 @@ import Image from 'next/image';
 import { useSelector, useDispatch } from 'react-redux';
 import Link from 'next/link';
 import iconSearch from '../../public/iconSearch.svg';
-import add from '../../public/add.svg';
 import { AppDispatch, RootState } from '../store';
 import { setSearchTerm } from '../store/searchTermSlice';
 import useToken from '../hooks/useToken';
