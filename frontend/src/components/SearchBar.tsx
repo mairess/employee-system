@@ -4,12 +4,15 @@
 
 import Image from 'next/image';
 import { useSelector, useDispatch } from 'react-redux';
+import Link from 'next/link';
 import iconSearch from '../../public/iconSearch.svg';
+import add from '../../public/add.svg';
 import { AppDispatch, RootState } from '../store';
 import { setSearchTerm } from '../store/searchTermSlice';
 import useToken from '../hooks/useToken';
 import findAllEmployees from '../services/findAllEmployees';
 import findAllUsers from '../services/findAllUsers';
+import ButtonAdd from './buttons/ButtonAdd';
 
 type SearchBarProps = {
   title: string
@@ -50,7 +53,26 @@ function SearchBar({ placeholder, title }: SearchBarProps) {
   return (
     <div className="flex flex-col items-center justify-center w-full md:flex-row my-spacing-regular-20">
 
-      <h1 className="w-full mb-spacing-regular-20 text-h1 text-black-neutral">{title}</h1>
+      <div className="flex w-full justify-between items-center md:mr-14">
+
+        <div className="flex gap-2">
+
+          <h1 className="mb-spacing-regular-20 md:m-0 text-h1 text-black-neutral">{title}</h1>
+
+          <Link
+            className="mb-spacing-regular-20 sm:m-0 text-h3 text-black-neutral"
+            href={ title === 'Employees' ? '/dashboard-users' : '/dashboard-employees' }
+          >
+
+            {title === 'Employees' ? 'Users' : 'Employees'}
+
+          </Link>
+
+        </div>
+
+        <ButtonAdd />
+
+      </div>
 
       <div className="w-full relative md:w-5/12">
 
