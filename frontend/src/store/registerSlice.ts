@@ -31,6 +31,9 @@ const registerSlice = createSlice({
     clearError: (state) => {
       state.error = null;
     },
+    resetUser: (state) => {
+      state.user = initialUser;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -49,5 +52,5 @@ const registerSlice = createSlice({
   },
 });
 
-export const { clearError } = registerSlice.actions;
+export const { clearError, resetUser } = registerSlice.actions;
 export default registerSlice.reducer;

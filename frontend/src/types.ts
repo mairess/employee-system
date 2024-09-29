@@ -1,5 +1,5 @@
 export type EmployeeType = {
-  id: number,
+  id: number | null,
   photo: string,
   fullName: string,
   position: string,

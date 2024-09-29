@@ -370,10 +370,10 @@ public class EmployeeIntegrationTest {
     String[] expectedMessages = {
         "Phone cannot be null!",
         "Position cannot be blank!",
-        "FullName cannot be null!",
+        "Full name cannot be null!",
         "Admission cannot be null!",
         "Position cannot be null!",
-        "FullName cannot be blank!",
+        "Full name cannot be blank!",
         "Invalid URL format",
         "Phone cannot be blank!"
     };

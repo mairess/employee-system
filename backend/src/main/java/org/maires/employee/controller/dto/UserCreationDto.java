@@ -43,8 +43,8 @@ public record UserCreationDto(
     @Size(min = 6, message = "Password must be >= 6 characters!")
     String password,
 
-    @NotNull(message = "Role cannot be null! Try ADMIN or TECHNICIAN")
-    @EnumValidator(enumClazz = Role.class, message = "Role must be ADMIN or TECHNICIAN")
+    @NotNull(message = "Role cannot be null! Try ADMIN or USER")
+    @EnumValidator(enumClazz = Role.class, message = "Role must be ADMIN or USER")
     String role
 ) {
 

@@ -8,6 +8,7 @@ import modalPasswordChangeReducer from './modalPasswordChangeSlice';
 import paginationReducer from './paginationSlice';
 import sortReducer from './sortSlice';
 import searchTermReducer from './searchTermSlice';
+import createEmployeeReducer from './createEmployeeSlice';
 
 const store = configureStore({
   reducer: {
@@ -20,6 +21,7 @@ const store = configureStore({
     pagination: paginationReducer,
     sort: sortReducer,
     searchTerm: searchTermReducer,
+    createEmployee: createEmployeeReducer,
   },
 });
 

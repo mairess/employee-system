@@ -2,9 +2,10 @@
 
 'use client';
 
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useDispatch, useSelector } from 'react-redux';
+import Swal from 'sweetalert2';
 import AuthFooter from './AuthFooter';
 import Button from './buttons/Button';
 import Divider from './Divider';
@@ -35,7 +36,23 @@ function FormLogin() {
   }, []);
 
   useEffect(() => {
-    if (token) { router.push('/dashboard-employees'); }
+    if (token) {
+      const Toast = Swal.mixin({
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+          toast.onmouseenter = Swal.stopTimer;
+          toast.onmouseleave = Swal.resumeTimer;
+        },
+      });
+      Toast.fire({
+        icon: 'success',
+        title: 'Signed in successfully',
+      }).then(() => router.push('/dashboard-employees'));
+    }
   }, [token, router]);
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -56,10 +73,11 @@ function FormLogin() {
     });
   };
 
-  // review this maybe interfering on loading page
+  // review this, maybe interfering on loading page
   if (!isLoaded) return null;
 
   return (
+
     <>
 
       {isModalOpen && <ModalChangePassword />}
@@ -115,7 +133,9 @@ function FormLogin() {
         />
 
       </form>
+
     </>
+
   );
 }
 
