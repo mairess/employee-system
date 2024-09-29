@@ -2,7 +2,7 @@
 
 'use client';
 
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useDispatch, useSelector } from 'react-redux';
 import AuthFooter from './AuthFooter';
@@ -60,6 +60,7 @@ function FormLogin() {
   if (!isLoaded) return null;
 
   return (
+
     <>
 
       {isModalOpen && <ModalChangePassword />}
@@ -115,7 +116,9 @@ function FormLogin() {
         />
 
       </form>
+
     </>
+
   );
 }
 
