@@ -7,9 +7,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { FaTimes } from 'react-icons/fa';
 import { useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
+import Swal from 'sweetalert2';
 import Input from './Input';
 import { AppDispatch, RootState } from '../store';
-import { clearError } from '../store/createEmployeeSlice';
+import { clearError, resetEmployee } from '../store/createEmployeeSlice';
 import createEmployee from '../services/createEmployee';
 import Button from './buttons/Button';
 import { closeModal } from '../store/modalPasswordChangeSlice';
@@ -40,6 +41,30 @@ function ModalCreateEmployee() {
       window.removeEventListener('keydown', handleKeyDown);
     };
   }, [isModalOpen, dispatch, pathName]);
+
+  useEffect(() => {
+    if (employee.id) {
+      const Toast = Swal.mixin({
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+          toast.onmouseenter = Swal.stopTimer;
+          toast.onmouseleave = Swal.resumeTimer;
+        },
+      });
+
+      Toast.fire({
+        icon: 'success',
+        title: 'Employee created successfully',
+      }).then(() => {
+        dispatch(closeModal());
+        dispatch(resetEmployee());
+      });
+    }
+  }, [dispatch, employee.id]);
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;

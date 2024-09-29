@@ -30,6 +30,9 @@ const createEmployeeSlice = createSlice({
     clearError: (state) => {
       state.error = null;
     },
+    resetEmployee: (state) => {
+      state.employee = initialEmployee;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -48,5 +51,5 @@ const createEmployeeSlice = createSlice({
   },
 });
 
-export const { clearError } = createEmployeeSlice.actions;
+export const { clearError, resetEmployee } = createEmployeeSlice.actions;
 export default createEmployeeSlice.reducer;

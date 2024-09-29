@@ -2,12 +2,14 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable max-len */
+
 import { useDispatch, useSelector } from 'react-redux';
 import { FaTimes } from 'react-icons/fa';
 import { useEffect, useState } from 'react';
+import Swal from 'sweetalert2';
 import Input from './Input';
 import { AppDispatch, RootState } from '../store';
-import { clearError } from '../store/registerSlice';
+import { clearError, resetUser } from '../store/registerSlice';
 import register from '../services/register';
 import Button from './buttons/Button';
 import { closeModal } from '../store/modalPasswordChangeSlice';
@@ -37,6 +39,30 @@ function ModalCreateUser() {
     };
   }, [isModalOpen, dispatch]);
 
+  useEffect(() => {
+    if (user.id) {
+      const Toast = Swal.mixin({
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+          toast.onmouseenter = Swal.stopTimer;
+          toast.onmouseleave = Swal.resumeTimer;
+        },
+      });
+
+      Toast.fire({
+        icon: 'success',
+        title: 'User created successfully',
+      }).then(() => {
+        dispatch(closeModal());
+        dispatch(resetUser());
+      });
+    }
+  }, [dispatch, user.id]);
+
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
     setFormData((prevData) => ({ ...prevData, [name]: value }));
@@ -52,10 +78,6 @@ function ModalCreateUser() {
     event.preventDefault();
     if (isFormValid) {
       dispatch(register(formData));
-    }
-
-    if (user.id) {
-      dispatch(closeModal());
     }
   };
 
