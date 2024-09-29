@@ -77,7 +77,7 @@ function ModalCreateUser() {
     >
 
       <form
-        className="relative flex flex-col gap-6 bg-light-neutral-100 border border-light-neutral-400 rounded-lg p-8 shadow-xl mt-60 mb-6 sm:m-0"
+        className="relative flex flex-col gap-6 bg-light-neutral-100 border border-light-neutral-400 rounded-lg p-8 shadow-xl"
         onSubmit={ handleSubmit }
         onClick={ handleClickInside }
       >
@@ -88,7 +88,10 @@ function ModalCreateUser() {
           aria-label="Fechar modal"
         >
 
-          <FaTimes size={ 24 } />
+          <FaTimes
+            className="hover:text-dark-neutral-600"
+            size={ 24 }
+          />
 
         </button>
 
@@ -102,7 +105,7 @@ function ModalCreateUser() {
           type="text"
           name="photo"
           id="URL"
-          placeholder="Photo url"
+          placeholder="https://robohash.org/me.png"
           value={ formData.photo }
           error={ error }
           onChange={ handleInputChange }

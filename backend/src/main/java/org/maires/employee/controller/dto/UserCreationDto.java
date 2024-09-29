@@ -44,7 +44,7 @@ public record UserCreationDto(
     String password,
 
     @NotNull(message = "Role cannot be null! Try ADMIN or TECHNICIAN")
-    @EnumValidator(enumClazz = Role.class, message = "Role must be ADMIN or TECHNICIAN")
+    @EnumValidator(enumClazz = Role.class, message = "Role must be ADMIN or USER")
     String role
 ) {
 

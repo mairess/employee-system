@@ -76,7 +76,10 @@ function ModalChangePassword() {
           aria-label="Fechar modal"
         >
 
-          <FaTimes size={ 24 } />
+          <FaTimes
+            className="hover:text-dark-neutral-600"
+            size={ 24 }
+          />
 
         </button>
 
