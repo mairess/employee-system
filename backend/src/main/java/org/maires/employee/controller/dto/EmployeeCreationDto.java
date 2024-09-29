@@ -18,9 +18,9 @@ public record EmployeeCreationDto(
     )
     String photo,
 
-    @NotNull(message = "FullName cannot be null!")
-    @NotBlank(message = "FullName cannot be blank!")
-    @Size(min = 4, message = "FullName must be >= 4 characters!")
+    @NotNull(message = "Full name cannot be null!")
+    @NotBlank(message = "Full name cannot be blank!")
+    @Size(min = 4, message = "Full name must be >= 4 characters!")
     @Pattern(
         regexp = "\\D+",
         message = "FullName must not contain digit!"
