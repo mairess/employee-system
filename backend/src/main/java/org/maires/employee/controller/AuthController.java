@@ -1,9 +1,13 @@
 package org.maires.employee.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
+import java.util.Map;
 import org.maires.employee.controller.dto.AuthDto;
 import org.maires.employee.controller.dto.TokenDto;
 import org.maires.employee.service.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -54,4 +58,32 @@ public class AuthController {
     return new TokenDto(token);
   }
 
+  /**
+   * Logout response entity.
+   *
+   * @param request the request
+   * @return the response entity
+   */
+  @PostMapping("/logout")
+  public ResponseEntity<Map<String, String>> logout(HttpServletRequest request) {
+
+    String authHeader = request.getHeader("Authorization");
+
+    if (authHeader != null && authHeader.startsWith("Bearer ")) {
+
+      String token = authHeader.substring(7);
+
+      tokenService.addToDenyList(token);
+
+      Map<String, String> response = Map.of("message", "Logout successful!");
+
+      return ResponseEntity.status(HttpStatus.OK).body(response);
+
+    }
+
+    Map<String, String> response = Map.of("message", "Token is missing!");
+
+    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+
+  }
 }

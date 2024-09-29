@@ -6,6 +6,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Map;
 import java.util.Optional;
 import org.maires.employee.security.util.HandleExceptions;
 import org.maires.employee.service.TokenService;
@@ -25,6 +26,7 @@ public class JwtFilter extends OncePerRequestFilter {
 
   private final TokenService tokenService;
   private final UserService userService;
+  private final ObjectMapper objectMapper;
 
   /**
    * Instantiates a new Jwt filter.
@@ -33,9 +35,10 @@ public class JwtFilter extends OncePerRequestFilter {
    * @param userService  the person service
    */
   @Autowired
-  public JwtFilter(TokenService tokenService, UserService userService) {
+  public JwtFilter(TokenService tokenService, UserService userService, ObjectMapper objectMapper) {
     this.tokenService = tokenService;
     this.userService = userService;
+    this.objectMapper = objectMapper;
   }
 
   @Override
@@ -45,6 +48,16 @@ public class JwtFilter extends OncePerRequestFilter {
     Optional<String> token = extractToken(request);
 
     if (token.isPresent()) {
+
+      if (tokenService.isInDenyList(token.get())) {
+
+        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        response.setContentType("application/json");
+        response.getWriter()
+            .write(objectMapper.writeValueAsString(Map.of("message", "Toke is in deny list!")));
+        return;
+
+      }
 
       try {
         String subject = tokenService.validateToken(token.get());
