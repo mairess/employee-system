@@ -15,7 +15,7 @@ function ButtonAdd() {
 
   return (
     <button
-      className="bg-success hover:bg-hover-success text-light-neutral-0 shadow-custom-10 rounded-lg p-2 flex"
+      className="bg-success hover:bg-hover-success text-light-neutral-0 shadow-custom-10 rounded-lg px-4 py-2 flex"
       onClick={ handleOpenModal }
     >
 
