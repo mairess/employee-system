@@ -12,7 +12,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.maires.employee.entity.User;
-import org.maires.employee.repository.EmployeeRepository;
+import org.maires.employee.repository.DenyListRepository;
 import org.maires.employee.repository.UserRepository;
 import org.maires.employee.security.Role;
 import org.maires.employee.service.TokenService;
@@ -41,9 +41,10 @@ public class UserIntegrationTest {
       .withDatabaseName("employee-db");
 
   @Autowired
-  EmployeeRepository employeeRepository;
-  @Autowired
   UserRepository userRepository;
+
+  @Autowired
+  DenyListRepository denyListRepository;
 
   @Autowired
   MockMvc mockMvc;
@@ -63,6 +64,7 @@ public class UserIntegrationTest {
   @BeforeEach
   public void cleanUp() {
     userRepository.deleteAll();
+    denyListRepository.deleteAll();
 
     User admin = new User("https://robohash.org/179.106.168.58.png", "Evangevaldo de Lima Soares",
         "vange", "vange@example.com", "123456",
@@ -378,6 +380,27 @@ public class UserIntegrationTest {
     mockMvc.perform(delete(userUrl)
             .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenAdmin))
         .andExpect(status().isNoContent());
+  }
+
+  @Test
+  @DisplayName("Token denied")
+  public void testTokenDenied() throws Exception {
+
+    String authUrl = "/auth/logout";
+
+    mockMvc.perform(post(authUrl)
+            .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenAdmin))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.message").value("Logout successfully!"));
+
+    String userUrl = "/users";
+
+    mockMvc.perform(post(userUrl)
+            .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenAdmin))
+        .andExpect(status().isUnauthorized())
+        .andExpect(jsonPath("$.message").value("Token is denied!"));
+
+
   }
 
 

@@ -72,11 +72,8 @@ public class HandleExceptions {
     }
   }
 
-  private void returnExceptionResponse(
-      HttpServletResponse response,
-      int statusCode,
-      String message
-  ) throws IOException {
+  private void returnExceptionResponse(HttpServletResponse response, int statusCode, String message)
+      throws IOException {
     Map<String, String> exceptionMessage = Map.of("message", message);
     response.setStatus(statusCode);
     response.setContentType("application/json");

@@ -63,13 +63,11 @@ public class TokenService {
   }
 
   private Instant generateExpiration() {
-    return Instant.now()
-        .plus(8, ChronoUnit.HOURS);
+    return Instant.now().plus(8, ChronoUnit.HOURS);
   }
 
   private Instant generateExpiration(int minutes) {
-    return Instant.now()
-        .plus(minutes, ChronoUnit.MINUTES);
+    return Instant.now().plus(minutes, ChronoUnit.MINUTES);
   }
 
   /**
@@ -79,10 +77,7 @@ public class TokenService {
    * @return the string
    */
   public String validateToken(String token) {
-    return JWT.require(algorithm)
-        .build()
-        .verify(token)
-        .getSubject();
+    return JWT.require(algorithm).build().verify(token).getSubject();
   }
 
   /**
@@ -93,8 +88,11 @@ public class TokenService {
   public void addToDenyList(String token) {
 
     LocalDateTime expiration = getExpirationDateFromToken(token);
+
     DenyListToken denyListToken = new DenyListToken(token, expiration);
+
     denyListRepository.save(denyListToken);
+
   }
 
   /**
@@ -104,7 +102,9 @@ public class TokenService {
    * @return the boolean
    */
   public boolean isInDenyList(String token) {
+
     return denyListRepository.existsByToken(token);
+
   }
 
   /**
@@ -114,10 +114,13 @@ public class TokenService {
    * @return the expiration date from token
    */
   public LocalDateTime getExpirationDateFromToken(String token) {
+
     DecodedJWT decodedJwt = JWT.decode(token);
+
     Date expiration = decodedJwt.getExpiresAt();
 
     return expiration.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+
   }
 
 }

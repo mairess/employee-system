@@ -54,7 +54,7 @@ public class JwtFilter extends OncePerRequestFilter {
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         response.setContentType("application/json");
         response.getWriter()
-            .write(objectMapper.writeValueAsString(Map.of("message", "Toke is in deny list!")));
+            .write(objectMapper.writeValueAsString(Map.of("message", "Token is denied!")));
         return;
 
       }

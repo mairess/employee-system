@@ -69,21 +69,13 @@ public class AuthController {
 
     String authHeader = request.getHeader("Authorization");
 
-    if (authHeader != null && authHeader.startsWith("Bearer ")) {
+    String token = authHeader.substring(7);
 
-      String token = authHeader.substring(7);
+    tokenService.addToDenyList(token);
 
-      tokenService.addToDenyList(token);
+    Map<String, String> response = Map.of("message", "Logout successfully!");
 
-      Map<String, String> response = Map.of("message", "Logout successful!");
-
-      return ResponseEntity.status(HttpStatus.OK).body(response);
-
-    }
-
-    Map<String, String> response = Map.of("message", "Token is missing!");
-
-    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+    return ResponseEntity.status(HttpStatus.OK).body(response);
 
   }
 }
