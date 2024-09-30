@@ -259,6 +259,52 @@ public class UserIntegrationTest {
   }
 
   @Test
+  @DisplayName("Create user with photo empty")
+  public void testCreateUserWithPhotoEmpty() throws Exception {
+
+    User newUser = new User("", "Gilmar de Castro", "gilmar",
+        "gilmar@example.com", "123456",
+        Role.USER);
+
+    ObjectMapper objectMapper = new ObjectMapper();
+    String newUserJson = objectMapper.writeValueAsString(newUser);
+    String userUrl = "/users";
+
+    mockMvc.perform(post(userUrl)
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(newUserJson))
+        .andExpect(status().isCreated())
+        .andExpect(jsonPath("$.id").exists())
+        .andExpect(jsonPath("$.photo").value("https://robohash.org/user0.png"))
+        .andExpect(jsonPath("$.fullName").value("Gilmar de Castro"))
+        .andExpect(jsonPath("$.username").value("gilmar"))
+        .andExpect(jsonPath("$.role").value("USER"));
+  }
+
+  @Test
+  @DisplayName("Create user with photo null")
+  public void testCreateUserWithPhotoNull() throws Exception {
+
+    User newUser = new User(null, "Gilmar de Castro", "gilmar",
+        "gilmar@example.com", "123456",
+        Role.USER);
+
+    ObjectMapper objectMapper = new ObjectMapper();
+    String newUserJson = objectMapper.writeValueAsString(newUser);
+    String userUrl = "/users";
+
+    mockMvc.perform(post(userUrl)
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(newUserJson))
+        .andExpect(status().isCreated())
+        .andExpect(jsonPath("$.id").exists())
+        .andExpect(jsonPath("$.photo").value("https://robohash.org/user0.png"))
+        .andExpect(jsonPath("$.fullName").value("Gilmar de Castro"))
+        .andExpect(jsonPath("$.username").value("gilmar"))
+        .andExpect(jsonPath("$.role").value("USER"));
+  }
+
+  @Test
   @DisplayName("Email in use exception")
   public void testEmailAlreadyInUse() throws Exception {
 
