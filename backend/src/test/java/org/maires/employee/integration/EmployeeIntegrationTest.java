@@ -70,7 +70,7 @@ public class EmployeeIntegrationTest {
     User admin = new User("https://robohash.org/179.106.168.19.png", "Gilmar de Castro", "gilmar",
         "gilmar@example.com", "123456", Role.ADMIN);
     userRepository.save(admin);
-    tokenAdmin = tokenService.generateToken(admin.getUsername());
+    tokenAdmin = tokenService.generateToken(admin.getUsername(), admin.getRole().toString());
   }
 
   @Test

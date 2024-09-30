@@ -77,7 +77,7 @@ public class PasswordResetIntegrationTest {
 
     PasswordResetDto passwordResetDto = new PasswordResetDto("segredo123");
 
-    String token = tokenService.generateToken(userAdmin.getEmail());
+    String token = tokenService.generateToken(userAdmin.getEmail(), userAdmin.getRole().toString());
 
     ObjectMapper objectMapper = new ObjectMapper();
     String newPassword = objectMapper.writeValueAsString(passwordResetDto);
@@ -98,7 +98,8 @@ public class PasswordResetIntegrationTest {
 
     PasswordResetDto passwordResetDto = new PasswordResetDto("segredo123");
 
-    String token = tokenService.generateToken("issoNonEcziste@example.com");
+    String token = tokenService.generateToken("issoNonEcziste@example.com",
+        userAdmin.getRole().toString());
 
     ObjectMapper objectMapper = new ObjectMapper();
     String newPassword = objectMapper.writeValueAsString(passwordResetDto);
@@ -120,7 +121,7 @@ public class PasswordResetIntegrationTest {
 
     PasswordResetDto passwordResetDto = new PasswordResetDto("segredo123");
 
-    String token = tokenService.generateToken(userAdmin.getEmail());
+    String token = tokenService.generateToken(userAdmin.getEmail(), userAdmin.getRole().toString());
 
     String invalidToken = token + "a";
 
@@ -142,7 +143,7 @@ public class PasswordResetIntegrationTest {
   @DisplayName("Empty body exception")
   public void testEmptyBodyException() throws Exception {
 
-    String token = tokenService.generateToken(userAdmin.getEmail());
+    String token = tokenService.generateToken(userAdmin.getEmail(), userAdmin.getRole().toString());
 
     String passwordUrl = "/password/reset?token=%s".formatted(token);
 

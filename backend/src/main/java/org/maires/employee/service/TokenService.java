@@ -35,15 +35,18 @@ public class TokenService {
     this.denyListRepository = denyListRepository;
   }
 
+
   /**
    * Generate token string.
    *
    * @param username the username
+   * @param role     the role
    * @return the string
    */
-  public String generateToken(String username) {
+  public String generateToken(String username, String role) {
     return JWT.create()
         .withSubject(username)
+        .withClaim("role", role)
         .withExpiresAt(generateExpiration())
         .sign(algorithm);
   }

@@ -59,7 +59,7 @@ function SearchBar({ placeholder, title }: SearchBarProps) {
           <h1 className="mb-spacing-regular-20 md:m-0 text-h1 text-black-neutral">{title}</h1>
 
           <Link
-            className="mb-spacing-regular-20 sm:m-0 text-h3 text-black-neutral"
+            className="mb-spacing-regular-20 sm:m-0 text-h3 text-link hover:text-link-hover underline"
             href={ title === 'Employees' ? '/dashboard-users' : '/dashboard-employees' }
           >
 

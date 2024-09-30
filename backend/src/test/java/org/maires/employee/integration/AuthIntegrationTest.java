@@ -70,7 +70,7 @@ public class AuthIntegrationTest {
         "gilmar@example.com", hashedPassword,
         Role.ADMIN);
     userRepository.save(admin);
-    tokenAdmin = tokenService.generateToken(admin.getUsername());
+    tokenAdmin = tokenService.generateToken(admin.getUsername(), admin.getRole().toString());
   }
 
   @Test
