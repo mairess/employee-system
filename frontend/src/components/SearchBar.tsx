@@ -5,10 +5,10 @@
 import Image from 'next/image';
 import { useSelector, useDispatch } from 'react-redux';
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
 import iconSearch from '../../public/iconSearch.svg';
 import { AppDispatch, RootState } from '../store';
 import { setSearchTerm } from '../store/searchTermSlice';
-import useToken from '../hooks/useToken';
 import findAllEmployees from '../services/findAllEmployees';
 import findAllUsers from '../services/findAllUsers';
 import ButtonAdd from './buttons/ButtonAdd';
@@ -19,11 +19,18 @@ type SearchBarProps = {
 };
 
 function SearchBar({ placeholder, title }: SearchBarProps) {
+  const [token, setToken] = useState<string | null>(null);
   const { term } = useSelector((state: RootState) => state.searchTerm);
   const { pageSize, pageNumber } = useSelector((state: RootState) => state.pagination);
   const { column, direction } = useSelector((state: RootState) => state.sort);
   const dispatch = useDispatch<AppDispatch>();
-  const token = useToken();
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const tokenStored = localStorage.getItem('token') || sessionStorage.getItem('token') || '';
+      setToken(tokenStored);
+    }
+  }, []);
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     dispatch(setSearchTerm(event.target.value));

@@ -40,13 +40,11 @@ public class TokenService {
    * Generate token string.
    *
    * @param username the username
-   * @param role     the role
    * @return the string
    */
-  public String generateToken(String username, String role) {
+  public String generateToken(String username) {
     return JWT.create()
         .withSubject(username)
-        .withClaim("role", role)
         .withExpiresAt(generateExpiration())
         .sign(algorithm);
   }

@@ -70,7 +70,7 @@ public class EmployeeIntegrationTest {
     User admin = new User("https://robohash.org/179.106.168.19.png", "Gilmar de Castro", "gilmar",
         "gilmar@example.com", "123456", Role.ADMIN);
     userRepository.save(admin);
-    tokenAdmin = tokenService.generateToken(admin.getUsername(), admin.getRole().toString());
+    tokenAdmin = tokenService.generateToken(admin.getUsername());
   }
 
   @Test
@@ -236,11 +236,13 @@ public class EmployeeIntegrationTest {
   @DisplayName("Create employee")
   public void testCreate() throws Exception {
 
+    LocalDate admissionDate = LocalDate.now();
+
     Employee Gahan = new Employee(
         "https://robohash.org/employee170.png",
         "David Gahan",
         "Backend",
-        LocalDate.now(),
+        admissionDate,
         "77912345678"
     );
 
@@ -259,7 +261,7 @@ public class EmployeeIntegrationTest {
         .andExpect(jsonPath("$.photo").value("https://robohash.org/employee170.png"))
         .andExpect(jsonPath("$.fullName").value("David Gahan"))
         .andExpect(jsonPath("$.position").value("Backend"))
-        .andExpect(jsonPath("$.admission").value("2024-09-30"))
+        .andExpect(jsonPath("$.admission").value(admissionDate.toString()))
         .andExpect(jsonPath("$.phone").value("77912345678"));
   }
 
@@ -267,11 +269,13 @@ public class EmployeeIntegrationTest {
   @DisplayName("Create employee with photo empty")
   public void testCreateEmployeeWithPhotoEmpty() throws Exception {
 
+    LocalDate admissionDate = LocalDate.now();
+
     Employee Gahan = new Employee(
         "",
         "David Gahan",
         "Backend",
-        LocalDate.now(),
+        admissionDate,
         "77912345678"
     );
 
@@ -290,7 +294,7 @@ public class EmployeeIntegrationTest {
         .andExpect(jsonPath("$.photo").value("https://robohash.org/employee0.png"))
         .andExpect(jsonPath("$.fullName").value("David Gahan"))
         .andExpect(jsonPath("$.position").value("Backend"))
-        .andExpect(jsonPath("$.admission").value("2024-09-30"))
+        .andExpect(jsonPath("$.admission").value(admissionDate.toString()))
         .andExpect(jsonPath("$.phone").value("77912345678"));
   }
 
@@ -298,11 +302,13 @@ public class EmployeeIntegrationTest {
   @DisplayName("Create employee with photo null")
   public void testCreateEmployeeWithPhotoNull() throws Exception {
 
+    LocalDate admissionDate = LocalDate.now();
+
     Employee Gahan = new Employee(
         null,
         "David Gahan",
         "Backend",
-        LocalDate.now(),
+        admissionDate,
         "77912345678"
     );
 
@@ -321,7 +327,7 @@ public class EmployeeIntegrationTest {
         .andExpect(jsonPath("$.photo").value("https://robohash.org/employee0.png"))
         .andExpect(jsonPath("$.fullName").value("David Gahan"))
         .andExpect(jsonPath("$.position").value("Backend"))
-        .andExpect(jsonPath("$.admission").value("2024-09-30"))
+        .andExpect(jsonPath("$.admission").value(admissionDate.toString()))
         .andExpect(jsonPath("$.phone").value("77912345678"));
   }
 
@@ -329,11 +335,13 @@ public class EmployeeIntegrationTest {
   @DisplayName("Phone in use exception")
   public void testPhoneAlreadyInUse() throws Exception {
 
+    LocalDate admissionDate = LocalDate.now();
+
     Employee Gore = new Employee(
         "https://robohash.org/employee170",
         "Martin Gore",
         "Frontend",
-        LocalDate.now(),
+        admissionDate,
         "77912345678"
     );
 
@@ -343,7 +351,7 @@ public class EmployeeIntegrationTest {
         "https://robohash.org/employee170.png",
         "David Gahan",
         "Backend",
-        LocalDate.now(),
+        admissionDate,
         "77912345678"
     );
 

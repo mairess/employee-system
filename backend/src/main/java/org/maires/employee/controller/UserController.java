@@ -111,7 +111,7 @@ public class UserController {
    * @throws UserNotFoundException the user not found exception
    */
   @GetMapping("/find")
-  @PreAuthorize("hasAuthority('ADMIN')")
+  @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
   public UserDto findUserByUsername(@RequestParam String username) throws UserNotFoundException {
     return UserDto.fromEntity(userService.findByUsername(username));
   }

@@ -59,7 +59,7 @@ public class AuthController {
         .findFirst()
         .orElse(null);
 
-    String token = tokenService.generateToken(auth.getName(), role);
+    String token = tokenService.generateToken(auth.getName());
 
     return new TokenDto(token);
   }

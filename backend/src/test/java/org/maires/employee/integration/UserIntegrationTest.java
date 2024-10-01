@@ -70,8 +70,7 @@ public class UserIntegrationTest {
         "vange", "vange@example.com", "123456",
         Role.ADMIN);
     userAdmin = userRepository.save(admin);
-    tokenAdmin = tokenService.generateToken(userAdmin.getUsername(),
-        userAdmin.getRole().toString());
+    tokenAdmin = tokenService.generateToken(userAdmin.getUsername());
   }
 
   @Test
@@ -129,8 +128,7 @@ public class UserIntegrationTest {
 
     User userNotAdmin = userRepository.save(notAdminUser);
 
-    String tokenNotAdmin = tokenService.generateToken(userNotAdmin.getUsername(),
-        userNotAdmin.getRole().toString());
+    String tokenNotAdmin = tokenService.generateToken(userNotAdmin.getUsername());
 
     userRepository.save(Ermenegildo);
     userRepository.save(Gilmar);
