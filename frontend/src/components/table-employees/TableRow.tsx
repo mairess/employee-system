@@ -69,15 +69,14 @@ function TableRowEmployees({ employee }: TableRowEmployeesProps) {
 
         <td className="hidden lg:table-cell">{formatPhoneNumber(employee.phone)}</td>
 
-        {isAdmin
-         && (
-           <td className="hidden lg:flex justify-center actions gap-2">
+        {isAdmin && (
+          <td className="hidden lg:flex justify-center actions gap-2">
 
-             <ButtonEdit />
-             <ButtonDelete />
+            <ButtonEdit />
+            <ButtonDelete />
 
-           </td>
-         )}
+          </td>
+        )}
 
         <td className="text-right ellipse lg:hidden">
 
@@ -119,10 +118,12 @@ function TableRowEmployees({ employee }: TableRowEmployeesProps) {
 
           <td className="px-spacing-regular-20" colSpan={ getColSpan(windowWidth, isAdmin) }>
 
-            <div className="flex w-full justify-end gap-2">
-              <ButtonEdit />
-              <ButtonDelete />
-            </div>
+            {isAdmin && (
+              <div className="flex w-full justify-end gap-2">
+                <ButtonEdit />
+                <ButtonDelete />
+              </div>
+            )}
 
           </td>
 
