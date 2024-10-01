@@ -2,27 +2,22 @@
 
 'use client';
 
-import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
 import { logout } from '../store/authSlice';
-import { AppDispatch } from '../store';
+import { AppDispatch, RootState } from '../store';
 import useToken from '../hooks/useToken';
 import getTokenSubject from '../utils/getTokenSubject';
-import { UserType } from '../types';
+import findLoggedUser from '../services/findLoggedUser';
+import Loading from './Loading';
 
 function Header() {
   const dispatch = useDispatch<AppDispatch>();
-  const [user, setUser] = useState<UserType>();
+  const { user, loading } = useSelector((state: RootState) => state.findLoggedUser);
   const [username, setUsername] = useState<string>();
   const router = useRouter();
-  const token = useToken();
-
-  const handleLogout = () => {
-    dispatch(logout());
-    router.replace('/');
-  };
+  const token = useToken() || '';
 
   useEffect(() => {
     if (token !== null) {
@@ -33,28 +28,15 @@ function Header() {
   }, [token]);
 
   useEffect(() => {
-    const fetchData = async () => {
-      if (!username) return;
-      const response = await fetch(`http://localhost:8080/users/find?username=${username}`, {
-        method: 'GET',
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+    if (username) {
+      dispatch(findLoggedUser({ token, username }));
+    }
+  }, [dispatch, token, username]);
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        console.error('Error fetching:', errorData.message);
-        return;
-      }
-
-      const userData = await response.json();
-
-      setUser(userData);
-    };
-
-    fetchData();
-  }, [token, username]);
+  const handleLogout = () => {
+    dispatch(logout());
+    router.replace('/');
+  };
 
   if (!token) return null;
 
@@ -66,14 +48,15 @@ function Header() {
       <div
         className="flex items-center gap-2"
       >
-
-        <img
-          className="border rounded-full border-secondary"
-          src={ user?.photo }
-          alt={ user?.fullName }
-          width={ 50 }
-          height={ 50 }
-        />
+        {loading ? <Loading /> : (
+          <img
+            className="border rounded-full border-secondary"
+            src={ user?.photo }
+            alt={ user?.fullName }
+            width={ 50 }
+            height={ 50 }
+          />
+        )}
 
         <div
           className="flex flex-col text-sm"

@@ -9,6 +9,7 @@ import paginationReducer from './paginationSlice';
 import sortReducer from './sortSlice';
 import searchTermReducer from './searchTermSlice';
 import createEmployeeReducer from './createEmployeeSlice';
+import findLoggedUserReducer from './findLoggedUserSlice';
 
 const store = configureStore({
   reducer: {
@@ -16,6 +17,7 @@ const store = configureStore({
     register: registerReducer,
     findAllUsers: findAllUsersReducer,
     findAllEmployees: findAllEmployeesReducer,
+    findLoggedUser: findLoggedUserReducer,
     passwordChange: passwordChangeReducer,
     modalPasswordChange: modalPasswordChangeReducer,
     pagination: paginationReducer,
