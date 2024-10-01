@@ -2,7 +2,7 @@
 import Image from 'next/image';
 import { useDispatch } from 'react-redux';
 import add from '../../../public/add.svg';
-import { openModal } from '../../store/modalPasswordChangeSlice';
+import { openModal } from '../../store/modalSlice';
 import { AppDispatch } from '../../store';
 
 function ButtonAdd() {

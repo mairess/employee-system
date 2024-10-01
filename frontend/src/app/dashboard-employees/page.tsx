@@ -10,9 +10,11 @@ import useAuth from '../../hooks/useAuth';
 import PaginationHeader from '../../components/table-employees/PaginationHeader';
 import ModalCreateEmployee from '../../components/ModalCreateEmployee';
 import { RootState } from '../../store';
+import ModalEditEmployee from '../../components/ModalEditEmployee';
 
 function DashboardEmployees() {
-  const { isModalOpen } = useSelector((state: RootState) => state.modalPasswordChange);
+  const { isModalOpen } = useSelector((state: RootState) => state.modal);
+  const selectedEmployee = useSelector((state: RootState) => state.editEmployee.selectedEmployee);
   const isAuthenticated = useAuth();
 
   if (isAuthenticated === null || !isAuthenticated) return null;
@@ -22,6 +24,8 @@ function DashboardEmployees() {
     <div className="bg-white px-spacing-regular-20 mb-1">
 
       {isModalOpen && <ModalCreateEmployee />}
+
+      {isModalOpen && selectedEmployee && <ModalEditEmployee employee={ selectedEmployee } />}
 
       <SearchBar title="Employees" placeholder="Search Employee" />
 

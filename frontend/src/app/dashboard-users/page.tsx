@@ -12,7 +12,7 @@ import ModalCreateUser from '../../components/ModalCreateUSer';
 import { RootState } from '../../store';
 
 function DashboardUsers() {
-  const { isModalOpen } = useSelector((state: RootState) => state.modalPasswordChange);
+  const { isModalOpen } = useSelector((state: RootState) => state.modal);
   const isAuthenticated = useAuth();
 
   if (isAuthenticated === null || !isAuthenticated) return null;

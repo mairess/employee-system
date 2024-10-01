@@ -13,14 +13,14 @@ import { AppDispatch, RootState } from '../store';
 import { clearError, resetEmployee } from '../store/createEmployeeSlice';
 import createEmployee from '../services/createEmployee';
 import Button from './buttons/Button';
-import { closeModal } from '../store/modalPasswordChangeSlice';
+import { closeModal } from '../store/modalSlice';
 import useToken from '../hooks/useToken';
 
 function ModalCreateEmployee() {
   const dispatch = useDispatch<AppDispatch>();
   const pathName = usePathname();
   const token = useToken();
-  const { isModalOpen } = useSelector((state: RootState) => state.modalPasswordChange);
+  const { isModalOpen } = useSelector((state: RootState) => state.modal);
   const { loading, employee, error } = useSelector((state: RootState) => state.createEmployee);
   const [formData, setFormData] = useState({ photo: '', fullName: '', position: '', admission: '', phone: '' });
 

@@ -4,11 +4,12 @@ import registerReducer from './registerSlice';
 import findAllUsersReducer from './findAllUsersSlice';
 import findAllEmployeesReducer from './findAllEmployeesSlice';
 import passwordChangeReducer from './passwordChangeSlice';
-import modalPasswordChangeReducer from './modalPasswordChangeSlice';
+import modalReducer from './modalSlice';
 import paginationReducer from './paginationSlice';
 import sortReducer from './sortSlice';
 import searchTermReducer from './searchTermSlice';
 import createEmployeeReducer from './createEmployeeSlice';
+import editEmployeeReducer from './editEmployeeSlice';
 import findLoggedUserReducer from './findLoggedUserSlice';
 
 const store = configureStore({
@@ -19,11 +20,12 @@ const store = configureStore({
     findAllEmployees: findAllEmployeesReducer,
     findLoggedUser: findLoggedUserReducer,
     passwordChange: passwordChangeReducer,
-    modalPasswordChange: modalPasswordChangeReducer,
+    modal: modalReducer,
     pagination: paginationReducer,
     sort: sortReducer,
     searchTerm: searchTermReducer,
     createEmployee: createEmployeeReducer,
+    editEmployee: editEmployeeReducer,
   },
 });
 

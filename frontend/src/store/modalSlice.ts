@@ -8,7 +8,7 @@ const initialState: ModalPasswordChangeState = {
   isModalOpen: false,
 };
 
-const modalPasswordChangeSlice = createSlice({
+const modalSlice = createSlice({
   name: 'modalPasswordChange',
   initialState,
   reducers: {
@@ -21,5 +21,5 @@ const modalPasswordChangeSlice = createSlice({
   },
 });
 
-export const { openModal, closeModal } = modalPasswordChangeSlice.actions;
-export default modalPasswordChangeSlice.reducer;
+export const { openModal, closeModal } = modalSlice.actions;
+export default modalSlice.reducer;

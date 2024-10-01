@@ -4,7 +4,7 @@
 
 import Link from 'next/link';
 import { useDispatch } from 'react-redux';
-import { openModal } from '../store/modalPasswordChangeSlice';
+import { openModal } from '../store/modalSlice';
 import { AppDispatch } from '../store';
 
 type AuthFooterProps = {

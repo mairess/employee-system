@@ -79,7 +79,7 @@ function TableRowUsers({ user }: TableRowUsersProps) {
           <button
             onClick={ handleDetail }
           >
-            <Image className="size-8" src={ showDetails ? iconChevronUp : iconChevronDown } alt="button to hide or show row details" />
+            <Image className="size-8" src={ showDetails ? iconChevronDown : iconChevronUp } alt="button to hide or show row details" />
           </button>
 
         </td>

@@ -10,7 +10,7 @@ import Button from './buttons/Button';
 import { AppDispatch, RootState } from '../store';
 import passwordChange from '../services/passwordChange';
 import { clearError } from '../store/passwordChangeSlice';
-import { closeModal } from '../store/modalPasswordChangeSlice';
+import { closeModal } from '../store/modalSlice';
 
 function ModalChangePassword() {
   const dispatch = useDispatch<AppDispatch>();

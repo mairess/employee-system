@@ -6,26 +6,53 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { FaTimes } from 'react-icons/fa';
 import { useEffect, useState } from 'react';
+import { usePathname } from 'next/navigation';
 import Swal from 'sweetalert2';
 import Input from './Input';
 import { AppDispatch, RootState } from '../store';
-import { clearError, resetUser } from '../store/registerSlice';
-import register from '../services/register';
+import { clearError, resetEmployee } from '../store/editEmployeeSlice';
+import editEmployee from '../services/editEmployee';
 import Button from './buttons/Button';
 import { closeModal } from '../store/modalSlice';
+import useToken from '../hooks/useToken';
+import { EmployeeType } from '../types';
+import findAllEmployees from '../services/findAllEmployees';
 
-function ModalCreateUser() {
+type ModalEditEmployeeProps = {
+  employee: EmployeeType
+};
+
+function ModalEditEmployee({ employee }: ModalEditEmployeeProps) {
   const dispatch = useDispatch<AppDispatch>();
-  const { isModalOpen } = useSelector((state: RootState) => state.modalPasswordChange);
-  const { loading, user, error } = useSelector((state: RootState) => state.register);
-  const [formData, setFormData] = useState({ photo: '', fullName: '', username: '', email: '', password: '', role: '' });
-  const [confirmPassword, setConfirmPassword] = useState('');
+  const pathName = usePathname();
+  const token = useToken();
+  const { isModalOpen } = useSelector((state: RootState) => state.modal);
+  const { loading, error } = useSelector((state: RootState) => state.editEmployee);
+  const [formData, setFormData] = useState({ photo: '', fullName: '', position: '', admission: '', phone: '' });
+  const { pageSize, pageNumber } = useSelector((state: RootState) => state.pagination);
+  const { column, direction } = useSelector((state: RootState) => state.sort);
+  const { term } = useSelector((state: RootState) => state.searchTerm);
+
+  const { id, photo, fullName, position, admission, phone } = employee;
+  const idSting = id?.toString() || '';
+
+  useEffect(() => {
+    if (employee) {
+      setFormData({
+        photo,
+        fullName,
+        position,
+        admission,
+        phone,
+      });
+    }
+  }, [employee, id, photo, fullName, position, admission, phone]);
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
         dispatch(closeModal());
-        setFormData({ photo: '', fullName: '', username: '', email: '', password: '', role: '' });
+        setFormData({ photo: '', fullName: '', position: '', admission: '', phone: '' });
         dispatch(clearError());
       }
     };
@@ -37,10 +64,19 @@ function ModalCreateUser() {
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
     };
-  }, [isModalOpen, dispatch]);
+  }, [isModalOpen, dispatch, pathName]);
 
-  useEffect(() => {
-    if (user.id) {
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = event.target;
+    setFormData((prevData) => ({ ...prevData, [name]: value }));
+  };
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    const resultAction = await dispatch(editEmployee({ token, id: idSting, employeeData: formData }));
+
+    if (editEmployee.fulfilled.match(resultAction)) {
       const Toast = Swal.mixin({
         toast: true,
         position: 'top-end',
@@ -55,34 +91,17 @@ function ModalCreateUser() {
 
       Toast.fire({
         icon: 'success',
-        title: 'User created successfully',
+        title: 'Employee created successfully',
       }).then(() => {
         dispatch(closeModal());
-        dispatch(resetUser());
+        dispatch(resetEmployee());
+        if (token) { dispatch(findAllEmployees({ token, pageNumber, pageSize, column, direction, term })); }
       });
-    }
-  }, [dispatch, user.id]);
-
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = event.target;
-    setFormData((prevData) => ({ ...prevData, [name]: value }));
-  };
-
-  const handleConfirmPassword = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setConfirmPassword(event.target.value);
-  };
-
-  const isFormValid = confirmPassword === formData.password;
-
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    if (isFormValid) {
-      dispatch(register(formData));
     }
   };
 
   const handleCloseModal = () => {
-    setFormData({ photo: '', fullName: '', username: '', email: '', password: '', role: '' });
+    setFormData({ photo: '', fullName: '', position: '', admission: '', phone: '' });
     dispatch(closeModal());
     dispatch(clearError());
   };
@@ -92,7 +111,6 @@ function ModalCreateUser() {
   };
 
   return (
-
     <div
       className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 overflow-y-auto"
       onClick={ handleCloseModal }
@@ -120,7 +138,7 @@ function ModalCreateUser() {
         <h1
           className="font-bold text-center text-2xl text-light-neutral-900 my-4"
         >
-          Add new user
+          Edit employee
         </h1>
 
         <Input
@@ -144,61 +162,38 @@ function ModalCreateUser() {
         />
 
         <Input
-          type="text"
-          name="username"
-          id="username"
-          placeholder="Username"
-          value={ formData.username }
+          type="position"
+          name="position"
+          id="position"
+          placeholder="Position"
+          value={ formData.position }
           error={ error }
           onChange={ handleInputChange }
         />
 
         <Input
-          type="email"
-          name="email"
-          id="email"
-          placeholder="Email"
-          value={ formData.email }
+          type="admission"
+          name="admission"
+          id="admission"
+          placeholder="Admission"
+          value={ formData.admission }
           error={ error }
           onChange={ handleInputChange }
         />
 
         <Input
-          type="role"
-          name="role"
-          id="role"
-          placeholder="Role"
-          value={ formData.role }
+          type="phone"
+          name="phone"
+          id="phone"
+          placeholder="Phone"
+          value={ formData.phone }
           error={ error }
           onChange={ handleInputChange }
-        />
-
-        <Input
-          type="password"
-          name="password"
-          id="password"
-          placeholder="Password"
-          value={ formData.password }
-          error={ error }
-          autocomplete="new-password"
-          onChange={ handleInputChange }
-        />
-
-        <Input
-          type="password"
-          name="confirmPassword"
-          id="confirmPassword"
-          placeholder="Confirm password"
-          value={ confirmPassword }
-          error={ formData.password !== confirmPassword ? 'Password do not match!' : null }
-          autocomplete="confirm-password"
-          onChange={ handleConfirmPassword }
         />
 
         <Button
           loading={ loading }
-          text="Create user"
-          disabled={ !isFormValid }
+          text="Edit employee"
         />
 
       </form>
@@ -207,4 +202,4 @@ function ModalCreateUser() {
   );
 }
 
-export default ModalCreateUser;
+export default ModalEditEmployee;
