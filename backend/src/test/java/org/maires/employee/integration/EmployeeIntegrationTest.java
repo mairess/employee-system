@@ -236,11 +236,13 @@ public class EmployeeIntegrationTest {
   @DisplayName("Create employee")
   public void testCreate() throws Exception {
 
+    LocalDate admissionDate = LocalDate.now();
+
     Employee Gahan = new Employee(
         "https://robohash.org/employee170.png",
         "David Gahan",
         "Backend",
-        LocalDate.now(),
+        admissionDate,
         "77912345678"
     );
 
@@ -256,18 +258,90 @@ public class EmployeeIntegrationTest {
             .content(newEmployeeAsString))
         .andExpect(status().isCreated())
         .andExpect(jsonPath("$.id").exists())
-        .andExpect(jsonPath("$.fullName").value("David Gahan"));
+        .andExpect(jsonPath("$.photo").value("https://robohash.org/employee170.png"))
+        .andExpect(jsonPath("$.fullName").value("David Gahan"))
+        .andExpect(jsonPath("$.position").value("Backend"))
+        .andExpect(jsonPath("$.admission").value(admissionDate.toString()))
+        .andExpect(jsonPath("$.phone").value("77912345678"));
+  }
+
+  @Test
+  @DisplayName("Create employee with photo empty")
+  public void testCreateEmployeeWithPhotoEmpty() throws Exception {
+
+    LocalDate admissionDate = LocalDate.now();
+
+    Employee Gahan = new Employee(
+        "",
+        "David Gahan",
+        "Backend",
+        admissionDate,
+        "77912345678"
+    );
+
+    ObjectMapper objectMapper = new ObjectMapper();
+    objectMapper.registerModule(new JavaTimeModule());
+    String newEmployeeAsString = objectMapper.writeValueAsString(Gahan);
+
+    String employeeUrl = "/employees";
+
+    mockMvc.perform(post(employeeUrl)
+            .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenAdmin)
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(newEmployeeAsString))
+        .andExpect(status().isCreated())
+        .andExpect(jsonPath("$.id").exists())
+        .andExpect(jsonPath("$.photo").value("https://robohash.org/employee0.png"))
+        .andExpect(jsonPath("$.fullName").value("David Gahan"))
+        .andExpect(jsonPath("$.position").value("Backend"))
+        .andExpect(jsonPath("$.admission").value(admissionDate.toString()))
+        .andExpect(jsonPath("$.phone").value("77912345678"));
+  }
+
+  @Test
+  @DisplayName("Create employee with photo null")
+  public void testCreateEmployeeWithPhotoNull() throws Exception {
+
+    LocalDate admissionDate = LocalDate.now();
+
+    Employee Gahan = new Employee(
+        null,
+        "David Gahan",
+        "Backend",
+        admissionDate,
+        "77912345678"
+    );
+
+    ObjectMapper objectMapper = new ObjectMapper();
+    objectMapper.registerModule(new JavaTimeModule());
+    String newEmployeeAsString = objectMapper.writeValueAsString(Gahan);
+
+    String employeeUrl = "/employees";
+
+    mockMvc.perform(post(employeeUrl)
+            .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenAdmin)
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(newEmployeeAsString))
+        .andExpect(status().isCreated())
+        .andExpect(jsonPath("$.id").exists())
+        .andExpect(jsonPath("$.photo").value("https://robohash.org/employee0.png"))
+        .andExpect(jsonPath("$.fullName").value("David Gahan"))
+        .andExpect(jsonPath("$.position").value("Backend"))
+        .andExpect(jsonPath("$.admission").value(admissionDate.toString()))
+        .andExpect(jsonPath("$.phone").value("77912345678"));
   }
 
   @Test
   @DisplayName("Phone in use exception")
   public void testPhoneAlreadyInUse() throws Exception {
 
+    LocalDate admissionDate = LocalDate.now();
+
     Employee Gore = new Employee(
         "https://robohash.org/employee170",
         "Martin Gore",
         "Frontend",
-        LocalDate.now(),
+        admissionDate,
         "77912345678"
     );
 
@@ -277,7 +351,7 @@ public class EmployeeIntegrationTest {
         "https://robohash.org/employee170.png",
         "David Gahan",
         "Backend",
-        LocalDate.now(),
+        admissionDate,
         "77912345678"
     );
 

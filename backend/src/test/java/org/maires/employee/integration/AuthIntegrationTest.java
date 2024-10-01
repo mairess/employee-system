@@ -1,12 +1,14 @@
 package org.maires.employee.integration;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.maires.employee.entity.User;
+import org.maires.employee.repository.DenyListRepository;
 import org.maires.employee.repository.EmployeeRepository;
 import org.maires.employee.repository.UserRepository;
 import org.maires.employee.security.Role;
@@ -14,6 +16,7 @@ import org.maires.employee.service.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.context.DynamicPropertyRegistry;
@@ -40,6 +43,9 @@ public class AuthIntegrationTest {
   UserRepository userRepository;
 
   @Autowired
+  DenyListRepository denyListRepository;
+
+  @Autowired
   MockMvc mockMvc;
   String tokenAdmin;
   @Autowired
@@ -56,6 +62,7 @@ public class AuthIntegrationTest {
   public void cleanUp() {
     userRepository.deleteAll();
     employeeRepository.deleteAll();
+    denyListRepository.deleteAll();
 
     String hashedPassword = new BCryptPasswordEncoder().encode("123456");
 
@@ -77,13 +84,26 @@ public class AuthIntegrationTest {
         }
         """;
 
-    String employeeUrl = "/auth/login";
+    String authUrl = "/auth/login";
 
-    mockMvc.perform(post(employeeUrl)
+    mockMvc.perform(post(authUrl)
             .contentType(MediaType.APPLICATION_JSON)
             .content(loginPayload))
         .andExpect(status().isOk());
   }
+
+  @Test
+  @DisplayName("Logout")
+  public void testLogout() throws Exception {
+
+    String authUrl = "/auth/logout";
+
+    mockMvc.perform(post(authUrl)
+            .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenAdmin))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.message").value("Logout successfully!"));
+  }
+
 
   @Test
   @DisplayName("Invalid credentials")
@@ -96,12 +116,11 @@ public class AuthIntegrationTest {
         }
         """;
 
-    String employeeUrl = "/auth/login";
+    String authUrl = "/auth/login";
 
-    mockMvc.perform(post(employeeUrl)
+    mockMvc.perform(post(authUrl)
             .contentType(MediaType.APPLICATION_JSON)
             .content(loginPayload))
         .andExpect(status().isUnauthorized());
   }
-
 }

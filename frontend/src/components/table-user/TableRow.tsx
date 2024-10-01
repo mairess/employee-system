@@ -3,8 +3,8 @@
 
 'use client';
 
+import React, { useState } from 'react';
 import Image from 'next/image';
-import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { UserType } from '../../types';
 import iconChevronDown from '../../../public/iconChevronDown.svg';
@@ -24,8 +24,11 @@ type TableRowUsersProps = {
 function TableRowUsers({ user }: TableRowUsersProps) {
   const dispatch = useDispatch<AppDispatch>();
   const [showDetails, setShowDetails] = useState('hidden');
+  const { user: userLogged } = useSelector((state: RootState) => state.findLoggedUser);
   const { direction, column } = useSelector((state: RootState) => state.sort);
   const windowWidth = useWindowWidth();
+
+  const isAdmin = userLogged?.role === 'ADMIN';
 
   const toggleSortDirection = () => {
     const newDirection = direction === 'asc' ? 'desc' : 'asc';
@@ -109,7 +112,7 @@ function TableRowUsers({ user }: TableRowUsersProps) {
 
         <tr className={ `${showDetails} lg:hidden` }>
 
-          <td className="px-spacing-regular-20" colSpan={ getColSpan(windowWidth) }>
+          <td className="px-spacing-regular-20" colSpan={ getColSpan(windowWidth, isAdmin) }>
 
             <div className="flex w-full justify-end gap-2">
               <ButtonEdit />

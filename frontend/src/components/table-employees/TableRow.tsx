@@ -3,8 +3,8 @@
 
 'use client';
 
+import React, { useState } from 'react';
 import Image from 'next/image';
-import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { EmployeeType } from '../../types';
 import iconChevronDown from '../../../public/iconChevronDown.svg';
@@ -26,7 +26,10 @@ function TableRowEmployees({ employee }: TableRowEmployeesProps) {
   const dispatch = useDispatch<AppDispatch>();
   const [showDetails, setShowDetails] = useState('hidden');
   const { direction, column } = useSelector((state: RootState) => state.sort);
+  const { user } = useSelector((state: RootState) => state.findLoggedUser);
   const windowWidth = useWindowWidth();
+
+  const isAdmin = user?.role === 'ADMIN';
 
   const toggleSortDirection = () => {
     const newDirection = direction === 'asc' ? 'desc' : 'asc';
@@ -66,12 +69,15 @@ function TableRowEmployees({ employee }: TableRowEmployeesProps) {
 
         <td className="hidden lg:table-cell">{formatPhoneNumber(employee.phone)}</td>
 
-        <td className="hidden lg:flex justify-center actions gap-2">
+        {isAdmin
+         && (
+           <td className="hidden lg:flex justify-center actions gap-2">
 
-          <ButtonEdit />
-          <ButtonDelete />
+             <ButtonEdit />
+             <ButtonDelete />
 
-        </td>
+           </td>
+         )}
 
         <td className="text-right ellipse lg:hidden">
 
@@ -111,7 +117,7 @@ function TableRowEmployees({ employee }: TableRowEmployeesProps) {
 
         <tr className={ `${showDetails} lg:hidden` }>
 
-          <td className="px-spacing-regular-20" colSpan={ getColSpan(windowWidth) }>
+          <td className="px-spacing-regular-20" colSpan={ getColSpan(windowWidth, isAdmin) }>
 
             <div className="flex w-full justify-end gap-2">
               <ButtonEdit />

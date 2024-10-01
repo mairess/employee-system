@@ -32,3 +32,9 @@ export type ApiResponseUserType = {
   users: UserType[];
   pagination: PaginationType;
 };
+
+export type DecodedTokenType = {
+  sub: string;
+  role: string;
+  exp: string
+};

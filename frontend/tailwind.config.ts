@@ -70,13 +70,15 @@ const config: Config = {
         'light-neutral-1100': '#091E42',
         'black-neutral': '#1C1C1C',
         'gray-neutral-10': '#DFDFDF',
-        error:'#B00020',
         'hover-error':'#8C001A',
-        success: '#388E3C',
         'hover-success': '#2C6E30',
+        'hover-primary-transparent': '#FFFFFF33',
+        'link': '#2563eb ',
+        'link-hover': '#1e40af ',
+        error:'#B00020',
+        success: '#388E3C',
         primary: '#594ED2',
         secondary: '#5A84C0',
-        'hover-primary-transparent': '#FFFFFF33'
       },
       backgroundImage: {
         'gradient-primary': 'linear-gradient(to bottom, #5A84C0, #594ED2)',

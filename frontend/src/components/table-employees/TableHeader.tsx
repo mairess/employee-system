@@ -13,6 +13,9 @@ import ButtonSort from '../buttons/ButtonSort';
 function TableHeader() {
   const dispatch = useDispatch<AppDispatch>();
   const { direction, column } = useSelector((state: RootState) => state.sort);
+  const { user } = useSelector((state: RootState) => state.findLoggedUser);
+
+  const isAdmin = user?.role === 'ADMIN';
 
   const toggleSortDirection = () => {
     const newDirection = direction === 'asc' ? 'desc' : 'asc';
@@ -75,7 +78,7 @@ function TableHeader() {
 
         </th>
 
-        <th className="text-left hidden lg:table-cell">
+        <th className={ `text-left hidden lg:table-cell ${!isAdmin && 'rounded-tr-lg'}` }>
 
           PHONE
           {' '}
@@ -88,7 +91,7 @@ function TableHeader() {
 
         </th>
 
-        <th className="text-center hidden rounded-tr-lg lg:table-cell actions">ACTIONS</th>
+        {isAdmin && <th className="text-center hidden rounded-tr-lg lg:table-cell actions">ACTIONS</th>}
 
         <th className="rounded-tr-lg ellipse lg:hidden">
 

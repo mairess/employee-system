@@ -5,10 +5,10 @@
 import Image from 'next/image';
 import { useSelector, useDispatch } from 'react-redux';
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
 import iconSearch from '../../public/iconSearch.svg';
 import { AppDispatch, RootState } from '../store';
 import { setSearchTerm } from '../store/searchTermSlice';
-import useToken from '../hooks/useToken';
 import findAllEmployees from '../services/findAllEmployees';
 import findAllUsers from '../services/findAllUsers';
 import ButtonAdd from './buttons/ButtonAdd';
@@ -19,11 +19,21 @@ type SearchBarProps = {
 };
 
 function SearchBar({ placeholder, title }: SearchBarProps) {
+  const dispatch = useDispatch<AppDispatch>();
+  const [token, setToken] = useState<string | null>(null);
   const { term } = useSelector((state: RootState) => state.searchTerm);
   const { pageSize, pageNumber } = useSelector((state: RootState) => state.pagination);
   const { column, direction } = useSelector((state: RootState) => state.sort);
-  const dispatch = useDispatch<AppDispatch>();
-  const token = useToken();
+  const { user } = useSelector((state: RootState) => state.findLoggedUser);
+
+  const isAdmin = user?.role === 'ADMIN';
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const tokenStored = localStorage.getItem('token') || sessionStorage.getItem('token') || '';
+      setToken(tokenStored);
+    }
+  }, []);
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     dispatch(setSearchTerm(event.target.value));
@@ -58,18 +68,20 @@ function SearchBar({ placeholder, title }: SearchBarProps) {
 
           <h1 className="mb-spacing-regular-20 md:m-0 text-h1 text-black-neutral">{title}</h1>
 
-          <Link
-            className="mb-spacing-regular-20 sm:m-0 text-h3 text-black-neutral"
-            href={ title === 'Employees' ? '/dashboard-users' : '/dashboard-employees' }
-          >
+          {isAdmin && (
+            <Link
+              className="mb-spacing-regular-20 sm:m-0 text-h3 text-link hover:text-link-hover underline"
+              href={ title === 'Employees' ? '/dashboard-users' : '/dashboard-employees' }
+            >
 
-            {title === 'Employees' ? 'Users' : 'Employees'}
+              {title === 'Employees' ? 'Users' : 'Employees'}
 
-          </Link>
+            </Link>
+          )}
 
         </div>
 
-        <ButtonAdd />
+        {isAdmin && <ButtonAdd />}
 
       </div>
 
