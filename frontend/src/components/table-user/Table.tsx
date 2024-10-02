@@ -23,9 +23,12 @@ function TableUsers() {
   const { pageSize, pageNumber } = useSelector((state: RootState) => state.pagination);
   const { column, direction } = useSelector((state: RootState) => state.sort);
   const { term } = useSelector((state: RootState) => state.searchTerm);
+  const { user: userLogged } = useSelector((state: RootState) => state.findLoggedUser);
   const windowWidth = useWindowWidth();
   const token = useToken();
   const router = useRouter();
+
+  const isAdmin = userLogged?.role === 'ADMIN';
   const isTokenExpired = error && error.includes('The Token has expired');
   const isUserForbidden = error && error.includes('Access Denied');
 
@@ -55,7 +58,7 @@ function TableUsers() {
 
           <tr>
 
-            <td colSpan={ getColSpan(windowWidth) } className="p-10">
+            <td colSpan={ getColSpan(windowWidth, isAdmin) } className="p-10">
 
               <Loading />
 
