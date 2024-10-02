@@ -5,36 +5,36 @@
 import { useEffect, useState } from 'react';
 import { FaTimes } from 'react-icons/fa';
 import { useDispatch, useSelector } from 'react-redux';
-import Input from './Input';
-import Button from './buttons/Button';
-import { AppDispatch, RootState } from '../store';
-import passwordChange from '../services/passwordChange';
-import { clearError } from '../store/passwordChangeSlice';
-import { closeModal } from '../store/modalSlice';
+import Input from '../Input';
+import Button from '../buttons/Button';
+import { AppDispatch, RootState } from '../../store';
+import passwordChange from '../../services/passwordChange';
+import { clearError } from '../../store/passwordChangeSlice';
+import { closeModalPasswordChange } from '../../store/modalPasswordChangeSlice';
 
 function ModalChangePassword() {
   const dispatch = useDispatch<AppDispatch>();
-  const { isModalOpen } = useSelector((state: RootState) => state.modalPasswordChange);
+  const { isModalPasswordChangeOpen } = useSelector((state: RootState) => state.modalPasswordChange);
   const { loading, message, error } = useSelector((state: RootState) => state.passwordChange);
   const [formData, setFormData] = useState({ email: '' });
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
-        dispatch(closeModal());
+        dispatch(closeModalPasswordChange());
         setFormData({ email: '' });
         dispatch(clearError());
       }
     };
 
-    if (isModalOpen) {
+    if (isModalPasswordChangeOpen) {
       window.addEventListener('keydown', handleKeyDown);
     }
 
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
     };
-  }, [isModalOpen, dispatch]);
+  }, [isModalPasswordChangeOpen, dispatch]);
 
   const isFormValid = !formData.email;
 
@@ -44,7 +44,7 @@ function ModalChangePassword() {
 
   const handleCloseModal = () => {
     setFormData({ email: '' });
-    dispatch(closeModal());
+    dispatch(closeModalPasswordChange());
     dispatch(clearError());
   };
 

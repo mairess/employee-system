@@ -8,11 +8,14 @@ import SearchBar from '../../components/SearchBar';
 import Table from '../../components/table-user/Table';
 import useAuth from '../../hooks/useAuth';
 import PaginationHeader from '../../components/table-user/PaginationHeader';
-import ModalCreateUser from '../../components/ModalCreateUSer';
+import ModalCreateUser from '../../components/modal/ModalCreateUSer';
 import { RootState } from '../../store';
+import ModalEditUser from '../../components/modal/ModalEditUser';
 
 function DashboardUsers() {
-  const { isModalOpen } = useSelector((state: RootState) => state.modal);
+  const { isModalCreateUserOpen } = useSelector((state: RootState) => state.modalCreateUser);
+  const { isModalEditUserOpen } = useSelector((state: RootState) => state.modalEditUser);
+  const selectedUser = useSelector((state: RootState) => state.editUser.selectedUser);
   const isAuthenticated = useAuth();
 
   if (isAuthenticated === null || !isAuthenticated) return null;
@@ -20,7 +23,9 @@ function DashboardUsers() {
   return (
     <div className="bg-white px-spacing-regular-20 mb-1">
 
-      {isModalOpen && <ModalCreateUser />}
+      {isModalCreateUserOpen && <ModalCreateUser />}
+
+      {isModalEditUserOpen && selectedUser && <ModalEditUser user={ selectedUser } />}
 
       <SearchBar title="Users" placeholder="Search User" />
 

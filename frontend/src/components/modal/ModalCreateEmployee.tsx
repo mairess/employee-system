@@ -8,39 +8,39 @@ import { FaTimes } from 'react-icons/fa';
 import { useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import Swal from 'sweetalert2';
-import Input from './Input';
-import { AppDispatch, RootState } from '../store';
-import { clearError, resetEmployee } from '../store/createEmployeeSlice';
-import createEmployee from '../services/createEmployee';
-import Button from './buttons/Button';
-import { closeModal } from '../store/modalSlice';
-import useToken from '../hooks/useToken';
+import Input from '../Input';
+import { AppDispatch, RootState } from '../../store';
+import { clearError, resetEmployee } from '../../store/createEmployeeSlice';
+import createEmployee from '../../services/createEmployee';
+import Button from '../buttons/Button';
+import { closeModalCreateEmployee } from '../../store/modalCreateEmployeeSlice';
+import useToken from '../../hooks/useToken';
 
 function ModalCreateEmployee() {
   const dispatch = useDispatch<AppDispatch>();
   const pathName = usePathname();
   const token = useToken();
-  const { isModalOpen } = useSelector((state: RootState) => state.modal);
+  const { isModalCreateEmployeeOpen } = useSelector((state: RootState) => state.modalCreateEmployee);
   const { loading, employee, error } = useSelector((state: RootState) => state.createEmployee);
   const [formData, setFormData] = useState({ photo: '', fullName: '', position: '', admission: '', phone: '' });
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
-        dispatch(closeModal());
+        dispatch(closeModalCreateEmployee());
         setFormData({ photo: '', fullName: '', position: '', admission: '', phone: '' });
         dispatch(clearError());
       }
     };
 
-    if (isModalOpen) {
+    if (isModalCreateEmployeeOpen) {
       window.addEventListener('keydown', handleKeyDown);
     }
 
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
     };
-  }, [isModalOpen, dispatch, pathName]);
+  }, [isModalCreateEmployeeOpen, dispatch, pathName]);
 
   useEffect(() => {
     if (employee.id) {
@@ -60,7 +60,7 @@ function ModalCreateEmployee() {
         icon: 'success',
         title: 'Employee created successfully',
       }).then(() => {
-        dispatch(closeModal());
+        dispatch(closeModalCreateEmployee());
         dispatch(resetEmployee());
       });
     }
@@ -76,13 +76,13 @@ function ModalCreateEmployee() {
     dispatch(createEmployee({ employeeData: formData, token }));
 
     if (employee.id) {
-      dispatch(closeModal());
+      dispatch(closeModalCreateEmployee());
     }
   };
 
   const handleCloseModal = () => {
     setFormData({ photo: '', fullName: '', position: '', admission: '', phone: '' });
-    dispatch(closeModal());
+    dispatch(closeModalCreateEmployee());
     dispatch(clearError());
   };
 

@@ -16,6 +16,8 @@ import ButtonEdit from '../buttons/ButtonEdit';
 import ButtonDelete from '../buttons/ButtonDelete';
 import { AppDispatch, RootState } from '../../store';
 import { setColumn, setDirection } from '../../store/sortSlice';
+import { setSelectedUser } from '../../store/editUserSlice';
+import { openModalEditUser } from '../../store/modalEditUserSlice';
 
 type TableRowUsersProps = {
   user: UserType
@@ -48,6 +50,11 @@ function TableRowUsers({ user }: TableRowUsersProps) {
     setShowDetails(showDetails === 'hidden' ? '' : 'hidden');
   };
 
+  const handleEdit = () => {
+    dispatch(setSelectedUser(user));
+    dispatch(openModalEditUser());
+  };
+
   return (
     <>
 
@@ -69,7 +76,7 @@ function TableRowUsers({ user }: TableRowUsersProps) {
 
         <td className="hidden lg:flex justify-center actions gap-2">
 
-          <ButtonEdit />
+          <ButtonEdit onClick={ handleEdit } />
           <ButtonDelete />
 
         </td>
@@ -115,7 +122,7 @@ function TableRowUsers({ user }: TableRowUsersProps) {
           <td className="px-spacing-regular-20" colSpan={ getColSpan(windowWidth, isAdmin) }>
 
             <div className="flex w-full justify-end gap-2">
-              <ButtonEdit />
+              <ButtonEdit onClick={ handleEdit } />
               <ButtonDelete />
             </div>
 

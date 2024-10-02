@@ -17,7 +17,7 @@ import ButtonDelete from '../buttons/ButtonDelete';
 import ButtonEdit from '../buttons/ButtonEdit';
 import { AppDispatch, RootState } from '../../store';
 import { setColumn, setDirection } from '../../store/sortSlice';
-import { openModal } from '../../store/modalSlice';
+import { openModalEditEmployee } from '../../store/modalEditEmployeeSlice';
 import { setSelectedEmployee } from '../../store/editEmployeeSlice';
 
 type TableRowEmployeesProps = {
@@ -51,9 +51,9 @@ function TableRowEmployees({ employee }: TableRowEmployeesProps) {
     setShowDetails(showDetails === 'hidden' ? '' : 'hidden');
   };
 
-  const handleEditClick = () => {
+  const handleEdit = () => {
     dispatch(setSelectedEmployee(employee));
-    dispatch(openModal());
+    dispatch(openModalEditEmployee());
   };
 
   return (
@@ -79,7 +79,7 @@ function TableRowEmployees({ employee }: TableRowEmployeesProps) {
         {isAdmin && (
           <td className="hidden lg:flex justify-center actions gap-2">
 
-            <ButtonEdit onClick={ handleEditClick } />
+            <ButtonEdit onClick={ handleEdit } />
             <ButtonDelete />
 
           </td>
@@ -127,7 +127,7 @@ function TableRowEmployees({ employee }: TableRowEmployeesProps) {
 
             {isAdmin && (
               <div className="flex w-full justify-end gap-2">
-                <ButtonEdit onClick={ handleEditClick } />
+                <ButtonEdit onClick={ handleEdit } />
                 <ButtonDelete />
               </div>
             )}

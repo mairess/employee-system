@@ -15,7 +15,7 @@ const initialState: FindLoggedUserState = {
 };
 
 const findLoggedUserSlice = createSlice({
-  name: 'allEmployees',
+  name: 'findLoggedUser',
   initialState,
   reducers: {},
   extraReducers: (builder) => {

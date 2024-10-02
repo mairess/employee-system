@@ -4,7 +4,7 @@
 
 import Link from 'next/link';
 import { useDispatch } from 'react-redux';
-import { openModal } from '../store/modalSlice';
+import { openModalPasswordChange } from '../store/modalPasswordChangeSlice';
 import { AppDispatch } from '../store';
 
 type AuthFooterProps = {
@@ -19,7 +19,7 @@ function AuthFooter({ forgotPassword = null, doNotHaveAccountText, doNotHaveAcco
 
   const handleOpenModal = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
-    dispatch(openModal());
+    dispatch(openModalPasswordChange());
   };
 
   return (

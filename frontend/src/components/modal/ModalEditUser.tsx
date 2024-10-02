@@ -6,65 +6,64 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { FaTimes } from 'react-icons/fa';
 import { useEffect, useState } from 'react';
-import { usePathname } from 'next/navigation';
 import Swal from 'sweetalert2';
-import Input from './Input';
-import { AppDispatch, RootState } from '../store';
-import { clearError, resetEmployee } from '../store/editEmployeeSlice';
-import editEmployee from '../services/editEmployee';
-import Button from './buttons/Button';
-import { closeModal } from '../store/modalSlice';
-import useToken from '../hooks/useToken';
-import { EmployeeType } from '../types';
-import findAllEmployees from '../services/findAllEmployees';
+import Input from '../Input';
+import { AppDispatch, RootState } from '../../store';
+import { clearError, resetUser } from '../../store/editUserSlice';
+import Button from '../buttons/Button';
+import { closeModalEditUser } from '../../store/modalEditUserSlice';
+import editUser from '../../services/editUser';
+import useToken from '../../hooks/useToken';
+import findAllUsers from '../../services/findAllUsers';
+import { UserType } from '../../types';
 
-type ModalEditEmployeeProps = {
-  employee: EmployeeType
+type ModalEditUserProps = {
+  user: UserType
 };
 
-function ModalEditEmployee({ employee }: ModalEditEmployeeProps) {
+function ModalEditUser({ user }: ModalEditUserProps) {
   const dispatch = useDispatch<AppDispatch>();
-  const pathName = usePathname();
-  const token = useToken();
-  const { isModalOpen } = useSelector((state: RootState) => state.modal);
-  const { loading, error } = useSelector((state: RootState) => state.editEmployee);
-  const [formData, setFormData] = useState({ photo: '', fullName: '', position: '', admission: '', phone: '' });
+  const { isModalEditUserOpen } = useSelector((state: RootState) => state.modalEditUser);
+  const { loading, error } = useSelector((state: RootState) => state.editUser);
   const { pageSize, pageNumber } = useSelector((state: RootState) => state.pagination);
   const { column, direction } = useSelector((state: RootState) => state.sort);
+  const [formData, setFormData] = useState({ photo: '', fullName: '', username: '', email: '', role: '' });
   const { term } = useSelector((state: RootState) => state.searchTerm);
+  const token = useToken();
 
-  const { id, photo, fullName, position, admission, phone } = employee;
-  const idSting = id?.toString() || '';
+  const { id, photo, fullName, username, email, role } = user;
+
+  const idString = id?.toString() || '';
 
   useEffect(() => {
-    if (employee) {
+    if (user) {
       setFormData({
         photo,
         fullName,
-        position,
-        admission,
-        phone,
+        username,
+        email,
+        role,
       });
     }
-  }, [employee, id, photo, fullName, position, admission, phone]);
+  }, [user, id, photo, fullName, username, email, role]);
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
-        dispatch(closeModal());
-        setFormData({ photo: '', fullName: '', position: '', admission: '', phone: '' });
+        dispatch(closeModalEditUser());
+        setFormData({ photo: '', fullName: '', username: '', email: '', role: '' });
         dispatch(clearError());
       }
     };
 
-    if (isModalOpen) {
+    if (isModalEditUserOpen) {
       window.addEventListener('keydown', handleKeyDown);
     }
 
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
     };
-  }, [isModalOpen, dispatch, pathName]);
+  }, [isModalEditUserOpen, dispatch]);
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
@@ -74,9 +73,9 @@ function ModalEditEmployee({ employee }: ModalEditEmployeeProps) {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    const resultAction = await dispatch(editEmployee({ token, id: idSting, employeeData: formData }));
+    const resultAction = await dispatch(editUser({ token, id: idString, userData: formData }));
 
-    if (editEmployee.fulfilled.match(resultAction)) {
+    if (editUser.fulfilled.match(resultAction)) {
       const Toast = Swal.mixin({
         toast: true,
         position: 'top-end',
@@ -91,18 +90,18 @@ function ModalEditEmployee({ employee }: ModalEditEmployeeProps) {
 
       Toast.fire({
         icon: 'success',
-        title: 'Employee created successfully',
+        title: 'User edited successfully',
       }).then(() => {
-        dispatch(closeModal());
-        dispatch(resetEmployee());
-        if (token) { dispatch(findAllEmployees({ token, pageNumber, pageSize, column, direction, term })); }
+        dispatch(closeModalEditUser());
+        dispatch(resetUser());
+        if (token) { dispatch(findAllUsers({ token, pageNumber, pageSize, column, direction, term })); }
       });
     }
   };
 
   const handleCloseModal = () => {
-    setFormData({ photo: '', fullName: '', position: '', admission: '', phone: '' });
-    dispatch(closeModal());
+    setFormData({ photo: '', fullName: '', username: '', email: '', role: '' });
+    dispatch(closeModalEditUser());
     dispatch(clearError());
   };
 
@@ -111,6 +110,7 @@ function ModalEditEmployee({ employee }: ModalEditEmployeeProps) {
   };
 
   return (
+
     <div
       className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 overflow-y-auto"
       onClick={ handleCloseModal }
@@ -138,7 +138,7 @@ function ModalEditEmployee({ employee }: ModalEditEmployeeProps) {
         <h1
           className="font-bold text-center text-2xl text-light-neutral-900 my-4"
         >
-          Edit employee
+          Edit user
         </h1>
 
         <Input
@@ -162,38 +162,38 @@ function ModalEditEmployee({ employee }: ModalEditEmployeeProps) {
         />
 
         <Input
-          type="position"
-          name="position"
-          id="position"
-          placeholder="Position"
-          value={ formData.position }
+          type="text"
+          name="username"
+          id="username"
+          placeholder="Username"
+          value={ formData.username }
           error={ error }
           onChange={ handleInputChange }
         />
 
         <Input
-          type="admission"
-          name="admission"
-          id="admission"
-          placeholder="Admission"
-          value={ formData.admission }
+          type="email"
+          name="email"
+          id="email"
+          placeholder="Email"
+          value={ formData.email }
           error={ error }
           onChange={ handleInputChange }
         />
 
         <Input
-          type="phone"
-          name="phone"
-          id="phone"
-          placeholder="Phone"
-          value={ formData.phone }
+          type="role"
+          name="role"
+          id="role"
+          placeholder="Role"
+          value={ formData.role }
           error={ error }
           onChange={ handleInputChange }
         />
 
         <Button
           loading={ loading }
-          text="Edit employee"
+          text="Edit user"
         />
 
       </form>
@@ -202,4 +202,4 @@ function ModalEditEmployee({ employee }: ModalEditEmployeeProps) {
   );
 }
 
-export default ModalEditEmployee;
+export default ModalEditUser;

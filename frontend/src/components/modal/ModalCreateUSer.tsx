@@ -7,16 +7,16 @@ import { useDispatch, useSelector } from 'react-redux';
 import { FaTimes } from 'react-icons/fa';
 import { useEffect, useState } from 'react';
 import Swal from 'sweetalert2';
-import Input from './Input';
-import { AppDispatch, RootState } from '../store';
-import { clearError, resetUser } from '../store/registerSlice';
-import register from '../services/register';
-import Button from './buttons/Button';
-import { closeModal } from '../store/modalSlice';
+import Input from '../Input';
+import { AppDispatch, RootState } from '../../store';
+import { clearError, resetUser } from '../../store/registerSlice';
+import register from '../../services/register';
+import Button from '../buttons/Button';
+import { closeModalCreateUser } from '../../store/modalCreateUserSlice';
 
 function ModalCreateUser() {
   const dispatch = useDispatch<AppDispatch>();
-  const { isModalOpen } = useSelector((state: RootState) => state.modalPasswordChange);
+  const { isModalCreateUserOpen } = useSelector((state: RootState) => state.modalCreateUser);
   const { loading, user, error } = useSelector((state: RootState) => state.register);
   const [formData, setFormData] = useState({ photo: '', fullName: '', username: '', email: '', password: '', role: '' });
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -24,20 +24,20 @@ function ModalCreateUser() {
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
-        dispatch(closeModal());
+        dispatch(closeModalCreateUser());
         setFormData({ photo: '', fullName: '', username: '', email: '', password: '', role: '' });
         dispatch(clearError());
       }
     };
 
-    if (isModalOpen) {
+    if (isModalCreateUserOpen) {
       window.addEventListener('keydown', handleKeyDown);
     }
 
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
     };
-  }, [isModalOpen, dispatch]);
+  }, [isModalCreateUserOpen, dispatch]);
 
   useEffect(() => {
     if (user.id) {
@@ -57,7 +57,7 @@ function ModalCreateUser() {
         icon: 'success',
         title: 'User created successfully',
       }).then(() => {
-        dispatch(closeModal());
+        dispatch(closeModalCreateUser());
         dispatch(resetUser());
       });
     }
@@ -83,7 +83,7 @@ function ModalCreateUser() {
 
   const handleCloseModal = () => {
     setFormData({ photo: '', fullName: '', username: '', email: '', password: '', role: '' });
-    dispatch(closeModal());
+    dispatch(closeModalCreateUser());
     dispatch(clearError());
   };
 
