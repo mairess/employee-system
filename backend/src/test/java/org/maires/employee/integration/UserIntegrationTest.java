@@ -413,6 +413,34 @@ public class UserIntegrationTest {
   }
 
   @Test
+  @DisplayName("Update user without password")
+  public void testUpdateUserWithoutPassword() throws Exception {
+
+    User admin = new User("https://robohash.org/179.106.168.58.png", "Evangevaldo de Lima Soares",
+        "vange", "vange@example.com", "123456",
+        Role.ADMIN);
+
+    User updatedUser = new User("https://robohash.org/179.106.168.66.png", "Gilmar de Castro",
+        "gilmar", "gilmar@example.com", "123456",
+        Role.USER);
+
+    ObjectMapper objectMapper = new ObjectMapper();
+    String updatedUserJson = objectMapper.writeValueAsString(updatedUser);
+    String userUrl = "/users/%s".formatted(userAdmin.getId());
+
+    mockMvc.perform(put(userUrl)
+            .header(HttpHeaders.AUTHORIZATION, "Bearer " + tokenAdmin)
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(updatedUserJson))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.photo").value("https://robohash.org/179.106.168.66.png"))
+        .andExpect(jsonPath("$.fullName").value("Gilmar de Castro"))
+        .andExpect(jsonPath("$.username").value("gilmar"))
+        .andExpect(jsonPath("$.email").value("gilmar@example.com"))
+        .andExpect(jsonPath("$.role").value("USER"));
+  }
+
+  @Test
   @DisplayName("Delete user")
   public void testDelete() throws Exception {
 

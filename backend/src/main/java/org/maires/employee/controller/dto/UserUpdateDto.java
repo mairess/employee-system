@@ -5,7 +5,6 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
-import org.maires.employee.entity.User;
 import org.maires.employee.security.Role;
 import org.maires.employee.validation.EnumValidator;
 
@@ -43,22 +42,5 @@ public record UserUpdateDto(
     @EnumValidator(enumClazz = Role.class, message = "Role must be ADMIN or USER")
     String role
 ) {
-
-
-  /**
-   * To entity user.
-   *
-   * @param existingUser the existing user
-   * @return the user
-   */
-  public User toEntity(User existingUser) {
-    existingUser.setPhoto(photo);
-    existingUser.setFullName(fullName);
-    existingUser.setUsername(username);
-    existingUser.setEmail(email);
-    existingUser.setRole(Role.valueOf(role.toUpperCase()));
-
-    return existingUser;
-  }
 
 }
