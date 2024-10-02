@@ -6,6 +6,7 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 import { useDispatch, useSelector } from 'react-redux';
+import Swal from 'sweetalert2';
 import { EmployeeType } from '../../types';
 import iconChevronDown from '../../../public/iconChevronDown.svg';
 import iconChevronUp from '../../../public/iconChevronUp.svg';
@@ -19,6 +20,8 @@ import { AppDispatch, RootState } from '../../store';
 import { setColumn, setDirection } from '../../store/sortSlice';
 import { openModalEditEmployee } from '../../store/modalEditEmployeeSlice';
 import { setSelectedEmployee } from '../../store/editEmployeeSlice';
+import useToken from '../../hooks/useToken';
+import findAllEmployees from '../../services/findAllEmployees';
 
 type TableRowEmployeesProps = {
   employee: EmployeeType
@@ -27,9 +30,12 @@ type TableRowEmployeesProps = {
 function TableRowEmployees({ employee }: TableRowEmployeesProps) {
   const dispatch = useDispatch<AppDispatch>();
   const [showDetails, setShowDetails] = useState('hidden');
+  const { pageSize, pageNumber } = useSelector((state: RootState) => state.pagination);
   const { direction, column } = useSelector((state: RootState) => state.sort);
   const { user } = useSelector((state: RootState) => state.findLoggedUser);
+  const { term } = useSelector((state: RootState) => state.searchTerm);
   const windowWidth = useWindowWidth();
+  const token = useToken();
 
   const isAdmin = user?.role === 'ADMIN';
 
@@ -56,6 +62,38 @@ function TableRowEmployees({ employee }: TableRowEmployeesProps) {
     dispatch(openModalEditEmployee());
   };
 
+  const handleDelete = async () => {
+    const response = await fetch(`http://localhost:8080/employees/${employee.id}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      console.error('Error fetching:', errorData.message);
+      return null;
+    }
+
+    const Toast = Swal.mixin({
+      toast: true,
+      position: 'top-end',
+      showConfirmButton: false,
+      timer: 3000,
+      timerProgressBar: true,
+      didOpen: (toast) => {
+        toast.onmouseenter = Swal.stopTimer;
+        toast.onmouseleave = Swal.resumeTimer;
+      },
+    });
+    Toast.fire({
+      icon: 'success',
+      title: 'Employee deleted successfully',
+    }).then(() => { if (token) { dispatch(findAllEmployees({ token, pageNumber, pageSize, column, direction, term })); } });
+  };
+
   return (
 
     <>
@@ -80,7 +118,7 @@ function TableRowEmployees({ employee }: TableRowEmployeesProps) {
           <td className="hidden lg:flex justify-center actions gap-2">
 
             <ButtonEdit onClick={ handleEdit } />
-            <ButtonDelete />
+            <ButtonDelete onClick={ handleDelete } />
 
           </td>
         )}
@@ -128,7 +166,7 @@ function TableRowEmployees({ employee }: TableRowEmployeesProps) {
             {isAdmin && (
               <div className="flex w-full justify-end gap-2">
                 <ButtonEdit onClick={ handleEdit } />
-                <ButtonDelete />
+                <ButtonDelete onClick={ handleDelete } />
               </div>
             )}
 
