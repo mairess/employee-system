@@ -1,8 +1,10 @@
 /* eslint-disable react/jsx-max-depth */
 import Image from 'next/image';
+import { useSelector } from 'react-redux';
 import noDataFound from '../../public/noDataFound.svg';
 import useWindowWidth from '../hooks/useWindowWidth';
 import getColSpan from '../utils/handleColSpan';
+import { RootState } from '../store';
 
 type NoDataFoundProps = {
   title: string
@@ -10,13 +12,16 @@ type NoDataFoundProps = {
 
 function NoDataFound({ title }: NoDataFoundProps) {
   const windowWidth = useWindowWidth();
+  const { user } = useSelector((state: RootState) => state.findLoggedUser);
+
+  const isAdmin = user?.role === 'ADMIN';
 
   return (
 
     <tbody>
 
       <tr>
-        <td colSpan={ getColSpan(windowWidth) } className="p-10 ">
+        <td colSpan={ getColSpan(windowWidth, isAdmin) } className="p-10 ">
 
           <div className="flex justify-center">
 
