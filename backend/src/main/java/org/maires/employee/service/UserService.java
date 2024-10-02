@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.transaction.Transactional;
 import java.util.Map;
-import org.maires.employee.controller.dto.UserCreationDto;
+import org.maires.employee.controller.dto.UserUpdateDto;
 import org.maires.employee.entity.User;
 import org.maires.employee.repository.UserRepository;
 import org.maires.employee.repository.specification.UserSpecification;
@@ -120,18 +120,18 @@ public class UserService implements UserDetailsService {
   /**
    * Update user.
    *
-   * @param userId          the user id
-   * @param userCreationDto the user creation dto
+   * @param userId        the user id
+   * @param userUpdateDto the user update dto
    * @return the user
    * @throws UserNotFoundException the user not found exception
    * @throws JsonMappingException  the json mapping exception
    */
   @Transactional
-  public User update(Long userId, UserCreationDto userCreationDto)
+  public User update(Long userId, UserUpdateDto userUpdateDto)
       throws UserNotFoundException, JsonMappingException {
     User userToUpdate = findById(userId);
 
-    objectMapper.updateValue(userToUpdate, userCreationDto);
+    objectMapper.updateValue(userToUpdate, userUpdateDto);
 
     return userRepository.save(userToUpdate);
   }

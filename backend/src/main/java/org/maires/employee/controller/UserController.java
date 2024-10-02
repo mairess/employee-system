@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import org.maires.employee.controller.dto.UserCreationDto;
 import org.maires.employee.controller.dto.UserDto;
+import org.maires.employee.controller.dto.UserUpdateDto;
 import org.maires.employee.entity.User;
 import org.maires.employee.service.UserService;
 import org.maires.employee.service.exception.UserNotFoundException;
@@ -134,8 +135,8 @@ public class UserController {
   /**
    * Update response entity.
    *
-   * @param userId          the user id
-   * @param userCreationDto the user creation dto
+   * @param userId        the user id
+   * @param userUpdateDto the user update dto
    * @return the response entity
    * @throws JsonMappingException  the json mapping exception
    * @throws UserNotFoundException the user not found exception
@@ -144,10 +145,10 @@ public class UserController {
   @PreAuthorize("hasAnyAuthority('ADMIN')")
   public ResponseEntity<UserDto> update(
       @PathVariable Long userId,
-      @Valid @RequestBody UserCreationDto userCreationDto
+      @Valid @RequestBody UserUpdateDto userUpdateDto
   ) throws JsonMappingException, UserNotFoundException {
 
-    User userUpdated = userService.update(userId, userCreationDto);
+    User userUpdated = userService.update(userId, userUpdateDto);
 
     return ResponseEntity.status(HttpStatus.OK).body(UserDto.fromEntity(userUpdated));
 

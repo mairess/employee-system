@@ -1,25 +1,26 @@
+/* eslint-disable max-len */
 import { createSlice } from '@reduxjs/toolkit';
 
 type ModalPasswordChangeState = {
-  isModalOpen: boolean;
+  isModalPasswordChangeOpen: boolean;
 };
 
 const initialState: ModalPasswordChangeState = {
-  isModalOpen: false,
+  isModalPasswordChangeOpen: false,
 };
 
 const modalPasswordChangeSlice = createSlice({
   name: 'modalPasswordChange',
   initialState,
   reducers: {
-    openModal(state) {
-      state.isModalOpen = true;
+    openModalPasswordChange(state) {
+      state.isModalPasswordChangeOpen = true;
     },
-    closeModal(state) {
-      state.isModalOpen = false;
+    closeModalPasswordChange(state) {
+      state.isModalPasswordChangeOpen = false;
     },
   },
 });
 
-export const { openModal, closeModal } = modalPasswordChangeSlice.actions;
+export const { openModalPasswordChange, closeModalPasswordChange } = modalPasswordChangeSlice.actions;
 export default modalPasswordChangeSlice.reducer;

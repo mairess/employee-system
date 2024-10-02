@@ -6,44 +6,41 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { FaTimes } from 'react-icons/fa';
 import { useEffect, useState } from 'react';
-import { usePathname } from 'next/navigation';
 import Swal from 'sweetalert2';
-import Input from './Input';
-import { AppDispatch, RootState } from '../store';
-import { clearError, resetEmployee } from '../store/createEmployeeSlice';
-import createEmployee from '../services/createEmployee';
-import Button from './buttons/Button';
-import { closeModal } from '../store/modalPasswordChangeSlice';
-import useToken from '../hooks/useToken';
+import Input from '../Input';
+import { AppDispatch, RootState } from '../../store';
+import { clearError, resetUser } from '../../store/registerSlice';
+import register from '../../services/register';
+import Button from '../buttons/Button';
+import { closeModalCreateUser } from '../../store/modalCreateUserSlice';
 
-function ModalCreateEmployee() {
+function ModalCreateUser() {
   const dispatch = useDispatch<AppDispatch>();
-  const pathName = usePathname();
-  const token = useToken();
-  const { isModalOpen } = useSelector((state: RootState) => state.modalPasswordChange);
-  const { loading, employee, error } = useSelector((state: RootState) => state.createEmployee);
-  const [formData, setFormData] = useState({ photo: '', fullName: '', position: '', admission: '', phone: '' });
+  const { isModalCreateUserOpen } = useSelector((state: RootState) => state.modalCreateUser);
+  const { loading, user, error } = useSelector((state: RootState) => state.register);
+  const [formData, setFormData] = useState({ photo: '', fullName: '', username: '', email: '', password: '', role: '' });
+  const [confirmPassword, setConfirmPassword] = useState('');
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
-        dispatch(closeModal());
-        setFormData({ photo: '', fullName: '', position: '', admission: '', phone: '' });
+        dispatch(closeModalCreateUser());
+        setFormData({ photo: '', fullName: '', username: '', email: '', password: '', role: '' });
         dispatch(clearError());
       }
     };
 
-    if (isModalOpen) {
+    if (isModalCreateUserOpen) {
       window.addEventListener('keydown', handleKeyDown);
     }
 
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
     };
-  }, [isModalOpen, dispatch, pathName]);
+  }, [isModalCreateUserOpen, dispatch]);
 
   useEffect(() => {
-    if (employee.id) {
+    if (user.id) {
       const Toast = Swal.mixin({
         toast: true,
         position: 'top-end',
@@ -58,31 +55,35 @@ function ModalCreateEmployee() {
 
       Toast.fire({
         icon: 'success',
-        title: 'Employee created successfully',
+        title: 'User created successfully',
       }).then(() => {
-        dispatch(closeModal());
-        dispatch(resetEmployee());
+        dispatch(closeModalCreateUser());
+        dispatch(resetUser());
       });
     }
-  }, [dispatch, employee.id]);
+  }, [dispatch, user.id]);
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
     setFormData((prevData) => ({ ...prevData, [name]: value }));
   };
 
+  const handleConfirmPassword = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setConfirmPassword(event.target.value);
+  };
+
+  const isFormValid = confirmPassword === formData.password;
+
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    dispatch(createEmployee({ employeeData: formData, token }));
-
-    if (employee.id) {
-      dispatch(closeModal());
+    if (isFormValid) {
+      dispatch(register(formData));
     }
   };
 
   const handleCloseModal = () => {
-    setFormData({ photo: '', fullName: '', position: '', admission: '', phone: '' });
-    dispatch(closeModal());
+    setFormData({ photo: '', fullName: '', username: '', email: '', password: '', role: '' });
+    dispatch(closeModalCreateUser());
     dispatch(clearError());
   };
 
@@ -91,6 +92,7 @@ function ModalCreateEmployee() {
   };
 
   return (
+
     <div
       className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 overflow-y-auto"
       onClick={ handleCloseModal }
@@ -118,7 +120,7 @@ function ModalCreateEmployee() {
         <h1
           className="font-bold text-center text-2xl text-light-neutral-900 my-4"
         >
-          Add new employee
+          Add new user
         </h1>
 
         <Input
@@ -142,38 +144,61 @@ function ModalCreateEmployee() {
         />
 
         <Input
-          type="position"
-          name="position"
-          id="position"
-          placeholder="Position"
-          value={ formData.position }
+          type="text"
+          name="username"
+          id="username"
+          placeholder="Username"
+          value={ formData.username }
           error={ error }
           onChange={ handleInputChange }
         />
 
         <Input
-          type="admission"
-          name="admission"
-          id="admission"
-          placeholder="Admission"
-          value={ formData.admission }
+          type="email"
+          name="email"
+          id="email"
+          placeholder="Email"
+          value={ formData.email }
           error={ error }
           onChange={ handleInputChange }
         />
 
         <Input
-          type="phone"
-          name="phone"
-          id="phone"
-          placeholder="Phone"
-          value={ formData.phone }
+          type="role"
+          name="role"
+          id="role"
+          placeholder="Role"
+          value={ formData.role }
           error={ error }
           onChange={ handleInputChange }
+        />
+
+        <Input
+          type="password"
+          name="password"
+          id="password"
+          placeholder="Password"
+          value={ formData.password }
+          error={ error }
+          autocomplete="new-password"
+          onChange={ handleInputChange }
+        />
+
+        <Input
+          type="password"
+          name="confirmPassword"
+          id="confirmPassword"
+          placeholder="Confirm password"
+          value={ confirmPassword }
+          error={ formData.password !== confirmPassword ? 'Password do not match!' : null }
+          autocomplete="confirm-password"
+          onChange={ handleConfirmPassword }
         />
 
         <Button
           loading={ loading }
-          text="Create employee"
+          text="Create user"
+          disabled={ !isFormValid }
         />
 
       </form>
@@ -182,4 +207,4 @@ function ModalCreateEmployee() {
   );
 }
 
-export default ModalCreateEmployee;
+export default ModalCreateUser;

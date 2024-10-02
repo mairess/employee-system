@@ -25,8 +25,11 @@ function TableEmployees() {
   const { column, direction } = useSelector((state: RootState) => state.sort);
   const { term } = useSelector((state: RootState) => state.searchTerm);
   const windowWidth = useWindowWidth();
+  const { user } = useSelector((state: RootState) => state.findLoggedUser);
   const token = useToken();
   const router = useRouter();
+
+  const isAdmin = user?.role === 'ADMIN';
 
   useEffect(() => {
     if (token) { dispatch(findAllEmployees({ token, pageNumber, pageSize, column, direction, term })); }
@@ -45,7 +48,7 @@ function TableEmployees() {
       {loading && (
         <tbody>
           <tr>
-            <td colSpan={ getColSpan(windowWidth) } className="p-10">
+            <td colSpan={ getColSpan(windowWidth, isAdmin) } className="p-10">
               <Loading />
               <p className="text-dark-neutral-0 text-center">Loading data...</p>
             </td>

@@ -11,7 +11,7 @@ import Button from './buttons/Button';
 import Divider from './Divider';
 import Input from './Input';
 import KeepLogged from './KeepLogged';
-import ModalChangePassword from './ModalChangePassword';
+import ModalChangePassword from './modal/ModalChangePassword';
 import { AppDispatch, RootState } from '../store';
 import auth from '../services/auth';
 import { clearError } from '../store/authSlice';
@@ -19,7 +19,7 @@ import { clearError } from '../store/authSlice';
 function FormLogin() {
   const dispatch = useDispatch<AppDispatch>();
   const { token, loading, error } = useSelector((state: RootState) => state.auth);
-  const { isModalOpen } = useSelector((state: RootState) => state.modalPasswordChange);
+  const { isModalPasswordChangeOpen } = useSelector((state: RootState) => state.modalPasswordChange);
   const [formData, setFormaData] = useState({ username: '', password: '' });
   const [isLoaded, setIsLoaded] = useState(false);
   const [keepLogged, setKeepLogged] = useState(false);
@@ -80,7 +80,7 @@ function FormLogin() {
 
     <>
 
-      {isModalOpen && <ModalChangePassword />}
+      {isModalPasswordChangeOpen && <ModalChangePassword />}
 
       <form
         className="flex flex-col gap-6 bg-light-neutral-100 border border-light-neutral-400 rounded-lg p-8 shadow-xl"
