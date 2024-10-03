@@ -41,7 +41,7 @@ function Header() {
   if (!token) return null;
 
   return (
-    <header className="flex items-center justify-between text-black w-full shadow-custom-10 p-spacing-little-12">
+    <header className="flex items-center justify-between text-black w-full shadow-custom-10 px-spacing-regular-20 py-spacing-little-12">
 
       <h1 className="text-h1 text-primary">ES.</h1>
 
