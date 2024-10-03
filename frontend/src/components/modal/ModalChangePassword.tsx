@@ -5,12 +5,14 @@
 import { useEffect, useState } from 'react';
 import { FaTimes } from 'react-icons/fa';
 import { useDispatch, useSelector } from 'react-redux';
+import Image from 'next/image';
 import Input from '../Input';
 import Button from '../buttons/Button';
 import { AppDispatch, RootState } from '../../store';
 import passwordChange from '../../services/passwordChange';
 import { clearError } from '../../store/passwordChangeSlice';
 import { closeModalPasswordChange } from '../../store/modalPasswordChangeSlice';
+import forgetPasswordAvatar from '../../../public/forgotPasswordAvatar.svg';
 
 function ModalChangePassword() {
   const dispatch = useDispatch<AppDispatch>();
@@ -87,15 +89,23 @@ function ModalChangePassword() {
           className="font-bold text-center text-2xl text-light-neutral-900"
         >
 
-          Please enter your email
+          Forget password?
 
         </h1>
+
+        <Image
+          className="border border-light-neutral-900 rounded-full"
+          height={ 80 }
+          width={ 80 }
+          src={ forgetPasswordAvatar }
+          alt="Login avatar"
+        />
 
         <Input
           type="email"
           name="email"
           id="email"
-          placeholder="Email"
+          placeholder="Enter your email"
           value={ formData.email }
           onChange={ handleInputChange }
           error={ message?.includes('your email!') ? message : error }

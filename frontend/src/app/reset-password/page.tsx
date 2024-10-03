@@ -17,19 +17,24 @@ function PasswordResetPage() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const response = await fetch(`http://localhost:8080/password/reset?token=${token}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ newPassword }),
-    });
+    try {
+      const response = await fetch(`http://localhost:8080/password/reset?token=${token}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ newPassword }),
+      });
 
-    if (response.ok) {
-      alert('Password has been changed!');
-    } else {
-      const errorData = await response.json();
-      alert(`Failed to reset password: ${errorData.message}`);
+      if (response.ok) {
+        alert('Password has been changed!');
+      } else {
+        const errorData = await response.json();
+        alert(`Failed to reset password: ${errorData.message}`);
+      }
+    } catch (error) {
+      console.error('Error fetching:', error);
+      return null;
     }
   };
 

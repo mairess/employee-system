@@ -81,7 +81,7 @@ function FormLogin() {
 
   return (
 
-    <div className="flex justify-center items-center gap-4 w-fit mx-4">
+    <div className="flex justify-center items-center w-fit mx-4">
 
       <div>
         <Image
@@ -106,12 +106,12 @@ function FormLogin() {
           </h1>
 
           <Image
-            className="border-2 rounded-full"
             height={ 70 }
             width={ 70 }
             src={ loginAvatar }
             alt="Login avatar"
           />
+
         </div>
 
         <Input

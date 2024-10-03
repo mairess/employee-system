@@ -15,6 +15,7 @@ import { AppDispatch, RootState } from '../store';
 import register from '../services/register';
 import { clearError } from '../store/registerSlice';
 import registerIcon from '../../public/register.svg';
+import registerAvatar from '../../public/registerAvatar.svg';
 
 function FormRegister() {
   const dispatch = useDispatch<AppDispatch>();
@@ -82,11 +83,23 @@ function FormRegister() {
         className="flex flex-col gap-6 bg-light-neutral-100 border border-light-neutral-400 rounded-lg p-8 shadow-xl"
         onSubmit={ handleSubmit }
       >
-        <h1
-          className="font-bold text-center text-2xl text-light-neutral-900 my-4"
-        >
-          Register
-        </h1>
+
+        <div className="flex flex-col items-center justify-center">
+
+          <h1
+            className="font-bold text-center text-2xl text-light-neutral-900 my-4"
+          >
+            Register
+          </h1>
+
+          <Image
+            height={ 70 }
+            width={ 70 }
+            src={ registerAvatar }
+            alt="Login avatar"
+          />
+
+        </div>
 
         <Input
           type="text"
