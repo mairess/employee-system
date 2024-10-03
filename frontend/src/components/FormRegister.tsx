@@ -5,6 +5,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useDispatch, useSelector } from 'react-redux';
+import Swal from 'sweetalert2';
 import Input from './Input';
 import Button from './buttons/Button';
 import Divider from './Divider';
@@ -15,7 +16,7 @@ import { clearError } from '../store/registerSlice';
 
 function FormRegister() {
   const dispatch = useDispatch<AppDispatch>();
-  const { loading, user, error } = useSelector((state: RootState) => state.register);
+  const { loading, error } = useSelector((state: RootState) => state.register);
   const [formData, setFormaData] = useState({ photo: '', fullName: '', username: '', email: '', password: '', role: 'user' });
   const [confirmPassword, setConfirmPassword] = useState('');
   const router = useRouter();
@@ -23,10 +24,6 @@ function FormRegister() {
   useEffect(() => {
     dispatch(clearError());
   }, [dispatch, router]);
-
-  useEffect(() => {
-    if (user.id) { router.push('/'); }
-  }, [user, router]);
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
@@ -42,7 +39,28 @@ function FormRegister() {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (isFormValid) {
-      dispatch(register(formData));
+      const resultAction = await dispatch(register(formData));
+
+      if (register.fulfilled.match(resultAction)) {
+        const Toast = Swal.mixin({
+          toast: true,
+          position: 'top-end',
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true,
+          didOpen: (toast) => {
+            toast.onmouseenter = Swal.stopTimer;
+            toast.onmouseleave = Swal.resumeTimer;
+          },
+        });
+
+        Toast.fire({
+          icon: 'success',
+          title: 'Registered successfully',
+        }).then(() => {
+          router.replace('/');
+        });
+      }
     }
   };
 
