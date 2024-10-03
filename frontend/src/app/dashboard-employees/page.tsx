@@ -22,7 +22,7 @@ function DashboardEmployees() {
 
   return (
 
-    <div className="bg-white px-spacing-regular-20 mb-1">
+    <div className="px-spacing-regular-20 mb-1">
 
       {isModalCreateEmployeeOpen && <ModalCreateEmployee />}
 

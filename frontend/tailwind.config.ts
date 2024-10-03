@@ -70,6 +70,8 @@ const config: Config = {
         'light-neutral-1100': '#091E42',
         'black-neutral': '#1C1C1C',
         'gray-neutral-10': '#DFDFDF',
+        'gray-neutral-20': '#f4f4f4',
+        'gray-neutral-30': '#f7f7f7',
         'hover-error':'#8C001A',
         'hover-success': '#2C6E30',
         'hover-primary-transparent': '#FFFFFF33',

@@ -77,8 +77,8 @@ function TableUsers() {
 
       <tbody>
 
-        {!loading && !error && data?.users.map((user) => (
-          <TableRowUsers key={ user.id } user={ user } />
+        {!loading && !error && data?.users.map((user, index) => (
+          <TableRowUsers key={ user.id } user={ user } index={ index } />
         ))}
 
       </tbody>

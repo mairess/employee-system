@@ -21,7 +21,7 @@ function DashboardUsers() {
   if (isAuthenticated === null || !isAuthenticated) return null;
 
   return (
-    <div className="bg-white px-spacing-regular-20 mb-1">
+    <div className="px-spacing-regular-20 mb-1">
 
       {isModalCreateUserOpen && <ModalCreateUser />}
 

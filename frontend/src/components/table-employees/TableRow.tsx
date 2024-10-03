@@ -25,10 +25,11 @@ import findAllEmployees from '../../services/findAllEmployees';
 import deleteEmployee from '../../services/deleteEmployee';
 
 type TableRowEmployeesProps = {
-  employee: EmployeeType
+  employee: EmployeeType,
+  index: number
 };
 
-function TableRowEmployees({ employee }: TableRowEmployeesProps) {
+function TableRowEmployees({ employee, index }: TableRowEmployeesProps) {
   const dispatch = useDispatch<AppDispatch>();
   const [showDetails, setShowDetails] = useState('hidden');
   const { pageSize, pageNumber } = useSelector((state: RootState) => state.pagination);
@@ -39,6 +40,7 @@ function TableRowEmployees({ employee }: TableRowEmployeesProps) {
   const token = useToken();
 
   const isAdmin = user?.role === 'ADMIN';
+  const isOdd = index % 2 === 0;
 
   const toggleSortDirection = () => {
     const newDirection = direction === 'asc' ? 'desc' : 'asc';
@@ -103,7 +105,7 @@ function TableRowEmployees({ employee }: TableRowEmployeesProps) {
 
     <>
 
-      <tr className="border-t">
+      <tr className={ `border-t ${isOdd ? 'bg-light-neutral-0' : 'bg-gray-neutral-10'}` }>
 
         <td className="photo sm:flex sm:justify-start">
 
@@ -148,6 +150,7 @@ function TableRowEmployees({ employee }: TableRowEmployeesProps) {
           breakpoint="lg:hidden"
           header="Phone"
           employeeData={ formatPhoneNumber(employee.phone) }
+          index={ index }
         />
         <RowDetail
           handleSort={ () => handleSort('admission') }
@@ -155,6 +158,7 @@ function TableRowEmployees({ employee }: TableRowEmployeesProps) {
           breakpoint="md:hidden"
           header="Admission"
           employeeData={ formatDate(employee.admission) }
+          index={ index }
         />
         <RowDetail
           handleSort={ () => handleSort('position') }
@@ -162,9 +166,10 @@ function TableRowEmployees({ employee }: TableRowEmployeesProps) {
           breakpoint="sm:hidden"
           header="Position"
           employeeData={ employee.position }
+          index={ index }
         />
 
-        <tr className={ `${showDetails} lg:hidden` }>
+        <tr className={ `${showDetails} lg:hidden  ${isOdd ? 'bg-light-neutral-0' : 'bg-gray-neutral-10'}` }>
 
           <td className="px-spacing-regular-20" colSpan={ getColSpan(windowWidth, isAdmin) }>
 

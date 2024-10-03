@@ -15,7 +15,6 @@ import Loading from '../Loading';
 import Error from '../Error';
 import useWindowWidth from '../../hooks/useWindowWidth';
 import getColSpan from '../../utils/handleColSpan';
-import { EmployeeType } from '../../types';
 import NoDataFound from '../NoDataFound';
 
 function TableEmployees() {
@@ -61,8 +60,8 @@ function TableEmployees() {
       {data?.employees.length === 0 && (<NoDataFound title="employee" />)}
 
       <tbody>
-        {!loading && !error && data?.employees.map((employee: EmployeeType) => (
-          <TableRowEmployees key={ employee.id } employee={ employee } />
+        {!loading && !error && data?.employees.map((employee, index) => (
+          <TableRowEmployees key={ employee.id } employee={ employee } index={ index } />
         ))}
       </tbody>
 

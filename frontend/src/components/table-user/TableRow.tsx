@@ -25,9 +25,10 @@ import deleteUser from '../../services/deleteUser';
 
 type TableRowUsersProps = {
   user: UserType
+  index: number
 };
 
-function TableRowUsers({ user }: TableRowUsersProps) {
+function TableRowUsers({ user, index }: TableRowUsersProps) {
   const dispatch = useDispatch<AppDispatch>();
   const [showDetails, setShowDetails] = useState('hidden');
   const { user: userLogged } = useSelector((state: RootState) => state.findLoggedUser);
@@ -38,6 +39,7 @@ function TableRowUsers({ user }: TableRowUsersProps) {
   const token = useToken();
 
   const isAdmin = userLogged?.role === 'ADMIN';
+  const isOdd = index % 2 === 0;
 
   const toggleSortDirection = () => {
     const newDirection = direction === 'asc' ? 'desc' : 'asc';
@@ -101,7 +103,7 @@ function TableRowUsers({ user }: TableRowUsersProps) {
   return (
     <>
 
-      <tr className="border-t">
+      <tr className={ `border-t ${isOdd ? 'bg-light-neutral-0' : 'bg-gray-neutral-10'}` }>
 
         <td className="photo sm:flex sm:justify-start">
 
@@ -144,6 +146,7 @@ function TableRowUsers({ user }: TableRowUsersProps) {
           breakpoint="lg:hidden"
           header="Role"
           employeeData={ user.role }
+          index={ index }
         />
         <RowDetail
           handleSort={ () => handleSort('email') }
@@ -151,6 +154,7 @@ function TableRowUsers({ user }: TableRowUsersProps) {
           breakpoint="md:hidden"
           header="Email"
           employeeData={ user.email }
+          index={ index }
         />
         <RowDetail
           handleSort={ () => handleSort('username') }
@@ -158,9 +162,10 @@ function TableRowUsers({ user }: TableRowUsersProps) {
           breakpoint="sm:hidden"
           header="Username"
           employeeData={ user.username }
+          index={ index }
         />
 
-        <tr className={ `${showDetails} lg:hidden` }>
+        <tr className={ `${showDetails} lg:hidden  ${isOdd ? 'bg-light-neutral-0' : 'bg-gray-neutral-10'}` }>
 
           <td className="px-spacing-regular-20" colSpan={ getColSpan(windowWidth, isAdmin) }>
 
