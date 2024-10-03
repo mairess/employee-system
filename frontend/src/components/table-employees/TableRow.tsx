@@ -22,6 +22,7 @@ import { openModalEditEmployee } from '../../store/modalEditEmployeeSlice';
 import { setSelectedEmployee } from '../../store/editEmployeeSlice';
 import useToken from '../../hooks/useToken';
 import findAllEmployees from '../../services/findAllEmployees';
+import deleteEmployee from '../../services/deleteEmployee';
 
 type TableRowEmployeesProps = {
   employee: EmployeeType
@@ -63,39 +64,39 @@ function TableRowEmployees({ employee }: TableRowEmployeesProps) {
   };
 
   const handleDelete = async () => {
-    try {
-      const response = await fetch(`http://localhost:8080/employees/${employee.id}`, {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-      });
+    const swalWithBootstrapButtons = Swal.mixin({
+      customClass: {
+        confirmButton: 'btn btn-success',
+        cancelButton: 'btn btn-danger',
+      },
+      buttonsStyling: true,
+    });
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        console.error('Error fetching:', errorData.message);
-        return null;
+    swalWithBootstrapButtons.fire({
+      title: `Delete ${employee.fullName}?`,
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, delete it!',
+      cancelButtonText: 'No, cancel!',
+      reverseButtons: true,
+    }).then((result) => {
+      if (result.isConfirmed) {
+        if (token) { deleteEmployee({ token, employeeId: employee.id }); }
+
+        swalWithBootstrapButtons.fire({
+          title: 'Deleted!',
+          text: `${employee.fullName} has been deleted.`,
+          icon: 'success',
+        }).then(() => { if (token) { dispatch(findAllEmployees({ token, pageNumber, pageSize, column, direction, term })); } });
+      } else if (result.dismiss === Swal.DismissReason.cancel) {
+        swalWithBootstrapButtons.fire({
+          title: 'Cancelled',
+          text: `${employee.fullName} is safe`,
+          icon: 'error',
+        });
       }
-
-      const Toast = Swal.mixin({
-        toast: true,
-        position: 'top-end',
-        showConfirmButton: false,
-        timer: 3000,
-        timerProgressBar: true,
-        didOpen: (toast) => {
-          toast.onmouseenter = Swal.stopTimer;
-          toast.onmouseleave = Swal.resumeTimer;
-        },
-      });
-      Toast.fire({
-        icon: 'success',
-        title: 'Employee deleted successfully',
-      }).then(() => { if (token) { dispatch(findAllEmployees({ token, pageNumber, pageSize, column, direction, term })); } });
-    } catch (error) {
-      console.error('Error fetching:', error);
-    }
+    });
   };
 
   return (
