@@ -23,7 +23,7 @@ public record EmployeeCreationDto(
     @Size(min = 4, message = "Full name must be >= 4 characters!")
     @Pattern(
         regexp = "\\D+",
-        message = "FullName must not contain digit!"
+        message = "Full name must not contain digit!"
     )
     String fullName,
 

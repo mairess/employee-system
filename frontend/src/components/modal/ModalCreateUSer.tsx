@@ -39,8 +39,23 @@ function ModalCreateUser() {
     };
   }, [isModalCreateUserOpen, dispatch]);
 
-  useEffect(() => {
-    if (user.id) {
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = event.target;
+    setFormData((prevData) => ({ ...prevData, [name]: value }));
+  };
+
+  const handleConfirmPassword = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setConfirmPassword(event.target.value);
+  };
+
+  const isFormValid = confirmPassword === formData.password;
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    const resultAction = await dispatch(register(formData));
+
+    if (register.fulfilled.match(resultAction)) {
       const Toast = Swal.mixin({
         toast: true,
         position: 'top-end',
@@ -60,24 +75,6 @@ function ModalCreateUser() {
         dispatch(closeModalCreateUser());
         dispatch(resetUser());
       });
-    }
-  }, [dispatch, user.id]);
-
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = event.target;
-    setFormData((prevData) => ({ ...prevData, [name]: value }));
-  };
-
-  const handleConfirmPassword = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setConfirmPassword(event.target.value);
-  };
-
-  const isFormValid = confirmPassword === formData.password;
-
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    if (isFormValid) {
-      dispatch(register(formData));
     }
   };
 
