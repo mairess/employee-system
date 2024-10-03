@@ -22,12 +22,14 @@ import { openModalEditEmployee } from '../../store/modalEditEmployeeSlice';
 import { setSelectedEmployee } from '../../store/editEmployeeSlice';
 import useToken from '../../hooks/useToken';
 import findAllEmployees from '../../services/findAllEmployees';
+import deleteEmployee from '../../services/deleteEmployee';
 
 type TableRowEmployeesProps = {
-  employee: EmployeeType
+  employee: EmployeeType,
+  index: number
 };
 
-function TableRowEmployees({ employee }: TableRowEmployeesProps) {
+function TableRowEmployees({ employee, index }: TableRowEmployeesProps) {
   const dispatch = useDispatch<AppDispatch>();
   const [showDetails, setShowDetails] = useState('hidden');
   const { pageSize, pageNumber } = useSelector((state: RootState) => state.pagination);
@@ -38,6 +40,7 @@ function TableRowEmployees({ employee }: TableRowEmployeesProps) {
   const token = useToken();
 
   const isAdmin = user?.role === 'ADMIN';
+  const isOdd = index % 2 === 0;
 
   const toggleSortDirection = () => {
     const newDirection = direction === 'asc' ? 'desc' : 'asc';
@@ -63,42 +66,46 @@ function TableRowEmployees({ employee }: TableRowEmployeesProps) {
   };
 
   const handleDelete = async () => {
-    const response = await fetch(`http://localhost:8080/employees/${employee.id}`, {
-      method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
+    const swalWithBootstrapButtons = Swal.mixin({
+      customClass: {
+        confirmButton: 'btn btn-success',
+        cancelButton: 'btn btn-danger',
       },
+      buttonsStyling: true,
     });
 
-    if (!response.ok) {
-      const errorData = await response.json();
-      console.error('Error fetching:', errorData.message);
-      return null;
-    }
+    swalWithBootstrapButtons.fire({
+      title: `Delete ${employee.fullName}?`,
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, delete it!',
+      cancelButtonText: 'No, cancel!',
+      reverseButtons: true,
+    }).then((result) => {
+      if (result.isConfirmed) {
+        if (token) { deleteEmployee({ token, employeeId: employee.id }); }
 
-    const Toast = Swal.mixin({
-      toast: true,
-      position: 'top-end',
-      showConfirmButton: false,
-      timer: 3000,
-      timerProgressBar: true,
-      didOpen: (toast) => {
-        toast.onmouseenter = Swal.stopTimer;
-        toast.onmouseleave = Swal.resumeTimer;
-      },
+        swalWithBootstrapButtons.fire({
+          title: 'Deleted!',
+          text: `${employee.fullName} has been deleted.`,
+          icon: 'success',
+        }).then(() => { if (token) { dispatch(findAllEmployees({ token, pageNumber, pageSize, column, direction, term })); } });
+      } else if (result.dismiss === Swal.DismissReason.cancel) {
+        swalWithBootstrapButtons.fire({
+          title: 'Cancelled',
+          text: `${employee.fullName} is safe`,
+          icon: 'error',
+        });
+      }
     });
-    Toast.fire({
-      icon: 'success',
-      title: 'Employee deleted successfully',
-    }).then(() => { if (token) { dispatch(findAllEmployees({ token, pageNumber, pageSize, column, direction, term })); } });
   };
 
   return (
 
     <>
 
-      <tr className="border-t">
+      <tr className={ `border-t ${isOdd ? 'bg-light-neutral-0' : 'bg-gray-neutral-10'}` }>
 
         <td className="photo sm:flex sm:justify-start">
 
@@ -143,6 +150,7 @@ function TableRowEmployees({ employee }: TableRowEmployeesProps) {
           breakpoint="lg:hidden"
           header="Phone"
           employeeData={ formatPhoneNumber(employee.phone) }
+          index={ index }
         />
         <RowDetail
           handleSort={ () => handleSort('admission') }
@@ -150,6 +158,7 @@ function TableRowEmployees({ employee }: TableRowEmployeesProps) {
           breakpoint="md:hidden"
           header="Admission"
           employeeData={ formatDate(employee.admission) }
+          index={ index }
         />
         <RowDetail
           handleSort={ () => handleSort('position') }
@@ -157,9 +166,10 @@ function TableRowEmployees({ employee }: TableRowEmployeesProps) {
           breakpoint="sm:hidden"
           header="Position"
           employeeData={ employee.position }
+          index={ index }
         />
 
-        <tr className={ `${showDetails} lg:hidden` }>
+        <tr className={ `${showDetails} lg:hidden  ${isOdd ? 'bg-light-neutral-0' : 'bg-gray-neutral-10'}` }>
 
           <td className="px-spacing-regular-20" colSpan={ getColSpan(windowWidth, isAdmin) }>
 

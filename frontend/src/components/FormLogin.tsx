@@ -6,6 +6,7 @@ import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useDispatch, useSelector } from 'react-redux';
 import Swal from 'sweetalert2';
+import Image from 'next/image';
 import AuthFooter from './AuthFooter';
 import Button from './buttons/Button';
 import Divider from './Divider';
@@ -15,6 +16,8 @@ import ModalChangePassword from './modal/ModalChangePassword';
 import { AppDispatch, RootState } from '../store';
 import auth from '../services/auth';
 import { clearError } from '../store/authSlice';
+import login from '../../public/login.svg';
+import loginAvatar from '../../public/loginAvatar.svg';
 
 function FormLogin() {
   const dispatch = useDispatch<AppDispatch>();
@@ -78,7 +81,15 @@ function FormLogin() {
 
   return (
 
-    <>
+    <div className="flex justify-center items-center w-fit mx-4">
+
+      <div>
+        <Image
+          className="hidden sm:flex"
+          src={ login }
+          alt="Logo"
+        />
+      </div>
 
       {isModalPasswordChangeOpen && <ModalChangePassword />}
 
@@ -87,11 +98,21 @@ function FormLogin() {
         onSubmit={ handleSubmit }
       >
 
-        <h1
-          className="font-bold text-center text-2xl text-light-neutral-900 my-4"
-        >
-          Welcome back
-        </h1>
+        <div className="flex flex-col items-center justify-center">
+          <h1
+            className="font-bold text-center text-2xl text-light-neutral-900 my-4"
+          >
+            Welcome back
+          </h1>
+
+          <Image
+            height={ 70 }
+            width={ 70 }
+            src={ loginAvatar }
+            alt="Login avatar"
+          />
+
+        </div>
 
         <Input
           type="text"
@@ -134,7 +155,7 @@ function FormLogin() {
 
       </form>
 
-    </>
+    </div>
 
   );
 }

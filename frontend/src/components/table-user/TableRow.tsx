@@ -21,12 +21,14 @@ import { setSelectedUser } from '../../store/editUserSlice';
 import { openModalEditUser } from '../../store/modalEditUserSlice';
 import findAllUsers from '../../services/findAllUsers';
 import useToken from '../../hooks/useToken';
+import deleteUser from '../../services/deleteUser';
 
 type TableRowUsersProps = {
   user: UserType
+  index: number
 };
 
-function TableRowUsers({ user }: TableRowUsersProps) {
+function TableRowUsers({ user, index }: TableRowUsersProps) {
   const dispatch = useDispatch<AppDispatch>();
   const [showDetails, setShowDetails] = useState('hidden');
   const { user: userLogged } = useSelector((state: RootState) => state.findLoggedUser);
@@ -37,6 +39,7 @@ function TableRowUsers({ user }: TableRowUsersProps) {
   const token = useToken();
 
   const isAdmin = userLogged?.role === 'ADMIN';
+  const isOdd = index % 2 === 0;
 
   const toggleSortDirection = () => {
     const newDirection = direction === 'asc' ? 'desc' : 'asc';
@@ -62,41 +65,45 @@ function TableRowUsers({ user }: TableRowUsersProps) {
   };
 
   const handleDelete = async () => {
-    const response = await fetch(`http://localhost:8080/users/${user.id}`, {
-      method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
+    const swalWithBootstrapButtons = Swal.mixin({
+      customClass: {
+        confirmButton: 'btn btn-success',
+        cancelButton: 'btn btn-danger',
       },
+      buttonsStyling: true,
     });
 
-    if (!response.ok) {
-      const errorData = await response.json();
-      console.error('Error fetching:', errorData.message);
-      return null;
-    }
+    swalWithBootstrapButtons.fire({
+      title: `Delete ${user.fullName}?`,
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, delete it!',
+      cancelButtonText: 'No, cancel!',
+      reverseButtons: true,
+    }).then((result) => {
+      if (result.isConfirmed) {
+        if (token) { deleteUser({ token, userId: user.id }); }
 
-    const Toast = Swal.mixin({
-      toast: true,
-      position: 'top-end',
-      showConfirmButton: false,
-      timer: 3000,
-      timerProgressBar: true,
-      didOpen: (toast) => {
-        toast.onmouseenter = Swal.stopTimer;
-        toast.onmouseleave = Swal.resumeTimer;
-      },
+        swalWithBootstrapButtons.fire({
+          title: 'Deleted!',
+          text: `${user.fullName} has been deleted.`,
+          icon: 'success',
+        }).then(() => { if (token) { dispatch(findAllUsers({ token, pageNumber, pageSize, column, direction, term })); } });
+      } else if (result.dismiss === Swal.DismissReason.cancel) {
+        swalWithBootstrapButtons.fire({
+          title: 'Cancelled',
+          text: `${user.fullName} is safe`,
+          icon: 'error',
+        });
+      }
     });
-    Toast.fire({
-      icon: 'success',
-      title: 'User deleted successfully',
-    }).then(() => { if (token) { dispatch(findAllUsers({ token, pageNumber, pageSize, column, direction, term })); } });
   };
 
   return (
     <>
 
-      <tr className="border-t">
+      <tr className={ `border-t ${isOdd ? 'bg-light-neutral-0' : 'bg-gray-neutral-10'}` }>
 
         <td className="photo sm:flex sm:justify-start">
 
@@ -139,6 +146,7 @@ function TableRowUsers({ user }: TableRowUsersProps) {
           breakpoint="lg:hidden"
           header="Role"
           employeeData={ user.role }
+          index={ index }
         />
         <RowDetail
           handleSort={ () => handleSort('email') }
@@ -146,6 +154,7 @@ function TableRowUsers({ user }: TableRowUsersProps) {
           breakpoint="md:hidden"
           header="Email"
           employeeData={ user.email }
+          index={ index }
         />
         <RowDetail
           handleSort={ () => handleSort('username') }
@@ -153,9 +162,10 @@ function TableRowUsers({ user }: TableRowUsersProps) {
           breakpoint="sm:hidden"
           header="Username"
           employeeData={ user.username }
+          index={ index }
         />
 
-        <tr className={ `${showDetails} lg:hidden` }>
+        <tr className={ `${showDetails} lg:hidden  ${isOdd ? 'bg-light-neutral-0' : 'bg-gray-neutral-10'}` }>
 
           <td className="px-spacing-regular-20" colSpan={ getColSpan(windowWidth, isAdmin) }>
 

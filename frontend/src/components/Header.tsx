@@ -5,12 +5,14 @@
 import { useRouter } from 'next/navigation';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
+import Image from 'next/image';
 import { logout } from '../store/authSlice';
 import { AppDispatch, RootState } from '../store';
 import useToken from '../hooks/useToken';
 import getTokenSubject from '../utils/getTokenSubject';
 import findLoggedUser from '../services/findLoggedUser';
 import Loading from './Loading';
+import logo from '../../public/logo.svg';
 
 function Header() {
   const dispatch = useDispatch<AppDispatch>();
@@ -41,9 +43,13 @@ function Header() {
   if (!token) return null;
 
   return (
-    <header className="flex items-center justify-between text-black w-full shadow-custom-10 p-spacing-little-12">
+    <header className="flex items-center justify-between text-black w-full shadow-custom-10 px-spacing-regular-20 py-spacing-little-12">
 
-      <h1 className="text-h1 text-primary">ES.</h1>
+      <div className="flex items-center">
+
+        <Image src={ logo } alt="Logo" className="h-12 w-12" />
+
+      </div>
 
       <div
         className="flex items-center gap-2"

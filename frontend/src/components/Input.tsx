@@ -18,9 +18,11 @@ type InputProps = {
 
 function Input({ type, name, id, placeholder, value, error = null, autocomplete = '', onChange }: InputProps) {
   return (
+
     <div>
+
       <input
-        className="rounded-xl px-3 py-2 text-black border border-light-neutral-400 bg-light-neutral-0 hover:border-dark-neutral-300"
+        className="rounded-xl px-3 py-2 text-black border border-light-neutral-400 bg-light-neutral-0 hover:border-dark-neutral-300 w-full"
         type={ type }
         name={ name }
         id={ id }
@@ -29,8 +31,11 @@ function Input({ type, name, id, placeholder, value, error = null, autocomplete 
         autoComplete={ autocomplete }
         onChange={ onChange }
       />
+
       {handleErrosInputFields(error, id, placeholder)}
+
     </div>
+
   );
 }
 

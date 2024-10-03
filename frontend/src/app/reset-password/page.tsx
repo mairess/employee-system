@@ -3,12 +3,16 @@
 'use client';
 
 import React, { useState } from 'react';
-import { useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
+import Swal from 'sweetalert2';
+import Button from '../../components/buttons/Button';
 
 function PasswordResetPage() {
   const [newPassword, setNewPassword] = useState('');
+  const [loading, setLoading] = useState(false);
   const searchParams = useSearchParams();
   const token = searchParams.get('token');
+  const router = useRouter();
 
   const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNewPassword(e.target.value);
@@ -16,60 +20,77 @@ function PasswordResetPage() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setLoading(true);
 
-    const response = await fetch(`http://localhost:8080/password/reset?token=${token}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ newPassword }),
-    });
+    try {
+      const response = await fetch(`http://localhost:8080/password/reset?token=${token}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ newPassword }),
+      });
 
-    if (response.ok) {
-      alert('Password has been changed!');
-    } else {
-      const errorData = await response.json();
-      alert(`Failed to reset password: ${errorData.message}`);
+      if (response.ok) {
+        const Toast = Swal.mixin({
+          toast: true,
+          position: 'top-end',
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true,
+          didOpen: (toast) => {
+            toast.onmouseenter = Swal.stopTimer;
+            toast.onmouseleave = Swal.resumeTimer;
+          },
+        });
+
+        Toast.fire({
+          icon: 'success',
+          title: 'Changed successfully',
+        }).then(() => router.replace('/'));
+      }
+    } catch (error) {
+      console.error('Error fetching:', error);
+      return null;
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <div
-      className="bg-slate-300 h-screen flex items-center justify-center"
+      className="bg-gradient-to-br from-dark-neutral-800 via-dark-neutral-900 to-dark-neutral-1100 h-screen flex items-center justify-center"
     >
+
       <form
-        className="bg-white p-6 rounded shadow-md w-full max-w-xs"
+        className="flex flex-col gap-6 bg-light-neutral-100 border border-light-neutral-400 rounded-lg p-8 shadow-xl"
         onSubmit={ handleSubmit }
       >
+
         <h1
-          className="text-xl text-black font-bold mb-4"
+          className="font-bold text-center text-2xl text-light-neutral-900"
         >
           Reset Password
         </h1>
 
-        <label
-          htmlFor="newPassword"
-          className="block text-sm font-medium mb-2 text-black"
-        >
-          Your new password
-        </label>
         <input
-          className="w-full p-2 border border-gray-300 rounded mb-4 text-black"
-          onChange={ handlePasswordChange }
+          className="rounded-xl px-3 py-2 text-black border border-light-neutral-400 bg-light-neutral-0 hover:border-dark-neutral-300 w-full"
           type="password"
           name="newPassword"
           id="newPassword"
+          placeholder="Your new password"
           value={ newPassword }
           required
+          onChange={ handlePasswordChange }
         />
 
-        <button
-          type="submit"
-          className="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600 transition duration-200"
-        >
-          Reset Password
-        </button>
+        <Button
+          loading={ loading }
+          text="Reset password"
+        />
+
       </form>
+
     </div>
   );
 }

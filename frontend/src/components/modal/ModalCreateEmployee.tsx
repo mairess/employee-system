@@ -42,8 +42,16 @@ function ModalCreateEmployee() {
     };
   }, [isModalCreateEmployeeOpen, dispatch, pathName]);
 
-  useEffect(() => {
-    if (employee.id) {
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = event.target;
+    setFormData((prevData) => ({ ...prevData, [name]: value }));
+  };
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const resultAction = await dispatch(createEmployee({ employeeData: formData, token }));
+
+    if (createEmployee.fulfilled.match(resultAction)) {
       const Toast = Swal.mixin({
         toast: true,
         position: 'top-end',
@@ -63,20 +71,6 @@ function ModalCreateEmployee() {
         dispatch(closeModalCreateEmployee());
         dispatch(resetEmployee());
       });
-    }
-  }, [dispatch, employee.id]);
-
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = event.target;
-    setFormData((prevData) => ({ ...prevData, [name]: value }));
-  };
-
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    dispatch(createEmployee({ employeeData: formData, token }));
-
-    if (employee.id) {
-      dispatch(closeModalCreateEmployee());
     }
   };
 
@@ -125,7 +119,7 @@ function ModalCreateEmployee() {
           type="text"
           name="photo"
           id="URL"
-          placeholder="https://robohash.org/me.png"
+          placeholder="https://robohash.org/01.png"
           value={ formData.photo }
           error={ error }
           onChange={ handleInputChange }

@@ -5,12 +5,15 @@
 import { useEffect, useState } from 'react';
 import { FaTimes } from 'react-icons/fa';
 import { useDispatch, useSelector } from 'react-redux';
+import Image from 'next/image';
+import Swal from 'sweetalert2';
 import Input from '../Input';
 import Button from '../buttons/Button';
 import { AppDispatch, RootState } from '../../store';
 import passwordChange from '../../services/passwordChange';
 import { clearError } from '../../store/passwordChangeSlice';
 import { closeModalPasswordChange } from '../../store/modalPasswordChangeSlice';
+import forgetPasswordAvatar from '../../../public/forgotPasswordAvatar.svg';
 
 function ModalChangePassword() {
   const dispatch = useDispatch<AppDispatch>();
@@ -50,8 +53,30 @@ function ModalChangePassword() {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    dispatch(clearError());
-    dispatch(passwordChange(formData.email));
+
+    const resultAction = await dispatch(passwordChange(formData.email));
+
+    if (passwordChange.fulfilled.match(resultAction)) {
+      const Toast = Swal.mixin({
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+          toast.onmouseenter = Swal.stopTimer;
+          toast.onmouseleave = Swal.resumeTimer;
+        },
+      });
+
+      Toast.fire({
+        icon: 'success',
+        title: 'Email sent successfully',
+      }).then(() => {
+        dispatch(closeModalPasswordChange());
+        dispatch(clearError());
+      });
+    }
   };
 
   const handleClickInside = (event: React.MouseEvent<HTMLFormElement>) => {
@@ -87,9 +112,17 @@ function ModalChangePassword() {
           className="font-bold text-center text-2xl text-light-neutral-900"
         >
 
-          Please enter your email
+          Forgot password?
 
         </h1>
+
+        <Image
+          className="border border-light-neutral-900 rounded-full"
+          height={ 80 }
+          width={ 80 }
+          src={ forgetPasswordAvatar }
+          alt="Forgot password avatar"
+        />
 
         <Input
           type="email"
@@ -98,7 +131,7 @@ function ModalChangePassword() {
           placeholder="Email"
           value={ formData.email }
           onChange={ handleInputChange }
-          error={ message?.includes('your email!') ? message : error }
+          error={ message && message?.includes('your email!') ? message : error }
         />
 
         <Button

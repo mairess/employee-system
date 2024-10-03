@@ -8,6 +8,10 @@
   @apply font-roboto;
 }
 
+body {
+  @apply bg-light-neutral-150
+}
+
 td, th {
   @apply p-spacing-little-08
 }
