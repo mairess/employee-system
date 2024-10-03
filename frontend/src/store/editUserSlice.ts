@@ -1,7 +1,7 @@
 /* eslint-disable max-len */
 import { createSlice } from '@reduxjs/toolkit';
 import { UserType } from '../types';
-import register from '../services/register';
+import editUser from '../services/editUser';
 
 type EditUserState = {
   user: UserType;
@@ -28,7 +28,7 @@ const initialState: EditUserState = {
 };
 
 const editUserSlice = createSlice({
-  name: 'register',
+  name: 'editUser',
   initialState,
   reducers: {
     clearError: (state) => {
@@ -46,15 +46,15 @@ const editUserSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(register.pending, (state) => {
+      .addCase(editUser.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(register.fulfilled, (state, action) => {
+      .addCase(editUser.fulfilled, (state, action) => {
         state.loading = false;
         state.user = action.payload;
       })
-      .addCase(register.rejected, (state, action) => {
+      .addCase(editUser.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
       });
