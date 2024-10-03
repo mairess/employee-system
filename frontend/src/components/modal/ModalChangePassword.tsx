@@ -53,7 +53,7 @@ function ModalChangePassword() {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    dispatch(clearError());
+
     const resultAction = await dispatch(passwordChange(formData.email));
 
     if (passwordChange.fulfilled.match(resultAction)) {
@@ -74,6 +74,7 @@ function ModalChangePassword() {
         title: 'Email sent successfully',
       }).then(() => {
         dispatch(closeModalPasswordChange());
+        dispatch(clearError());
       });
     }
   };

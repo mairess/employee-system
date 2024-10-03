@@ -3,7 +3,8 @@
 'use client';
 
 import React, { useState } from 'react';
-import { useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
+import Swal from 'sweetalert2';
 import Button from '../../components/buttons/Button';
 
 function PasswordResetPage() {
@@ -11,6 +12,7 @@ function PasswordResetPage() {
   const [loading, setLoading] = useState(false);
   const searchParams = useSearchParams();
   const token = searchParams.get('token');
+  const router = useRouter();
 
   const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNewPassword(e.target.value);
@@ -30,10 +32,22 @@ function PasswordResetPage() {
       });
 
       if (response.ok) {
-        alert('Password has been changed!');
-      } else {
-        const errorData = await response.json();
-        alert(`Failed to reset password: ${errorData.message}`);
+        const Toast = Swal.mixin({
+          toast: true,
+          position: 'top-end',
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true,
+          didOpen: (toast) => {
+            toast.onmouseenter = Swal.stopTimer;
+            toast.onmouseleave = Swal.resumeTimer;
+          },
+        });
+
+        Toast.fire({
+          icon: 'success',
+          title: 'Changed successfully',
+        }).then(() => router.replace('/'));
       }
     } catch (error) {
       console.error('Error fetching:', error);
@@ -73,7 +87,6 @@ function PasswordResetPage() {
         <Button
           loading={ loading }
           text="Reset password"
-          disabled
         />
 
       </form>
