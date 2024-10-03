@@ -89,7 +89,7 @@ function ModalChangePassword() {
           className="font-bold text-center text-2xl text-light-neutral-900"
         >
 
-          Forget password?
+          Forgot password?
 
         </h1>
 
@@ -98,7 +98,7 @@ function ModalChangePassword() {
           height={ 80 }
           width={ 80 }
           src={ forgetPasswordAvatar }
-          alt="Login avatar"
+          alt="Forgot password avatar"
         />
 
         <Input

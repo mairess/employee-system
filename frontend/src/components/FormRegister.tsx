@@ -96,7 +96,7 @@ function FormRegister() {
             height={ 70 }
             width={ 70 }
             src={ registerAvatar }
-            alt="Login avatar"
+            alt="Register avatar"
           />
 
         </div>
