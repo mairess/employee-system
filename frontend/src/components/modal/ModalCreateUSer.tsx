@@ -127,7 +127,7 @@ function ModalCreateUser() {
           type="text"
           name="photo"
           id="URL"
-          placeholder="https://robohash.org/me.png"
+          placeholder="https://robohash.org/01.png"
           value={ formData.photo }
           error={ error }
           onChange={ handleInputChange }

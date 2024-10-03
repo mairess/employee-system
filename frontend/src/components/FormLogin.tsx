@@ -106,7 +106,7 @@ function FormLogin() {
           </h1>
 
           <Image
-            className="border-4 rounded-full"
+            className="border-2 rounded-full"
             height={ 70 }
             width={ 70 }
             src={ loginAvatar }
