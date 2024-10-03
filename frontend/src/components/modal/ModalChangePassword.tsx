@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 import { FaTimes } from 'react-icons/fa';
 import { useDispatch, useSelector } from 'react-redux';
 import Image from 'next/image';
+import Swal from 'sweetalert2';
 import Input from '../Input';
 import Button from '../buttons/Button';
 import { AppDispatch, RootState } from '../../store';
@@ -53,7 +54,28 @@ function ModalChangePassword() {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     dispatch(clearError());
-    dispatch(passwordChange(formData.email));
+    const resultAction = await dispatch(passwordChange(formData.email));
+
+    if (passwordChange.fulfilled.match(resultAction)) {
+      const Toast = Swal.mixin({
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+          toast.onmouseenter = Swal.stopTimer;
+          toast.onmouseleave = Swal.resumeTimer;
+        },
+      });
+
+      Toast.fire({
+        icon: 'success',
+        title: 'Email sent successfully',
+      }).then(() => {
+        dispatch(closeModalPasswordChange());
+      });
+    }
   };
 
   const handleClickInside = (event: React.MouseEvent<HTMLFormElement>) => {
@@ -105,10 +127,10 @@ function ModalChangePassword() {
           type="email"
           name="email"
           id="email"
-          placeholder="Enter your email"
+          placeholder="Email"
           value={ formData.email }
           onChange={ handleInputChange }
-          error={ message?.includes('your email!') ? message : error }
+          error={ message && message?.includes('your email!') ? message : error }
         />
 
         <Button
