@@ -63,35 +63,39 @@ function TableRowEmployees({ employee }: TableRowEmployeesProps) {
   };
 
   const handleDelete = async () => {
-    const response = await fetch(`http://localhost:8080/employees/${employee.id}`, {
-      method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    try {
+      const response = await fetch(`http://localhost:8080/employees/${employee.id}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
-    if (!response.ok) {
-      const errorData = await response.json();
-      console.error('Error fetching:', errorData.message);
-      return null;
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error('Error fetching:', errorData.message);
+        return null;
+      }
+
+      const Toast = Swal.mixin({
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+          toast.onmouseenter = Swal.stopTimer;
+          toast.onmouseleave = Swal.resumeTimer;
+        },
+      });
+      Toast.fire({
+        icon: 'success',
+        title: 'Employee deleted successfully',
+      }).then(() => { if (token) { dispatch(findAllEmployees({ token, pageNumber, pageSize, column, direction, term })); } });
+    } catch (error) {
+      console.error('Error fetching:', error);
     }
-
-    const Toast = Swal.mixin({
-      toast: true,
-      position: 'top-end',
-      showConfirmButton: false,
-      timer: 3000,
-      timerProgressBar: true,
-      didOpen: (toast) => {
-        toast.onmouseenter = Swal.stopTimer;
-        toast.onmouseleave = Swal.resumeTimer;
-      },
-    });
-    Toast.fire({
-      icon: 'success',
-      title: 'Employee deleted successfully',
-    }).then(() => { if (token) { dispatch(findAllEmployees({ token, pageNumber, pageSize, column, direction, term })); } });
   };
 
   return (
