@@ -88,6 +88,8 @@ function FormLogin() {
           className="hidden sm:flex"
           src={ login }
           alt="Logo"
+          width={ 500 }
+          height={ 500 }
         />
       </div>
 
