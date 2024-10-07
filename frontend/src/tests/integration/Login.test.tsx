@@ -13,9 +13,7 @@ vi.mock('next/navigation', () => ({
 describe('Testing Login page.', () => {
   it('Renders inputs and image.', async () => {
     render(
-      <Provider store={ store }>
-        <LoginPage />
-      </Provider>,
+      <Provider store={ store }><LoginPage /></Provider>,
     );
 
     const title = screen.getByText(/welcome back/i);
@@ -58,9 +56,7 @@ describe('Testing Login page.', () => {
 
   it('Selects keep me logged.', async () => {
     render(
-      <Provider store={ store }>
-        <LoginPage />
-      </Provider>,
+      <Provider store={ store }><LoginPage /></Provider>,
     );
 
     const keepMeLoggedCheckBox = screen.getByRole('checkbox');
@@ -73,9 +69,7 @@ describe('Testing Login page.', () => {
 
   it('Renders modal password change.', async () => {
     render(
-      <Provider store={ store }>
-        <LoginPage />
-      </Provider>,
+      <Provider store={ store }><LoginPage /></Provider>,
     );
 
     const buttonForgotPassword = screen.getByRole('button', { name: /forgot your password/i });
