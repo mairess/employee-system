@@ -1,6 +1,5 @@
 import { render, screen } from '@testing-library/react';
 import { Provider } from 'react-redux';
-import userEvent from '@testing-library/user-event';
 import { vi } from 'vitest';
 import RegisterPage from '../../app/register/page';
 import store from '../../store';

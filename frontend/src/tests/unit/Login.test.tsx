@@ -12,9 +12,7 @@ vi.mock('next/navigation', () => ({
 
 describe('Testing Login page.', () => {
   it('Renders inputs and image.', async () => {
-    render(
-      <Provider store={ store }><LoginPage /></Provider>,
-    );
+    render(<Provider store={ store }><LoginPage /></Provider>);
 
     const title = screen.getByText(/welcome back/i);
     const loginAvatar = screen.getByAltText(/login avatar/i);
