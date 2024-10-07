@@ -97,7 +97,7 @@ function TableHeader() {
 
           <div className="flex justify-end pr-spacing-little-12">
 
-            <Image src={ ellipse } alt="dot to indicating hidden columns" />
+            <Image src={ ellipse } height={ 9 } width={ 9 } alt="dot to indicating hidden columns" />
 
           </div>
 

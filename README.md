@@ -8,8 +8,6 @@ coverage backend
 
 This is a system for managing employees.
 
-Frontend is in MVP mode and only supports password change.
-
 ## Run with Docker
 
 ### Prerequisites

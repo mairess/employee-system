@@ -106,6 +106,8 @@ function SearchBar({ placeholder, title }: SearchBarProps) {
               className="w-6 h-auto"
               src={ iconSearch }
               alt="search icon"
+              height={ 24 }
+              width={ 24 }
             />
 
           </button>

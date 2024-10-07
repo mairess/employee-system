@@ -76,6 +76,8 @@ function FormRegister() {
           className="hidden sm:flex"
           src={ registerIcon }
           alt="Logo Register"
+          width={ 500 }
+          height={ 500 }
         />
       </div>
 
