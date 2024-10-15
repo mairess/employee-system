@@ -1,7 +1,6 @@
 package org.maires.employee.security;
 
 import java.util.Arrays;
-import java.util.Collections;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -52,7 +51,8 @@ public class SecurityConfig {
         .csrf(AbstractHttpConfigurer::disable)
         .cors(cors -> cors.configurationSource(request -> {
           CorsConfiguration corsConfig = new CorsConfiguration();
-          corsConfig.setAllowedOrigins(Collections.singletonList("http://localhost:3000"));
+          corsConfig.setAllowedOrigins(
+              Arrays.asList("http://localhost:3000", "https://employee-system.up.railway.app"));
           corsConfig.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
           corsConfig.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type"));
           return corsConfig;
