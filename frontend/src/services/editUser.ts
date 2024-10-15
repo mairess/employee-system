@@ -18,7 +18,7 @@ const editUser = createAsyncThunk(
   'editUser',
   async ({ userData, token, id }: EditUserParams, { rejectWithValue }) => {
     try {
-      const response = await fetch(`http://localhost:8080/users/${id}`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

@@ -4,8 +4,10 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 const auth = createAsyncThunk(
   'auth',
   async (credentials: { username: string, password: string, keepLogged: boolean }, { rejectWithValue }) => {
+    console.log('process.env.NEXT_PUBLIC_API_URL', process.env.NEXT_PUBLIC_API_URL);
+
     try {
-      const response = await fetch('http://localhost:8080/auth/login', {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

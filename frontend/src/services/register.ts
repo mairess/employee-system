@@ -6,7 +6,7 @@ const register = createAsyncThunk(
   'register',
   async (userData: { photo: string, fullName: string, username: string, email: string, password: string, role: string }, { rejectWithValue }) => {
     try {
-      const response = await fetch('http://localhost:8080/users', {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

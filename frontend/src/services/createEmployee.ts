@@ -17,7 +17,7 @@ const createEmployee = createAsyncThunk(
   'createEmployee',
   async ({ employeeData, token }: CreateEmployeeParams, { rejectWithValue }) => {
     try {
-      const response = await fetch('http://localhost:8080/employees', {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/employees`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
