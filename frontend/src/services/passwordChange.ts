@@ -1,10 +1,11 @@
+/* eslint-disable max-len */
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
 const passwordChange = createAsyncThunk(
   'passwordChange',
   async (email: string, { rejectWithValue }) => {
     try {
-      const response = await fetch('http://localhost:8080/password/reset-request', {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/password/reset-request`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

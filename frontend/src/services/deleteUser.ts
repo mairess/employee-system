@@ -5,7 +5,7 @@ type DeleteUserProps = {
 
 const deleteUser = async ({ token, userId }: DeleteUserProps) => {
   try {
-    const response = await fetch(`http://localhost:8080/users/${userId}`, {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/${userId}`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',

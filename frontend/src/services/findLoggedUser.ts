@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
 type FindLoggedUserParams = {
@@ -9,7 +10,7 @@ const findLoggedUser = createAsyncThunk(
   'loggedUser',
   async ({ token, username }: FindLoggedUserParams, { rejectWithValue }) => {
     try {
-      const response = await fetch(`http://localhost:8080/users/find?username=${username}`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/find?username=${username}`, {
         method: 'GET',
         headers: {
           Authorization: `Bearer ${token}`,

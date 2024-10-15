@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 type DeleteEmployeeProps = {
   token: string;
   employeeId: number | null;
@@ -5,7 +6,7 @@ type DeleteEmployeeProps = {
 
 const deleteEmployee = async ({ token, employeeId }: DeleteEmployeeProps) => {
   try {
-    const response = await fetch(`http://localhost:8080/employees/${employeeId}`, {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/employees/${employeeId}`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
