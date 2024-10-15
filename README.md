@@ -8,6 +8,14 @@ coverage backend
 
 This is a system for managing employees.
 
+Try with admin super power:
+
+```
+username: vitoria 
+
+password: 123456
+```
+
 ## Run with Docker
 
 ### Prerequisites
