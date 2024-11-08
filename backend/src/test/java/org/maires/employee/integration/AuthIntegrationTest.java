@@ -22,6 +22,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
+import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
@@ -35,6 +36,10 @@ public class AuthIntegrationTest {
   @Container
   public static PostgreSQLContainer POSTGRES_CONTAINER = new PostgreSQLContainer<>(
       "postgres").withDatabaseName("employee-db");
+
+  @Container
+  public static GenericContainer redisContainer = new GenericContainer("redis:latest")
+      .withExposedPorts(6379);
 
   @Autowired
   EmployeeRepository employeeRepository;
@@ -53,9 +58,14 @@ public class AuthIntegrationTest {
 
   @DynamicPropertySource
   public static void overrideProperties(DynamicPropertyRegistry registry) {
+    // PostgreSQL
     registry.add("spring.datasource.url", POSTGRES_CONTAINER::getJdbcUrl);
     registry.add("spring.datasource.username", POSTGRES_CONTAINER::getUsername);
     registry.add("spring.datasource.password", POSTGRES_CONTAINER::getPassword);
+
+    // Redis
+    registry.add("spring.redis.host", redisContainer::getHost);
+    registry.add("spring.redis.port", () -> redisContainer.getMappedPort(6379));
   }
 
   @BeforeEach
