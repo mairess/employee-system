@@ -12,6 +12,7 @@ services:
     environment:
       POSTGRES_HOST: database
       KAFKA_HOST: kafka
+      REDIS_HOST: redis
     depends_on:
       database:
         condition: service_healthy
@@ -77,3 +78,10 @@ services:
       KAFKA_CONTROLLER_QUORUM_VOTERS: 1@kafka:9093
       KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+  
+  redis:
+    image: redis
+    container_name: redis
+    ports:
+      - 6379:6379
+    command: ["redis-server", "--appendonly", "yes"]
