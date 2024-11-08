@@ -199,6 +199,14 @@
       <scope>test</scope>
     </dependency>
 
+    <!-- https://mvnrepository.com/artifact/com.redis/testcontainers-redis -->
+    <dependency>
+      <artifactId>testcontainers-redis</artifactId>
+      <groupId>com.redis</groupId>
+      <scope>test</scope>
+      <version>2.2.2</version>
+    </dependency>
+
     <!-- https://mvnrepository.com/artifact/org.springframework.kafka/spring-kafka-test -->
     <dependency>
       <artifactId>spring-kafka-test</artifactId>

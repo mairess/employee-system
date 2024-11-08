@@ -10,6 +10,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.redis.testcontainers.RedisContainer;
 import java.time.LocalDate;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -30,8 +31,10 @@ import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.testcontainers.containers.PostgreSQLContainer;
+import org.testcontainers.containers.wait.strategy.Wait;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
+import org.testcontainers.utility.DockerImageName;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -42,6 +45,11 @@ public class EmployeeIntegrationTest {
   @Container
   public static PostgreSQLContainer POSTGRES_CONTAINER = new PostgreSQLContainer<>(
       "postgres").withDatabaseName("employee-db");
+
+  @Container
+  public static RedisContainer REDIS_CONTAINER = new RedisContainer(
+      DockerImageName.parse("redis:6.2.6"))
+      .waitingFor(Wait.forListeningPort());
 
   @Autowired
   EmployeeRepository employeeRepository;
@@ -57,9 +65,14 @@ public class EmployeeIntegrationTest {
 
   @DynamicPropertySource
   public static void overrideProperties(DynamicPropertyRegistry registry) {
+    // PostgreSQL
     registry.add("spring.datasource.url", POSTGRES_CONTAINER::getJdbcUrl);
     registry.add("spring.datasource.username", POSTGRES_CONTAINER::getUsername);
     registry.add("spring.datasource.password", POSTGRES_CONTAINER::getPassword);
+
+    // Redis
+    registry.add("spring.redis.host", REDIS_CONTAINER::getHost);
+    registry.add("spring.redis.port", () -> REDIS_CONTAINER.getMappedPort(33013));
   }
 
   @BeforeEach

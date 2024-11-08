@@ -4,6 +4,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.redis.testcontainers.RedisContainer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -22,10 +23,11 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
-import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.containers.PostgreSQLContainer;
+import org.testcontainers.containers.wait.strategy.Wait;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
+import org.testcontainers.utility.DockerImageName;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -38,8 +40,9 @@ public class AuthIntegrationTest {
       "postgres").withDatabaseName("employee-db");
 
   @Container
-  public static GenericContainer redisContainer = new GenericContainer("redis:latest")
-      .withExposedPorts(6379);
+  public static RedisContainer REDIS_CONTAINER = new RedisContainer(
+      DockerImageName.parse("redis:6.2.6"))
+      .waitingFor(Wait.forListeningPort());
 
   @Autowired
   EmployeeRepository employeeRepository;
@@ -64,8 +67,11 @@ public class AuthIntegrationTest {
     registry.add("spring.datasource.password", POSTGRES_CONTAINER::getPassword);
 
     // Redis
-    registry.add("spring.redis.host", redisContainer::getHost);
-    registry.add("spring.redis.port", () -> redisContainer.getMappedPort(6379));
+    registry.add("spring.redis.host", REDIS_CONTAINER::getHost);
+    registry.add("spring.redis.port", () -> REDIS_CONTAINER.getMappedPort(33013));
+
+    System.out.println("Redis Host: " + REDIS_CONTAINER.getHost());
+    System.out.println("Redis Port: " + REDIS_CONTAINER.getMappedPort(6379));
   }
 
   @BeforeEach
