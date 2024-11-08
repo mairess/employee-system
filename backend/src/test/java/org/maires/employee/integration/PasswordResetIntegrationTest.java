@@ -6,6 +6,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.redis.testcontainers.RedisContainer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -23,9 +24,11 @@ import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 import org.testcontainers.containers.PostgreSQLContainer;
+import org.testcontainers.containers.wait.strategy.Wait;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.kafka.KafkaContainer;
+import org.testcontainers.utility.DockerImageName;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -40,6 +43,11 @@ public class PasswordResetIntegrationTest {
   @Container
   public static KafkaContainer KAFKA_CONTAINER = new KafkaContainer("apache/kafka:3.8.0");
 
+  @Container
+  public static RedisContainer REDIS_CONTAINER = new RedisContainer(
+      DockerImageName.parse("redis:6.2.6"))
+      .waitingFor(Wait.forListeningPort());
+
   @Autowired
   UserRepository userRepository;
 
@@ -51,9 +59,14 @@ public class PasswordResetIntegrationTest {
 
   @DynamicPropertySource
   public static void overrideProperties(DynamicPropertyRegistry registry) {
+    // PostgreSQL
     registry.add("spring.datasource.url", POSTGRES_CONTAINER::getJdbcUrl);
     registry.add("spring.datasource.username", POSTGRES_CONTAINER::getUsername);
     registry.add("spring.datasource.password", POSTGRES_CONTAINER::getPassword);
+
+    // Redis
+    registry.add("spring.redis.host", REDIS_CONTAINER::getHost);
+    registry.add("spring.redis.port", () -> REDIS_CONTAINER.getMappedPort(33013));
   }
 
   @DynamicPropertySource

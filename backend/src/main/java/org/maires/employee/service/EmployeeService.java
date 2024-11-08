@@ -12,6 +12,8 @@ import org.maires.employee.repository.specification.EmployeeSpecification;
 import org.maires.employee.service.exception.EmployeeNotFoundException;
 import org.maires.employee.service.exception.FutureDateException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -53,6 +55,10 @@ public class EmployeeService {
    * @param term       the term
    * @return the map
    */
+  @Cacheable(
+      value = "employees",
+      key = "#pageNumber + '-' + #pageSize + '-' + #column + '-' + #direction + '-' + #term"
+  )
   public Map<String, Object> findAll(int pageNumber, int pageSize, String column,
       String direction, String term) {
 
@@ -85,6 +91,7 @@ public class EmployeeService {
    * @return the employee
    * @throws EmployeeNotFoundException the employee not found exception
    */
+  @Cacheable(value = "employees", key = "#employeeId")
   public Employee findById(Long employeeId) throws EmployeeNotFoundException {
 
     return employeeRepository.findById(employeeId).orElseThrow(
@@ -103,6 +110,7 @@ public class EmployeeService {
    * @return the employee
    * @throws FutureDateException the future date exception
    */
+  @CacheEvict(value = "employees", allEntries = true)
   public Employee create(Employee employee) throws FutureDateException {
 
     LocalDate admission = employee.getAdmission();
@@ -130,6 +138,7 @@ public class EmployeeService {
    * @throws JsonMappingException      the json mapping exception
    */
   @Transactional
+  @CacheEvict(value = "employees", allEntries = true)
   public Employee update(
       Long employeeId,
       EmployeeCreationDto employeeCreationDto
@@ -149,6 +158,7 @@ public class EmployeeService {
    * @param employeeId the employee id
    * @throws EmployeeNotFoundException the employee not found exception
    */
+  @CacheEvict(value = "employees", allEntries = true)
   public void deleteById(Long employeeId) throws EmployeeNotFoundException {
 
     Employee employee = findById(employeeId);

@@ -8,6 +8,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.redis.testcontainers.RedisContainer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -26,9 +27,11 @@ import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.testcontainers.containers.PostgreSQLContainer;
+import org.testcontainers.containers.wait.strategy.Wait;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
+import org.testcontainers.utility.DockerImageName;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -39,6 +42,11 @@ public class UserIntegrationTest {
   @Container
   public static PostgreSQLContainer POSTGRES_CONTAINER = new PostgreSQLContainer("postgres")
       .withDatabaseName("employee-db");
+
+  @Container
+  public static RedisContainer REDIS_CONTAINER = new RedisContainer(
+      DockerImageName.parse("redis:6.2.6"))
+      .waitingFor(Wait.forListeningPort());
 
   @Autowired
   UserRepository userRepository;
@@ -56,9 +64,14 @@ public class UserIntegrationTest {
 
   @DynamicPropertySource
   public static void overrideProperties(DynamicPropertyRegistry registry) {
+    // PostgreSQL
     registry.add("spring.datasource.url", POSTGRES_CONTAINER::getJdbcUrl);
     registry.add("spring.datasource.username", POSTGRES_CONTAINER::getUsername);
     registry.add("spring.datasource.password", POSTGRES_CONTAINER::getPassword);
+
+    // Redis
+    registry.add("spring.redis.host", REDIS_CONTAINER::getHost);
+    registry.add("spring.redis.port", () -> REDIS_CONTAINER.getMappedPort(33013));
   }
 
   @BeforeEach
