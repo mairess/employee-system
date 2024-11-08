@@ -10,6 +10,8 @@ import org.maires.employee.repository.UserRepository;
 import org.maires.employee.repository.specification.UserSpecification;
 import org.maires.employee.service.exception.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -53,6 +55,10 @@ public class UserService implements UserDetailsService {
    * @param term       the term
    * @return the map
    */
+  @Cacheable(
+      value = "users",
+      key = "#pageNumber + '-' + #pageSize + '-' + #column + '-' + #direction + '-' + #term"
+  )
   public Map<String, Object> findAll(int pageNumber, int pageSize, String column,
       String direction, String term) {
 
@@ -83,6 +89,7 @@ public class UserService implements UserDetailsService {
    * @return the user
    * @throws UserNotFoundException the user not found exception
    */
+  @Cacheable(value = "users", key = "#id")
   public User findById(Long id) throws UserNotFoundException {
     return userRepository.findById(id)
         .orElseThrow(() -> new UserNotFoundException(id.toString(), "id"));
@@ -95,6 +102,7 @@ public class UserService implements UserDetailsService {
    * @return the user
    * @throws UserNotFoundException the user not found exception
    */
+  @Cacheable(value = "users", key = "#username")
   public User findByUsername(String username) throws UserNotFoundException {
     return userRepository.findByUsername(username)
         .orElseThrow(() -> new UserNotFoundException(username, "id"));
@@ -106,6 +114,7 @@ public class UserService implements UserDetailsService {
    * @param user the user
    * @return the user
    */
+  @CacheEvict(value = "users", allEntries = true)
   public User create(User user) {
     String hashedPassword = new BCryptPasswordEncoder().encode(user.getPassword());
 
@@ -127,6 +136,7 @@ public class UserService implements UserDetailsService {
    * @throws JsonMappingException  the json mapping exception
    */
   @Transactional
+  @CacheEvict(value = "users", allEntries = true)
   public User update(Long userId, UserUpdateDto userUpdateDto)
       throws UserNotFoundException, JsonMappingException {
     User userToUpdate = findById(userId);
@@ -142,6 +152,7 @@ public class UserService implements UserDetailsService {
    * @param userId the user id
    * @throws UserNotFoundException the user not found exception
    */
+  @CacheEvict(value = "users", allEntries = true)
   public void deleteById(Long userId) throws UserNotFoundException {
 
     User user = findById(userId);
@@ -151,6 +162,7 @@ public class UserService implements UserDetailsService {
 
 
   @Override
+  @Cacheable(value = "users", key = "#username")
   public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
     return userRepository.findByUsername(username)
         .orElseThrow(() -> new UsernameNotFoundException(username));
