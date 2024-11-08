@@ -91,7 +91,7 @@ public class EmployeeService {
    * @return the employee
    * @throws EmployeeNotFoundException the employee not found exception
    */
-  @Cacheable(value = "employees", key = "#id")
+  @Cacheable(value = "employees", key = "#employeeId")
   public Employee findById(Long employeeId) throws EmployeeNotFoundException {
 
     return employeeRepository.findById(employeeId).orElseThrow(
